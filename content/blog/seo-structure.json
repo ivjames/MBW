@@ -1,0 +1,45 @@
+{
+    "slug": "seo-structure",
+    "title": "SEO Starts With Structure",
+    "date": "2026-01-08",
+    "author": "DeepDigital",
+    "image": "https://picsum.photos/seed/deepdigital-blog-2/1400/900",
+    "excerpt": "Ranking isn’t content alone—it’s architecture.",
+    "tags": [
+        "SEO",
+        "Web Design"
+    ],
+    "content": [
+        {
+            "type": "paragraph",
+            "text": "Many businesses think SEO is just about keywords and content, but the truth is that site architecture plays a huge role in search rankings. A well-structured website with clear navigation, proper use of headings, and optimized metadata can significantly improve your chances of ranking higher on Google."
+        },
+        {
+            "type": "heading",
+            "text": "The Role of Site Architecture"
+        },
+        {
+            "type": "paragraph",
+            "text": "Search engines crawl websites to understand their content and relevance. If your site has a confusing structure, it can hinder the crawling process and negatively impact your SEO. A clear hierarchy, logical URL structure, and internal linking can help search engines index your site more effectively."
+        },
+        {
+            "type": "image",
+            "src": "https://picsum.photos/seed/blog-inline-3/1400/900",
+            "alt": "Diagram of website structure",
+            "caption": "A clear site structure helps both users and search engines."
+        },
+        {
+            "type": "quote",
+            "text": "SEO isn’t just about content; it’s about creating a website that search engines can easily understand and navigate."
+        },
+        {
+            "type": "list",
+            "items": [
+                "Use descriptive URLs that reflect the content hierarchy.",
+                "Implement a clear navigation menu with categories and subcategories.",
+                "Optimize your headings (H1, H2, etc.) to reflect the content structure.",
+                "Ensure your site is mobile-friendly and loads quickly."
+            ]
+        }
+    ]
+}

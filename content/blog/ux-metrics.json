@@ -1,0 +1,45 @@
+{
+    "slug": "ux-metrics",
+    "title": "Measuring UX Success",
+    "date": "2026-01-15",
+    "author": "DeepDigital",
+    "image": "https://picsum.photos/seed/deepdigital-blog-3/1400/900",
+    "excerpt": "Understanding user experience through metrics.",
+    "tags": [
+        "UX",
+        "Analytics"
+    ],
+    "content": [
+        {
+            "type": "paragraph",
+            "text": "Measuring the success of your UX efforts is crucial for continuous improvement. By tracking key metrics, you can gain insights into how users interact with your product and identify areas for enhancement."
+        },
+        {
+            "type": "heading",
+            "text": "Key UX Metrics"
+        },
+        {
+            "type": "paragraph",
+            "text": "Some important UX metrics include task success rate, time on task, user error rate, and user satisfaction. These metrics help you understand the effectiveness and efficiency of your design."
+        },
+        {
+            "type": "image",
+            "src": "https://picsum.photos/seed/blog-inline-2/1400/900",
+            "alt": "Graph of UX metrics",
+            "caption": "Tracking UX metrics over time can reveal trends and areas for improvement."
+        },
+        {
+            "type": "quote",
+            "text": "UX metrics are not just numbers—they are insights into your users’ experiences and opportunities for growth."
+        },
+        {
+            "type": "list",
+            "items": [
+                "Task Success Rate: The percentage of users who successfully complete a task.",
+                "Time on Task: The average time it takes for users to complete a task.",
+                "User Error Rate: The frequency of errors made by users during interactions.",
+                "User Satisfaction: Often measured through surveys, this indicates how satisfied users are with their experience."
+            ]
+        }
+    ]
+}

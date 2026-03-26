@@ -1,0 +1,102 @@
+import { createElement } from '../primitives/element.js';
+import { Button } from '../primitives/button.js';
+
+function createNavItem(item, currentPage) {
+  const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+
+  const link = createElement('a', {
+    text: item.label,
+    attrs: {
+      href: item.href,
+      'aria-current': item.page === currentPage ? 'page' : null
+    }
+  });
+
+  if (!hasChildren) {
+    return createElement('div', {
+      className: 'nav-item',
+      children: [link]
+    });
+  }
+
+  const submenu = createElement('div', {
+    className: 'submenu',
+    children: item.children.map(child =>
+      createElement('a', {
+        text: child.label,
+        attrs: {
+          href: child.href,
+          'aria-current': child.page === currentPage ? 'page' : null
+        }
+      })
+    )
+  });
+
+  return createElement('div', {
+    className: 'nav-item has-submenu',
+    children: [link, submenu]
+  });
+}
+
+export function Navbar({ nav, currentPage }) {
+  const header = createElement('div', { className: 'site-header' });
+  const inner = createElement('div', { className: 'header-inner' });
+
+  const brand = createElement('a', {
+    className: 'brand-lockup',
+    attrs: { href: '/', 'aria-label': 'DeepDigital home' },
+    children: [
+      createElement('img', {
+        className: 'brand-mark-image',
+        attrs: {
+          src: '/assets/images/logo-mark.png',
+          alt: 'DeepDigital logo mark'
+        }
+      }),
+      createElement('div', {
+        className: 'brand-wordmark',
+        children: [
+          createElement('span', {
+            className: 'brand-name',
+            text: 'DeepDigital'
+          })
+        ]
+      })
+    ]
+  });
+
+  const links = createElement('nav', {
+    className: 'nav-links',
+    children: nav.map(item => createNavItem(item, currentPage))
+  });
+
+  const actions = createElement('div', {
+    className: 'header-actions',
+    children: [
+      createElement('button', {
+        className: 'theme-toggle',
+        text: 'Light',
+        attrs: {
+          type: 'button',
+          id: 'themeToggle',
+          'aria-label': 'Toggle theme',
+          'aria-pressed': 'false'
+        }
+      }),
+      Button({ label: 'Book a Call', href: '/contact', variant: 'primary' }),
+      createElement('button', {
+        className: 'mobile-toggle',
+        html: '☰',
+        attrs: {
+          type: 'button',
+          'aria-label': 'Open navigation',
+          id: 'mobileToggle'
+        }
+      })
+    ]
+  });
+
+  inner.append(brand, links, actions);
+  header.appendChild(inner);
+  return header;
+}

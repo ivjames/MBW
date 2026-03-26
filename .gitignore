@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+.vscode/
+
+*.log
+*.zip
+
+server/node_modules/
+server/.env
+
+server/data/*.db-wal
+server/data/*.db-shm
+server/data/*.bak

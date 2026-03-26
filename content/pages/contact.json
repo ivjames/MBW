@@ -1,0 +1,30 @@
+{
+    "hero": {
+        "eyebrow": "Contact",
+        "title": "Start the conversation.",
+        "lead": "Use the shared contact structure across the site, keep the cards compact, and route serious inquiries through a working Node-powered demo form."
+    },
+    "methods": [
+        {
+            "kicker": "Call Us",
+            "title": "New Accounts",
+            "copy": "1-800-123-4567"
+        },
+        {
+            "kicker": "Call Us",
+            "title": "Support",
+            "copy": "1-800-123-4569"
+        },
+        {
+            "kicker": "Write Us",
+            "title": "Email",
+            "copy": "maurice@marketingbuzzworthy.com"
+        },
+        {
+            "kicker": "Visit Us",
+            "title": "Office",
+            "copy": "2231 Sycamore Lake Road\nGreen Bay, WI 54304"
+        }
+    ],
+    "image": "https://picsum.photos/seed/deepdigital-contact-a/1600/1000"
+}

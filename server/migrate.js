@@ -1,0 +1,734 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { db, nowIso, slugify } from './db.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
+
+db.exec(`
+CREATE TABLE IF NOT EXISTS posts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  slug TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  excerpt TEXT DEFAULT '',
+  cover_image TEXT DEFAULT '',
+  author TEXT DEFAULT 'DeepDigital',
+  status TEXT NOT NULL DEFAULT 'draft',
+  published_at TEXT,
+  content_json TEXT NOT NULL DEFAULT '[]',
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS helpdesk_topics (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  slug TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  description TEXT DEFAULT '',
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS helpdesk_articles (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  slug TEXT NOT NULL UNIQUE,
+  topic_id INTEGER,
+  title TEXT NOT NULL,
+  excerpt TEXT DEFAULT '',
+  status TEXT NOT NULL DEFAULT 'draft',
+  published_at TEXT,
+  tags_json TEXT NOT NULL DEFAULT '[]',
+  content_json TEXT NOT NULL DEFAULT '[]',
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  FOREIGN KEY (topic_id) REFERENCES helpdesk_topics(id) ON DELETE SET NULL
+);
+`);
+
+const now = nowIso();
+
+if (!db.prepare('SELECT 1 FROM posts LIMIT 1').get()) {
+    const insert = db.prepare(`
+    INSERT INTO posts (
+      slug, title, excerpt, cover_image, author, status, published_at,
+      content_json, created_at, updated_at
+    ) VALUES (
+      @slug, @title, @excerpt, @cover_image, @author, @status, @published_at,
+      @content_json, @created_at, @updated_at
+    )
+  `);
+
+    [
+        {
+            title: 'Conversion-Focused Web Design Basics',
+            excerpt: 'Why most websites fail to convert and how to fix it with structure, clarity, and intent.',
+            cover_image: 'https://picsum.photos/seed/blog-1/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Most websites fail because they prioritize aesthetics over clarity.' },
+                { type: 'heading', text: 'Clarity beats creativity' },
+                { type: 'paragraph', text: 'Users scan for relevance, proof, and direction.' }
+            ])
+        },
+        {
+            title: 'SEO Starts With Structure',
+            excerpt: 'Ranking is not content alone. Architecture and hierarchy matter first.',
+            cover_image: 'https://picsum.photos/seed/blog-2/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Search performance starts with information architecture.' }
+            ])
+        },
+        {
+            title: 'The Psychology Behind High-Converting CTAs',
+            excerpt: 'Why users click, hesitate, or ignore—and how to design for action.',
+            cover_image: 'https://picsum.photos/seed/blog-6/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'CTA performance depends on clarity, timing, and perceived value.' },
+                { type: 'heading', text: 'Reduce hesitation' },
+                { type: 'paragraph', text: 'Users avoid uncertainty more than they seek reward.' }
+            ])
+        },
+        {
+            title: 'Designing for Scan Behavior',
+            excerpt: 'Users do not read. Structure content for scanning and fast comprehension.',
+            cover_image: 'https://picsum.photos/seed/blog-7/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Most users scan in patterns, not linearly.' },
+                { type: 'heading', text: 'Visual hierarchy matters' },
+                { type: 'paragraph', text: 'Headings and spacing guide attention flow.' }
+            ])
+        },
+        {
+            title: 'Authority Signals That Build Trust Instantly',
+            excerpt: 'Establish credibility within seconds using proof and positioning.',
+            cover_image: 'https://picsum.photos/seed/blog-8/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Trust is evaluated before content is consumed.' },
+                { type: 'heading', text: 'Types of authority signals' },
+                { type: 'paragraph', text: 'Testimonials, logos, and quantified results.' }
+            ])
+        },
+        {
+            title: 'How to Structure a High-Impact Homepage',
+            excerpt: 'Turn your homepage into a guided narrative instead of a static layout.',
+            cover_image: 'https://picsum.photos/seed/blog-9/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'A homepage should answer key questions immediately.' },
+                { type: 'heading', text: 'Sequence matters' },
+                { type: 'paragraph', text: 'Problem, solution, proof, then action.' }
+            ])
+        },
+        {
+            title: 'The Role of Speed in Conversion Rates',
+            excerpt: 'Performance is not technical overhead—it directly impacts revenue.',
+            cover_image: 'https://picsum.photos/seed/blog-10/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Slow pages increase abandonment rates.' },
+                { type: 'heading', text: 'Perceived vs actual speed' },
+                { type: 'paragraph', text: 'Users react to feedback, not raw load time.' }
+            ])
+        },
+        {
+            title: 'Eliminating Friction in User Flows',
+            excerpt: 'Identify and remove blockers that prevent users from completing actions.',
+            cover_image: 'https://picsum.photos/seed/blog-11/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Friction compounds across steps in a flow.' },
+                { type: 'heading', text: 'Common friction points' },
+                { type: 'paragraph', text: 'Forms, unclear labels, and unexpected steps.' }
+            ])
+        },
+        {
+            title: 'Why Simplicity Outperforms Feature-Rich Design',
+            excerpt: 'More options reduce clarity and increase abandonment.',
+            cover_image: 'https://picsum.photos/seed/blog-12/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Complexity introduces cognitive load.' },
+                { type: 'heading', text: 'Constraint improves decisions' },
+                { type: 'paragraph', text: 'Fewer choices lead to faster action.' }
+            ])
+        },
+        {
+            title: 'Using Data to Refine UX Decisions',
+            excerpt: 'Move beyond opinions—use behavioral data to guide design improvements.',
+            cover_image: 'https://picsum.photos/seed/blog-13/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'User behavior reveals friction and intent.' },
+                { type: 'heading', text: 'Measure what matters' },
+                { type: 'paragraph', text: 'Focus on actions, not vanity metrics.' }
+            ])
+        },
+        {
+            title: 'Microcopy That Drives Action',
+            excerpt: 'Small text changes can significantly impact user decisions.',
+            cover_image: 'https://picsum.photos/seed/blog-14/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Microcopy reduces uncertainty at critical moments.' },
+                { type: 'heading', text: 'Where microcopy matters most' },
+                { type: 'paragraph', text: 'Forms, buttons, and error states.' }
+            ])
+        },
+        {
+            title: 'Designing for Mobile-First Behavior',
+            excerpt: 'Mobile constraints force better prioritization and clearer UX.',
+            cover_image: 'https://picsum.photos/seed/blog-15/1600/1000',
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Mobile users have less patience and attention.' },
+                { type: 'heading', text: 'Prioritize essential actions' },
+                { type: 'paragraph', text: 'Remove non-critical elements on smaller screens.' }
+            ])
+        }
+    ].forEach(post => {
+        insert.run({
+            slug: slugify(post.title),
+            title: post.title,
+            excerpt: post.excerpt,
+            cover_image: post.cover_image,
+            author: 'DeepDigital',
+            status: 'published',
+            published_at: now,
+            content_json: post.content_json,
+            created_at: now,
+            updated_at: now
+        });
+    });
+}
+
+if (!db.prepare('SELECT 1 FROM helpdesk_topics LIMIT 1').get()) {
+    const insert = db.prepare(`
+    INSERT INTO helpdesk_topics (slug, title, description, sort_order, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `);
+
+    [
+        ['coverage', 'Coverage', 'Articles related to service coverage, availability, and scope.', 10],
+        ['payment-method', 'Payment Method', 'Payment flows, billing basics, and invoicing questions.', 20],
+        ['system-solutions', 'System Solutions', 'System architecture, integrations, and implementation support.', 30],
+        ['team-leader', 'Team Leader', 'Leadership, handoff, and communication articles.', 40],
+        ['tech-support', 'Tech Support', 'Operational support and technical troubleshooting.', 50],
+        ['user-interface', 'User Interface', 'Interface, usage, and workflow guidance.', 60]
+    ].forEach(row => insert.run(row[0], row[1], row[2], row[3], now, now));
+}
+
+if (!db.prepare('SELECT 1 FROM helpdesk_articles LIMIT 1').get()) {
+    const topicMap = Object.fromEntries(
+        db.prepare('SELECT id, slug FROM helpdesk_topics').all().map(r => [r.slug, r.id])
+    );
+
+    const insert = db.prepare(`
+    INSERT INTO helpdesk_articles (
+      slug, topic_id, title, excerpt, status, published_at,
+      tags_json, content_json, created_at, updated_at
+    ) VALUES (
+      @slug, @topic_id, @title, @excerpt, @status, @published_at,
+      @tags_json, @content_json, @created_at, @updated_at
+    )
+  `);
+
+    [
+        {
+            slug: 'coverage-overview',
+            topic_id: topicMap.coverage,
+            title: 'Coverage overview',
+            excerpt: 'Understand what is included, where support applies, and how service boundaries work.',
+            tags_json: JSON.stringify(['Coverage', 'Support']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Coverage defines the boundaries of support, maintenance, and included work.' },
+                { type: 'heading', text: 'What coverage means' },
+                { type: 'paragraph', text: 'Coverage should be explicit so users know what is included.' }
+            ])
+        },
+        {
+            slug: 'coverage-limits',
+            topic_id: topicMap.coverage,
+            title: 'Coverage limits',
+            excerpt: 'Learn where service scope begins and ends.',
+            tags_json: JSON.stringify(['Coverage']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Coverage limits clarify boundaries and reduce support ambiguity.' },
+                { type: 'heading', text: 'Common limits' },
+                { type: 'paragraph', text: 'Limits can be based on time, resources, or specific services.' }
+            ])
+        },
+        {
+            slug: 'payment-processing-failures',
+            topic_id: topicMap['payment-method'],
+            title: 'Payment processing failures',
+            excerpt: 'Understand why payments fail and how to resolve common issues.',
+            tags_json: JSON.stringify(['Payment', 'Billing']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Payment failures are typically caused by validation or authorization issues.' },
+                { type: 'heading', text: 'Common causes' },
+                { type: 'paragraph', text: 'Expired cards, insufficient funds, and gateway timeouts.' }
+            ])
+        },
+        {
+            slug: 'invoice-and-billing-cycle',
+            topic_id: topicMap['payment-method'],
+            title: 'Invoice and billing cycle',
+            excerpt: 'Learn how billing cycles work and when invoices are generated.',
+            tags_json: JSON.stringify(['Billing']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Billing cycles define when charges are calculated and issued.' },
+                { type: 'heading', text: 'Cycle details' },
+                { type: 'paragraph', text: 'Cycles can be monthly, annually, or custom based on agreements.' }
+            ])
+        },
+        {
+            slug: 'system-integration-basics',
+            topic_id: topicMap['system-solutions'],
+            title: 'System integration basics',
+            excerpt: 'Overview of integrating external systems and APIs.',
+            tags_json: JSON.stringify(['Integration', 'API']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'System integrations enable data synchronization across platforms.' },
+                { type: 'heading', text: 'Key considerations' },
+                { type: 'paragraph', text: 'Authentication, rate limits, and data consistency.' }
+            ])
+        },
+        {
+            slug: 'implementation-timelines',
+            topic_id: topicMap['system-solutions'],
+            title: 'Implementation timelines',
+            excerpt: 'What to expect during system rollout and delivery phases.',
+            tags_json: JSON.stringify(['Implementation']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Implementation timelines depend on project scope and complexity.' },
+                { type: 'heading', text: 'Typical phases' },
+                { type: 'paragraph', text: 'Planning, development, testing, and deployment.' }
+            ])
+        },
+        {
+            slug: 'team-lead-responsibilities',
+            topic_id: topicMap['team-leader'],
+            title: 'Team lead responsibilities',
+            excerpt: 'Define expectations for team leaders in project delivery.',
+            tags_json: JSON.stringify(['Leadership']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Team leads ensure alignment, communication, and execution.' },
+                { type: 'heading', text: 'Core responsibilities' },
+                { type: 'paragraph', text: 'Project management, stakeholder communication, and risk mitigation.' }
+            ])
+        },
+        {
+            slug: 'handoff-best-practices',
+            topic_id: topicMap['team-leader'],
+            title: 'Handoff best practices',
+            excerpt: 'Ensure smooth transitions between teams and phases.',
+            tags_json: JSON.stringify(['Handoff']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Clear documentation prevents operational gaps during handoffs.' },
+                { type: 'heading', text: 'Best practices' },
+                { type: 'paragraph', text: 'Ensure knowledge transfer, maintain checklists, and conduct reviews.' }
+            ])
+        },
+        {
+            slug: 'troubleshooting-login-issues',
+            topic_id: topicMap['tech-support'],
+            title: 'Troubleshooting login issues',
+            excerpt: 'Resolve common authentication and access problems.',
+            tags_json: JSON.stringify(['Auth', 'Support']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Login issues are often tied to credentials or session handling.' },
+                { type: 'heading', text: 'Common solutions' },
+                { type: 'paragraph', text: 'Password resets, clearing cookies, and checking account status.' }
+            ])
+        },
+        {
+            slug: 'system-outage-response',
+            topic_id: topicMap['tech-support'],
+            title: 'System outage response',
+            excerpt: 'Steps to take during outages and degraded performance.',
+            tags_json: JSON.stringify(['Outage']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Outage response should prioritize communication and containment.' },
+                { type: 'heading', text: 'Response steps' },
+                { type: 'paragraph', text: 'Identify the issue, notify stakeholders, and implement mitigation strategies.' }
+
+            ])
+        },
+        {
+            slug: 'navigating-the-dashboard',
+            topic_id: topicMap['user-interface'],
+            title: 'Navigating the dashboard',
+            excerpt: 'Understand layout, menus, and primary workflows.',
+            tags_json: JSON.stringify(['UI']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'The dashboard centralizes key actions and visibility.' },
+                { type: 'heading', text: 'Main sections' },
+                { type: 'paragraph', text: 'Overview, management, and settings areas.' }
+            ])
+        },
+        {
+            slug: 'customizing-user-preferences',
+            topic_id: topicMap['user-interface'],
+            title: 'Customizing user preferences',
+            excerpt: 'Adjust settings for a personalized experience.',
+            tags_json: JSON.stringify(['Settings']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'User preferences control display, notifications, and behavior.' },
+                { type: 'heading', text: 'Available options' },
+                { type: 'paragraph', text: 'Themes, notification settings, and data display preferences.' }
+            ])
+        },
+        // COVERAGE (add 3 more → total ~5)
+        {
+            slug: 'regional-coverage-availability',
+            topic_id: topicMap.coverage,
+            title: 'Regional coverage availability',
+            excerpt: 'Where services are available and how regions affect delivery.',
+            tags_json: JSON.stringify(['Coverage']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Service availability varies by region and infrastructure.' },
+                { type: 'heading', text: 'Regional factors' },
+                { type: 'paragraph', text: 'Infrastructure, regulations, and local demand influence coverage.' }
+
+            ])
+        },
+        {
+            slug: 'coverage-exceptions',
+            topic_id: topicMap.coverage,
+            title: 'Coverage exceptions',
+            excerpt: 'Understand scenarios where standard coverage does not apply.',
+            tags_json: JSON.stringify(['Coverage']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Exceptions prevent incorrect assumptions about support scope.' },
+                { type: 'heading', text: 'Common exceptions' },
+                { type: 'paragraph', text: 'Certain scenarios may not be covered due to specific conditions or limitations.' }
+
+            ])
+        },
+        {
+            slug: 'service-scope-definition',
+            topic_id: topicMap.coverage,
+            title: 'Service scope definition',
+            excerpt: 'Define what is explicitly included in service agreements.',
+            tags_json: JSON.stringify(['Coverage']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Clear scope reduces ambiguity and support overhead.' },
+                { type: 'heading', text: 'Defining scope' },
+                { type: 'paragraph', text: 'Scope should be explicitly stated in service agreements to avoid misunderstandings.' }
+
+            ])
+        },
+
+        // PAYMENT METHOD (add 5 more → total ~7)
+        {
+            slug: 'accepted-payment-types',
+            topic_id: topicMap['payment-method'],
+            title: 'Accepted payment types',
+            excerpt: 'List of supported payment methods and limitations.',
+            tags_json: JSON.stringify(['Payment']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Supported methods vary by region and integration.' },
+                { type: 'heading', text: 'Common payment types' },
+                { type: 'paragraph', text: 'Credit cards, debit cards, and digital wallets are commonly accepted.' }
+
+            ])
+        },
+        {
+            slug: 'refund-processing-times',
+            topic_id: topicMap['payment-method'],
+            title: 'Refund processing times',
+            excerpt: 'How long refunds take and what affects timing.',
+            tags_json: JSON.stringify(['Payment']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Refund timing depends on processors and banking systems.' },
+                { type: 'heading', text: 'Factors affecting timing' },
+                { type: 'paragraph', text: 'Processing delays, holidays, and bank policies can impact refund times.' }
+
+            ])
+        },
+        {
+            slug: 'failed-subscription-renewals',
+            topic_id: topicMap['payment-method'],
+            title: 'Failed subscription renewals',
+            excerpt: 'Why recurring payments fail and how retries work.',
+            tags_json: JSON.stringify(['Billing']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Retries follow defined intervals before cancellation.' },
+                { type: 'heading', text: 'Retry schedule' },
+                { type: 'paragraph', text: 'The retry schedule outlines the intervals and conditions for retrying failed payments.' }
+
+            ])
+        },
+        {
+            slug: 'updating-payment-details',
+            topic_id: topicMap['payment-method'],
+            title: 'Updating payment details',
+            excerpt: 'How users update billing information securely.',
+            tags_json: JSON.stringify(['Payment']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Payment details should be updated before billing cycles.' },
+            ])
+        },
+        {
+            slug: 'taxes-and-fees-explained',
+            topic_id: topicMap['payment-method'],
+            title: 'Taxes and fees explained',
+            excerpt: 'Breakdown of additional charges on invoices.',
+            tags_json: JSON.stringify(['Billing']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Taxes depend on jurisdiction and service classification.' },
+                { type: 'heading', text: 'Common fees' },
+                { type: 'paragraph', text: 'Service fees, processing fees, and other charges may apply.' }
+
+            ])
+        },
+
+        // SYSTEM SOLUTIONS (add 4 more → total ~6)
+        {
+            slug: 'api-authentication-methods',
+            topic_id: topicMap['system-solutions'],
+            title: 'API authentication methods',
+            excerpt: 'Understand how systems authenticate securely.',
+            tags_json: JSON.stringify(['API']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Authentication ensures secure system communication.' },
+                { type: 'heading', text: 'Common methods' },
+                { type: 'paragraph', text: 'API keys, OAuth tokens, and JWTs are widely used authentication methods.' }
+            ])
+        },
+        {
+            slug: 'data-sync-strategies',
+            topic_id: topicMap['system-solutions'],
+            title: 'Data sync strategies',
+            excerpt: 'Approaches for maintaining data consistency across systems.',
+            tags_json: JSON.stringify(['Integration']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Sync strategies balance performance and accuracy.' },
+                { type: 'heading', text: 'Common strategies' },
+                { type: 'paragraph', text: 'Real-time, scheduled, and on-demand syncs are common approaches.' }
+            ])
+        },
+        {
+            slug: 'webhook-configuration',
+            topic_id: topicMap['system-solutions'],
+            title: 'Webhook configuration',
+            excerpt: 'How to set up event-driven integrations.',
+            tags_json: JSON.stringify(['Integration']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Webhooks push updates instead of polling.' },
+                { type: 'heading', text: 'Configuration steps' },
+                { type: 'paragraph', text: 'Define events, set endpoints, and secure with signatures.' }
+            ])
+        },
+        {
+            slug: 'environment-setup-guide',
+            topic_id: topicMap['system-solutions'],
+            title: 'Environment setup guide',
+            excerpt: 'Prepare staging and production environments.',
+            tags_json: JSON.stringify(['Setup']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Environment separation prevents deployment risks.' },
+                { type: 'heading', text: 'Setup considerations' },
+                { type: 'paragraph', text: 'Staging should mirror production to ensure reliable testing.' }
+            ])
+        },
+
+        // TEAM LEADER (add 6 more → total ~8)
+        {
+            slug: 'managing-cross-functional-teams',
+            topic_id: topicMap['team-leader'],
+            title: 'Managing cross-functional teams',
+            excerpt: 'Coordinate across roles and responsibilities.',
+            tags_json: JSON.stringify(['Leadership']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Alignment reduces delays and miscommunication.' },
+                { type: 'heading', text: 'Key strategies' },
+                { type: 'paragraph', text: 'Regular check-ins, clear documentation, and defined roles.' }
+            ])
+        },
+        {
+            slug: 'setting-project-priorities',
+            topic_id: topicMap['team-leader'],
+            title: 'Setting project priorities',
+            excerpt: 'Determine what matters most and sequence execution.',
+            tags_json: JSON.stringify(['Leadership']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Prioritization drives resource allocation.' },
+                { type: 'heading', text: 'Frameworks for prioritization' },
+                { type: 'paragraph', text: 'Impact vs effort matrices and stakeholder input can guide priorities.' }
+            ])
+        },
+        {
+            slug: 'communication-rhythms',
+            topic_id: topicMap['team-leader'],
+            title: 'Communication rhythms',
+            excerpt: 'Establish consistent update cycles.',
+            tags_json: JSON.stringify(['Communication']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Predictable communication improves visibility.' },
+                { type: 'heading', text: 'Common rhythms' },
+                { type: 'paragraph', text: 'Daily standups, weekly reviews, and monthly retrospectives are common communication rhythms.' }
+            ])
+        },
+        {
+            slug: 'risk-management-basics',
+            topic_id: topicMap['team-leader'],
+            title: 'Risk management basics',
+            excerpt: 'Identify and mitigate project risks early.',
+            tags_json: JSON.stringify(['Leadership']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Early risk detection reduces impact.' },
+                { type: 'heading', text: 'Risk management steps' },
+                { type: 'paragraph', text: 'Identify, assess, mitigate, and monitor risks throughout the project lifecycle.' }
+            ])
+        },
+        {
+            slug: 'stakeholder-alignment',
+            topic_id: topicMap['team-leader'],
+            title: 'Stakeholder alignment',
+            excerpt: 'Keep stakeholders informed and aligned.',
+            tags_json: JSON.stringify(['Communication']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Misalignment causes delays and rework.' },
+                { type: 'heading', text: 'Alignment strategies' },
+                { type: 'paragraph', text: 'Regular updates, clear documentation, and involving stakeholders in key decisions can maintain alignment.' }
+            ])
+        },
+        {
+            slug: 'performance-tracking',
+            topic_id: topicMap['team-leader'],
+            title: 'Performance tracking',
+            excerpt: 'Measure progress and team output.',
+            tags_json: JSON.stringify(['Metrics']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Tracking ensures accountability and optimization.' },
+                { type: 'heading', text: 'Key performance indicators' },
+                { type: 'paragraph', text: 'Velocity, quality metrics, and team satisfaction are important performance indicators.' }
+
+            ])
+        },
+
+        // TECH SUPPORT (add 5 more → total ~7)
+        {
+            slug: 'debugging-common-errors',
+            topic_id: topicMap['tech-support'],
+            title: 'Debugging common errors',
+            excerpt: 'Identify and resolve frequent system issues.',
+            tags_json: JSON.stringify(['Support']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Systematic debugging isolates root causes.' },
+                { type: 'heading', text: 'Common error types' },
+                { type: 'paragraph', text: 'Syntax errors, runtime exceptions, and logical errors are common categories.' }
+            ])
+        },
+        {
+            slug: 'clearing-cache-and-state',
+            topic_id: topicMap['tech-support'],
+            title: 'Clearing cache and state',
+            excerpt: 'Resolve issues caused by stale data.',
+            tags_json: JSON.stringify(['Support']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Cached data can create inconsistent behavior.' },
+                { type: 'heading', text: 'When to clear cache' },
+                { type: 'paragraph', text: 'Clearing cache can resolve issues related to stale data or corrupted state.' }
+            ])
+        },
+        {
+            slug: 'browser-compatibility-issues',
+            topic_id: topicMap['tech-support'],
+            title: 'Browser compatibility issues',
+            excerpt: 'Handle inconsistencies across browsers.',
+            tags_json: JSON.stringify(['Support']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Different engines interpret code differently.' },
+                { type: 'heading', text: 'Handling compatibility issues' },
+                { type: 'paragraph', text: 'Testing across multiple browsers and using polyfills can mitigate compatibility problems.' }
+
+            ])
+        },
+        {
+            slug: 'error-log-analysis',
+            topic_id: topicMap['tech-support'],
+            title: 'Error log analysis',
+            excerpt: 'Use logs to diagnose system failures.',
+            tags_json: JSON.stringify(['Debugging']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Logs provide context for failures and anomalies.' },
+                { type: 'heading', text: 'Effective log analysis' },
+                { type: 'paragraph', text: 'Filtering, correlation, and pattern recognition are key techniques for analyzing logs effectively.' }
+            ])
+        },
+        {
+            slug: 'support-escalation-process',
+            topic_id: topicMap['tech-support'],
+            title: 'Support escalation process',
+            excerpt: 'When and how to escalate issues.',
+            tags_json: JSON.stringify(['Support']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Escalation ensures critical issues are prioritized.' },
+                { type: 'heading', text: 'Escalation criteria' },
+                { type: 'paragraph', text: 'Issues that impact multiple users, cause data loss, or have no workaround should be escalated immediately.' }
+            ])
+        },
+
+        // USER INTERFACE (add 4 more → total ~6)
+        {
+            slug: 'using-keyboard-shortcuts',
+            topic_id: topicMap['user-interface'],
+            title: 'Using keyboard shortcuts',
+            excerpt: 'Improve efficiency with shortcut workflows.',
+            tags_json: JSON.stringify(['UI']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Shortcuts reduce interaction time.' },
+                { type: 'heading', text: 'Common shortcuts' },
+                { type: 'paragraph', text: 'Ctrl+C for copy, Ctrl+V for paste, and Ctrl+Z for undo are widely used shortcuts.' }
+
+            ])
+        },
+        {
+            slug: 'understanding-navigation-structure',
+            topic_id: topicMap['user-interface'],
+            title: 'Understanding navigation structure',
+            excerpt: 'How menus and hierarchy are organized.',
+            tags_json: JSON.stringify(['UI']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Navigation reflects system architecture.' },
+                { type: 'heading', text: 'Navigation patterns' },
+                { type: 'paragraph', text: 'Hierarchical, flat, and faceted navigation are common patterns depending on content complexity.' }
+            ])
+        },
+        {
+            slug: 'form-interaction-guidelines',
+            topic_id: topicMap['user-interface'],
+            title: 'Form interaction guidelines',
+            excerpt: 'Best practices for completing forms.',
+            tags_json: JSON.stringify(['UI']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Clear input expectations reduce errors.' },
+                { type: 'heading', text: 'Form validation' },
+                { type: 'paragraph', text: 'Real-time validation helps users correct mistakes promptly.' }
+
+            ])
+        },
+        {
+            slug: 'notification-settings-control',
+            topic_id: topicMap['user-interface'],
+            title: 'Notification settings control',
+            excerpt: 'Manage alerts and system notifications.',
+            tags_json: JSON.stringify(['Settings']),
+            content_json: JSON.stringify([
+                { type: 'paragraph', text: 'Notification control prevents overload.' },
+                { type: 'heading', text: 'Managing notifications' },
+                { type: 'paragraph', text: 'Users can customize notification preferences to reduce distractions and focus on important alerts.' }
+
+            ])
+        }
+        
+    ].forEach(article => {
+        insert.run({
+            ...article,
+            status: 'published',
+            published_at: now,
+            created_at: now,
+            updated_at: now
+        });
+    });
+}
+
+console.log('Migration complete.');

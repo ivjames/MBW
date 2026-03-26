@@ -1,0 +1,30 @@
+{
+    "meta": {
+        "title": "DeepDigital — Development",
+        "description": "DeepDigital development services."
+    },
+    "hero": {
+        "eyebrow": "Service",
+        "title": "Development",
+        "lead": "Custom programming for most complex functions you can think. No more headaches. Focus on your business and let it grow fast!",
+        "image": "https://picsum.photos/seed/deepdigital-development/1600/1000"
+    },
+    "sections": [
+        {
+            "title": "Custom Features",
+            "copy": "We build custom functionality for business workflows, integrations, and internal tools that cannot be solved cleanly with templates."
+        },
+        {
+            "title": "Stable Architecture",
+            "copy": "Clean structure, modular code, and predictable behavior so your site can grow without turning into technical debt."
+        },
+        {
+            "title": "Filler Content",
+            "copy": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt."
+        }
+    ],
+    "cta": {
+        "title": "Need custom development?",
+        "body": "Replace this with real use cases, integrations, and system constraints."
+    }
+}

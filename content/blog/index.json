@@ -1,0 +1,70 @@
+{
+    "hero": {
+        "image": "https://picsum.photos/seed/deepdigital-blog-hero/1600/1000"
+    },
+    "intro": {
+        "title": "Articles with better framing",
+        "lead": "A cleaner blog index should feel more like a publication and less like a random card grid."
+    },
+    "posts": [
+        {
+            "slug": "conversion-design-basics",
+            "title": "Conversion-Focused Web Design Basics",
+            "excerpt": "Why most websites fail to convert and how to fix it with structure, clarity, and intent.",
+            "date": "2026-01-12",
+            "author": "DeepDigital",
+            "image": "https://picsum.photos/seed/blog-1/1400/900",
+            "tags": [
+                "Web Design",
+                "Conversion"
+            ]
+        },
+        {
+            "slug": "seo-structure",
+            "title": "SEO Starts With Structure",
+            "excerpt": "Ranking isn’t content alone—it’s architecture.",
+            "date": "2026-01-08",
+            "author": "DeepDigital",
+            "image": "https://picsum.photos/seed/blog-2/1400/900",
+            "tags": [
+                "SEO",
+                "Structure"
+            ]
+        },
+        {
+            "slug": "ux-metrics",
+            "title": "Measuring UX Success",
+            "excerpt": "Understanding user experience through metrics.",
+            "date": "2026-01-15",
+            "author": "DeepDigital",
+            "image": "https://picsum.photos/seed/deepdigital-blog-3/1400/900",
+            "tags": [
+                "UX",
+                "Analytics"
+            ]
+        },
+        {
+            "slug": "mbw-new-website",
+            "title": "MBW's New Website",
+            "excerpt": "After months of hard work, we're excited to unveil our new website!",
+            "date": "2024-06-01",
+            "author": "Jim Orr",
+            "image": "https://picsum.photos/seed/deepdigital-blog-4/1400/900",
+            "tags": [
+                "Website",
+                "Design"
+            ]
+        },
+        {
+            "slug": "coming-soon",
+            "title": "More Articles Coming Soon",
+            "excerpt": "We're working on more content to share with you. Stay tuned!",
+            "date": "2026-01-20",
+            "author": "DeepDigital",
+            "image": "https://picsum.photos/seed/deepdigital-blog-5/1400/900",
+            "tags": [
+                "Announcement"
+            ]
+        }
+    ]
+}

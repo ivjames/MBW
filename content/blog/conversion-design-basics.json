@@ -1,0 +1,44 @@
+{
+    "slug": "conversion-design-basics",
+    "title": "Conversion-Focused Web Design Basics",
+    "excerpt": "Why most websites fail to convert and how to fix it with structure, clarity, and intent.",
+    "date": "2026-01-12",
+    "author": "DeepDigital",
+    "image": "https://picsum.photos/seed/blog-1/1600/1000",
+    "tags": [
+        "Web Design",
+        "Conversion"
+    ],
+    "content": [
+        {
+            "type": "paragraph",
+            "text": "Most websites fail because they prioritize aesthetics over clarity."
+        },
+        {
+            "type": "heading",
+            "text": "Clarity beats creativity"
+        },
+        {
+            "type": "paragraph",
+            "text": "Users do not read websites in a linear way. They scan for relevance, proof, and direction."
+        },
+        {
+            "type": "image",
+            "src": "https://picsum.photos/seed/blog-inline-1/1400/900",
+            "alt": "Wireframe and design process",
+            "caption": "A clearer structure reduces decision friction."
+        },
+        {
+            "type": "quote",
+            "text": "A beautiful website that does not help users decide is still underperforming."
+        },
+        {
+            "type": "list",
+            "items": [
+                "Clarify the offer",
+                "Reduce page friction",
+                "Use proof where decisions happen"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "meta": {
+        "title": "DeepDigital — SEO Optimisation",
+        "description": "DeepDigital SEO services."
+    },
+    "hero": {
+        "eyebrow": "Service",
+        "title": "SEO Optimisation",
+        "lead": "Optimizing our web designs to rank on the first page of Google is our specialty.",
+        "image": "https://picsum.photos/seed/deepdigital-seo/1600/1000"
+    },
+    "sections": [
+        {
+            "title": "Technical SEO",
+            "copy": "We improve structure, performance, metadata, and crawlability so your site can actually be indexed correctly."
+        },
+        {
+            "title": "Content Structure",
+            "copy": "SEO is built into page structure, not layered on top after design is finished."
+        },
+        {
+            "title": "Filler Content",
+            "copy": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
+        }
+    ],
+    "cta": {
+        "title": "Need better rankings?",
+        "body": "Replace with keyword targets, content strategy, and measurable goals."
+    }
+}

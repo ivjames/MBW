@@ -1,0 +1,87 @@
+{
+    "hero": {
+        "eyebrow": "Selected work",
+        "title": "Previous projects, presented as a browsable gallery.",
+        "lead": "Use this page to show recent work, visual direction, project categories, and short business context without forcing users into a heavy case-study flow.",
+        "image": "https://picsum.photos/seed/deepdigital-works-hero/1600/1000"
+    },
+    "intro": {
+        "title": "Interactive project gallery",
+        "lead": "Each project can be filtered by category and opened in a lightweight viewer. Replace filler content with real screenshots, metrics, deliverables, and project summaries."
+    },
+    "filters": [
+        "All",
+        "Marketing",
+        "Development",
+        "Web Design",
+        "SEO",
+        "Ecommerce",
+        "Branding"
+    ],
+    "projects": [
+        {
+            "title": "NorthPeak Legal",
+            "category": "Web Design",
+            "image": "https://picsum.photos/seed/deepdigital-work-legal/1400/1000",
+            "summary": "Service-page redesign focused on trust, clarity, and consultation conversion.",
+            "metrics": [
+                "+41% qualified leads",
+                "+28% consult bookings"
+            ]
+        },
+        {
+            "title": "MetricForge",
+            "category": "Development",
+            "image": "https://picsum.photos/seed/deepdigital-work-saas/1400/1000",
+            "summary": "Modular marketing site rebuild with cleaner product story and stronger user flow.",
+            "metrics": [
+                "+52% demo requests",
+                "+33% activation rate"
+            ]
+        },
+        {
+            "title": "BlueHarbor Systems",
+            "category": "Marketing",
+            "image": "https://picsum.photos/seed/deepdigital-work-industrial/1400/1000",
+            "summary": "Campaign landing pages and message cleanup for an industrial services brand.",
+            "metrics": [
+                "+31% quote requests",
+                "-17% drop-off rate"
+            ]
+        },
+        {
+            "title": "Aster Advisory",
+            "category": "Branding",
+            "image": "https://picsum.photos/seed/deepdigital-work-brand/1400/1000",
+            "summary": "Brand system refresh with tighter visual language and stronger executive positioning.",
+            "metrics": [
+                "Brand refresh",
+                "Guideline system"
+            ]
+        },
+        {
+            "title": "HarborCart",
+            "category": "Ecommerce",
+            "image": "https://picsum.photos/seed/deepdigital-work-ecommerce/1400/1000",
+            "summary": "Ecommerce UX refresh focused on product discovery and checkout simplification.",
+            "metrics": [
+                "Higher AOV",
+                "Cleaner navigation"
+            ]
+        },
+        {
+            "title": "SignalRank",
+            "category": "SEO",
+            "image": "https://picsum.photos/seed/deepdigital-work-seo/1400/1000",
+            "summary": "SEO structure and content improvements to support discoverability and ranking.",
+            "metrics": [
+                "Technical cleanup",
+                "Content structure"
+            ]
+        }
+    ],
+    "cta": {
+        "title": "Want a deeper case study section later?",
+        "body": "This gallery can evolve into full case studies with before-and-after pages, metrics, process notes, and testimonial blocks."
+    }
+}

@@ -1,0 +1,296 @@
+{
+    "hero": {
+        "eyebrow": "Conversion-focused digital agency",
+        "title": "Websites that make your business easier to <span class=\"highlight\">choose</span>.",
+        "lead": "We redesign underperforming sites, sharpen positioning, and build growth campaigns that turn traffic into qualified leads and revenue. The system is modular, flex-first, and built to self-host cleanly.",
+        "ctas": [
+            {
+                "label": "Book a Strategy Call",
+                "href": "contact.html",
+                "variant": "primary"
+            },
+            {
+                "label": "See Services",
+                "href": "services.html",
+                "variant": "secondary"
+            },
+            {
+                "label": "About the Team",
+                "href": "about.html",
+                "variant": "ghost"
+            }
+        ],
+        "proof": [
+            "50+ launches delivered",
+            "34% average lift in qualified leads",
+            "Design system + modular JS"
+        ],
+        "metrics": [
+            {
+                "label": "Qualified Leads",
+                "value": "+38%",
+                "trend": "Month over month"
+            },
+            {
+                "label": "Conversion Rate",
+                "value": "5.4%",
+                "trend": "Up from 3.1%"
+            },
+            {
+                "label": "Cost per Lead",
+                "value": "-22%",
+                "trend": "Trim intake waste"
+            }
+        ],
+        "chart": {
+            "label": "Lead growth after redesign",
+            "points": [
+                {
+                    "label": "Jan",
+                    "value": 34
+                },
+                {
+                    "label": "Feb",
+                    "value": 42
+                },
+                {
+                    "label": "Mar",
+                    "value": 46
+                },
+                {
+                    "label": "Apr",
+                    "value": 58
+                },
+                {
+                    "label": "May",
+                    "value": 69
+                },
+                {
+                    "label": "Jun",
+                    "value": 78
+                },
+                {
+                    "label": "Jul",
+                    "value": 84
+                },
+                {
+                    "label": "Aug",
+                    "value": 94
+                }
+            ]
+        },
+        "quote": {
+            "text": "The new site finally matches the quality of our service. Lead quality improved within the first month.",
+            "author": "Operations Director, NorthPeak Legal"
+        },
+        "image": "https://picsum.photos/seed/deepdigital-hero-a/1600/900"
+    },
+    "logos": [
+        {
+            "name": "NorthPeak",
+            "image": "assets/logos/logo_1.png"
+        },
+        {
+            "name": "Aster",
+            "image": "assets/logos/logo_2.png"
+        },
+        {
+            "name": "Axiom",
+            "image": "assets/logos/logo_3.png"
+        },
+        {
+            "name": "BlueHarbor",
+            "image": "assets/logos/logo_4.png"
+        },
+        {
+            "name": "MetricForge",
+            "image": "assets/logos/logo_5.png"
+        },
+        {
+            "name": "PrimeLayer",
+            "image": "assets/logos/logo_6.png"
+        }
+    ],
+    "services": [
+        {
+            "kicker": "01",
+            "title": "Marketing",
+            "copy": "We use strategic marketing tactics that have been proven to work.",
+            "tokens": [
+                "Campaign strategy",
+                "Lead generation",
+                "B2B focus"
+            ]
+        },
+        {
+            "kicker": "02",
+            "title": "Development",
+            "copy": "Custom programming for most complex functions you can think.",
+            "tokens": [
+                "Custom features",
+                "Clean handoff",
+                "Self-hosted builds"
+            ]
+        },
+        {
+            "kicker": "03",
+            "title": "Web Design",
+            "copy": "Powerful web design that will out-perform your strongest competitors.",
+            "tokens": [
+                "Conversion-focused",
+                "Responsive UX",
+                "Clear hierarchy"
+            ]
+        }
+    ],
+    "cases": [
+        {
+            "badge": "B2B Professional Services",
+            "title": "NorthPeak Legal",
+            "body": "Repositioned the firm, rebuilt core service pages, and tightened consultation flows to improve trust and lead quality for a multi-location practice.",
+            "image": "https://picsum.photos/seed/deepdigital-case-legal/1400/900",
+            "stats": [
+                {
+                    "value": "+41%",
+                    "label": "Qualified leads"
+                },
+                {
+                    "value": "+28%",
+                    "label": "Consult bookings"
+                },
+                {
+                    "value": "-19%",
+                    "label": "Bounce rate"
+                }
+            ]
+        },
+        {
+            "badge": "Growth-Stage SaaS",
+            "title": "MetricForge",
+            "body": "Rebuilt the homepage and demand-gen landing flow around a clearer product story, stronger proof, and sharper user segmentation.",
+            "image": "https://picsum.photos/seed/deepdigital-case-saas/1400/900",
+            "stats": [
+                {
+                    "value": "+52%",
+                    "label": "Demo requests"
+                },
+                {
+                    "value": "+33%",
+                    "label": "Activation rate"
+                },
+                {
+                    "value": "-24%",
+                    "label": "Paid CAC"
+                }
+            ]
+        },
+        {
+            "badge": "Industrial Services",
+            "title": "BlueHarbor Systems",
+            "body": "Rebuilt a dense legacy site into a cleaner technical platform with better hierarchy, stronger lead routing, and easier decision paths.",
+            "image": "https://picsum.photos/seed/deepdigital-case-industrial/1400/900",
+            "stats": [
+                {
+                    "value": "+31%",
+                    "label": "Quote requests"
+                },
+                {
+                    "value": "+22%",
+                    "label": "Qualified sessions"
+                },
+                {
+                    "value": "-17%",
+                    "label": "Drop-off rate"
+                }
+            ]
+        }
+    ],
+    "system": {
+        "title": "A reusable system, not a pile of disconnected files.",
+        "lead": "The template uses tokens, utilities, primitives, section modules, and data-driven composition.",
+        "pillars": [
+            {
+                "kicker": "T",
+                "title": "Tokens",
+                "copy": "Color, spacing, radius, type, glow, and shadows live in a dedicated token layer.",
+                "tokens": [
+                    "Palette",
+                    "Spacing",
+                    "Typography"
+                ]
+            },
+            {
+                "kicker": "U",
+                "title": "Utilities",
+                "copy": "Flex and container helpers create layout discipline without inline-style sprawl.",
+                "tokens": [
+                    "Flex-first",
+                    "Containers",
+                    "Responsive"
+                ]
+            },
+            {
+                "kicker": "P",
+                "title": "Primitives",
+                "copy": "Buttons, cards, and charts expose variants and enforce consistent design behavior.",
+                "tokens": [
+                    "Variants",
+                    "States",
+                    "Reuse"
+                ]
+            },
+            {
+                "kicker": "S",
+                "title": "Sections",
+                "copy": "Hero, services, slider, system panels, and CTA are assembled from data and modules.",
+                "tokens": [
+                    "Composable",
+                    "Data-driven",
+                    "Scalable"
+                ]
+            }
+        ],
+        "process": [
+            {
+                "step": "1",
+                "title": "Strategy",
+                "copy": "Define your competition and target audience."
+            },
+            {
+                "step": "2",
+                "title": "Design",
+                "copy": "Establish color scheme, layout, sitemap, and style."
+            },
+            {
+                "step": "3",
+                "title": "Develop",
+                "copy": "Turn ideas into working pages, interactions, and systems."
+            },
+            {
+                "step": "4",
+                "title": "Support",
+                "copy": "Keep design, marketing, and maintenance aligned after launch."
+            }
+        ]
+    },
+    "testimonial": {
+        "quote": "DeepDigital replaced a generic website with a system our team can extend without degrading the design or the message.",
+        "author": "Maya Chen, CEO at Aster Advisory"
+    },
+    "cta": {
+        "title": "Ready to replace the template with a real offer?",
+        "body": "Use this starter as the base for a static self-hosted build, then swap placeholder metrics, case studies, and contact routing with real business content.",
+        "actions": [
+            {
+                "label": "Start the Project",
+                "href": "contact.html",
+                "variant": "primary"
+            },
+            {
+                "label": "Review Services",
+                "href": "services.html",
+                "variant": "secondary"
+            }
+        ]
+    }
+}

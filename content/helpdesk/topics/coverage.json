@@ -1,0 +1,35 @@
+{
+    "slug": "coverage",
+    "title": "Coverage",
+    "excerpt": "Understand what is included, where support applies, and how service boundaries work.",
+    "date": "2024-06-01",
+    "author": "Arthur Smith",
+    "tags": [
+        "Coverage",
+        "Support"
+    ],
+    "content": [
+        {
+            "type": "paragraph",
+            "text": "Our coverage includes 24/7 support for all critical issues, with a guaranteed response time of under 1 hour. We provide assistance for software bugs, hardware failures, and network issues within the scope of our service agreement."
+        },
+        {
+            "type": "heading",
+            "text": "Service Boundaries"
+        },
+        {
+            "type": "paragraph",
+            "text": "While we strive to provide comprehensive support, there are certain boundaries to our services. We do not cover issues caused by third-party software or hardware that is not part of our standard offerings. Additionally, we do not provide support for user errors or unauthorized modifications to our products."
+        },
+        {
+            "type": "image",
+            "src": "https://picsum.photos/seed/helpdesk-coverage/1400/900",
+            "alt": "Coverage diagram",
+            "caption": "Visual representation of our coverage areas."
+        },
+        {
+            "type": "quote",
+            "text": "Our goal is to ensure that you have the support you need when you need it, while also maintaining clear boundaries to provide the best service possible."
+        }
+    ]
+}

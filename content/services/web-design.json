@@ -1,0 +1,30 @@
+{
+    "meta": {
+        "title": "DeepDigital — Web Design",
+        "description": "DeepDigital web design services."
+    },
+    "hero": {
+        "eyebrow": "Service",
+        "title": "Web Design",
+        "lead": "Powerful web design that will out-perform your strongest competitors. Let us help you with that. Get a free quote.",
+        "image": "https://picsum.photos/seed/deepdigital-web-design/1600/1000"
+    },
+    "sections": [
+        {
+            "title": "Conversion-First Design",
+            "copy": "We design around decision-making, trust, and action—not decoration."
+        },
+        {
+            "title": "Clear Structure",
+            "copy": "Strong hierarchy, readable layouts, and intentional spacing make the site easier to scan and easier to trust."
+        },
+        {
+            "title": "Filler Content",
+            "copy": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor."
+        }
+    ],
+    "cta": {
+        "title": "Need a better website?",
+        "body": "Replace with real before/after examples and performance metrics."
+    }
+}

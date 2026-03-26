@@ -1,0 +1,25 @@
+{
+    "articles": [
+        {
+            "slug": "coverage-overview",
+            "title": "Coverage overview",
+            "excerpt": "Understand what is included, where support applies, and how service boundaries work.",
+            "date": "2026-03-25",
+            "primaryTopic": "coverage",
+            "tags": [
+                "Coverage",
+                "Support"
+            ]
+        },
+        {
+            "slug": "coverage-limits",
+            "title": "Coverage limits",
+            "excerpt": "Learn where service scope begins and ends.",
+            "date": "2026-03-26",
+            "primaryTopic": "coverage",
+            "tags": [
+                "Coverage"
+            ]
+        }
+    ]
+}

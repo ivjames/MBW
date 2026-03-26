@@ -1,0 +1,202 @@
+import express from 'express';
+import { db } from '../db.js';
+
+export const apiRouter = express.Router();
+
+const parseJSON = (v, fallback) => {
+    try { return JSON.parse(v || ''); } catch { return fallback; }
+};
+
+apiRouter.post('/contact', (req, res) => {
+    const {
+        name = '',
+        email = '',
+        message = '',
+        company = '',
+        phone = '',
+        service = '',
+        budget = '',
+        website = ''
+    } = req.body || {};
+
+    if (website) return res.json({ ok: true, message: 'Thanks.' });
+    if (!name.trim() || !email.trim() || !message.trim()) {
+        return res.status(400).json({ ok: false, message: 'Name, email, and message are required.' });
+    }
+
+    console.log({
+        submittedAt: new Date().toISOString(),
+        name, email, company, phone, service, budget, message
+    });
+
+    return res.json({
+        ok: true,
+        message: 'Message received in demo mode. Check the server console for the submission payload.'
+    });
+});
+
+apiRouter.get('/site', (_req, res) => {
+    res.json({
+        company: {
+            name: 'DeepDigital',
+            email: 'maurice@marketingbuzzworthy.com',
+            phone: '1-800-123-4567',
+            supportPhone: '1-800-123-4569',
+            addressLines: ['2231 Sycamore Lake Road', 'Green Bay, WI 54304']
+        },
+        nav: [
+            { label: 'Home', href: 'index.html', page: 'home' },
+            {
+                label: 'Services', href: 'services.html', page: 'services',
+                children: [
+                    { label: 'Marketing', href: 'marketing.html', page: 'marketing' },
+                    { label: 'Development', href: 'development.html', page: 'development' },
+                    { label: 'Web Design', href: 'web-design.html', page: 'web-design' },
+                    { label: 'SEO Optimisation', href: 'seo-optimisation.html', page: 'seo-optimisation' },
+                    { label: 'Ecommerce', href: 'ecommerce.html', page: 'ecommerce' },
+                    { label: 'Branding', href: 'branding.html', page: 'branding' }
+                ]
+            },
+            { label: 'Works', href: 'works.html', page: 'works' },
+            { label: 'Blog', href: 'blog.html', page: 'blog' },
+            { label: 'Helpdesk', href: 'helpdesk.html', page: 'helpdesk' },
+            { label: 'About', href: 'about.html', page: 'about' },
+            { label: 'Contact', href: 'contact.html', page: 'contact' }
+        ],
+        servicePills: [
+            { label: 'Marketing', href: 'marketing.html', page: 'marketing' },
+            { label: 'Development', href: 'development.html', page: 'development' },
+            { label: 'Web Design', href: 'web-design.html', page: 'web-design' },
+            { label: 'SEO Optimisation', href: 'seo-optimisation.html', page: 'seo-optimisation' },
+            { label: 'Ecommerce', href: 'ecommerce.html', page: 'ecommerce' },
+            { label: 'Branding', href: 'branding.html', page: 'branding' }
+        ]
+    });
+});
+
+apiRouter.get('/blog', (_req, res) => {
+    const posts = db.prepare(`
+    SELECT slug, title, excerpt, cover_image, author, published_at, updated_at
+    FROM posts
+    WHERE status = 'published'
+    ORDER BY datetime(COALESCE(published_at, updated_at)) DESC
+  `).all().map(row => ({
+        slug: row.slug,
+        title: row.title,
+        excerpt: row.excerpt,
+        date: (row.published_at || row.updated_at || '').slice(0, 10),
+        author: row.author || 'DeepDigital',
+        image: row.cover_image,
+        tags: ['Blog']
+    }));
+
+    res.json({
+        hero: { image: 'https://picsum.photos/seed/deepdigital-blog-hero/1600/1000' },
+        intro: {
+            title: 'Articles with better framing',
+            lead: 'A cleaner blog index should feel more like a publication and less like a random card grid.'
+        },
+        posts
+    });
+});
+
+apiRouter.get('/blog/:slug', (req, res) => {
+    const row = db.prepare(`
+    SELECT * FROM posts
+    WHERE slug = ? AND status = 'published'
+  `).get(req.params.slug);
+
+    if (!row) return res.status(404).json({ error: 'Not found' });
+
+    res.json({
+        slug: row.slug,
+        title: row.title,
+        excerpt: row.excerpt,
+        date: (row.published_at || row.updated_at || '').slice(0, 10),
+        author: row.author || 'DeepDigital',
+        image: row.cover_image,
+        tags: ['Blog'],
+        content: parseJSON(row.content_json, [])
+    });
+});
+
+apiRouter.get('/helpdesk', (_req, res) => {
+    const topics = db.prepare(`
+    SELECT t.slug, t.title, t.description, COUNT(a.id) AS count
+    FROM helpdesk_topics t
+    LEFT JOIN helpdesk_articles a
+      ON a.topic_id = t.id AND a.status = 'published'
+    GROUP BY t.id
+    ORDER BY t.sort_order ASC, t.title ASC
+  `).all();
+
+    const rows = db.prepare(`
+    SELECT a.slug, a.title, t.title AS topic
+    FROM helpdesk_articles a
+    LEFT JOIN helpdesk_topics t ON t.id = a.topic_id
+    WHERE a.status = 'published'
+    ORDER BY datetime(COALESCE(a.published_at, a.updated_at)) DESC
+  `).all();
+
+    res.json({
+        hero: {
+            eyebrow: 'Helpdesk',
+            title: 'How can we help?',
+            lead: 'Search FAQs, browse support topics, and open individual help articles.',
+            image: 'https://picsum.photos/seed/deepdigital-helpdesk/1600/1000'
+        },
+        topics,
+        popular: rows.slice(0, 3),
+        mostViewed: rows.slice(0, 3)
+    });
+});
+
+apiRouter.get('/helpdesk/topic/:slug', (req, res) => {
+    const topic = db.prepare(`
+    SELECT id, slug, title, description
+    FROM helpdesk_topics
+    WHERE slug = ?
+  `).get(req.params.slug);
+
+    if (!topic) return res.status(404).json({ error: 'Not found' });
+
+    const articles = db.prepare(`
+    SELECT slug, title, excerpt, published_at, updated_at
+    FROM helpdesk_articles
+    WHERE topic_id = ? AND status = 'published'
+    ORDER BY datetime(COALESCE(published_at, updated_at)) DESC
+  `).all(topic.id).map(row => ({
+        slug: row.slug,
+        title: row.title,
+        excerpt: row.excerpt,
+        date: (row.published_at || row.updated_at || '').slice(0, 10)
+    }));
+
+    res.json({
+        slug: topic.slug,
+        title: topic.title,
+        description: topic.description,
+        articles
+    });
+});
+
+apiRouter.get('/helpdesk/article/:slug', (req, res) => {
+    const row = db.prepare(`
+    SELECT a.*, t.slug AS topic_slug
+    FROM helpdesk_articles a
+    LEFT JOIN helpdesk_topics t ON t.id = a.topic_id
+    WHERE a.slug = ? AND a.status = 'published'
+  `).get(req.params.slug);
+
+    if (!row) return res.status(404).json({ error: 'Not found' });
+
+    res.json({
+        slug: row.slug,
+        topic: row.topic_slug || '',
+        title: row.title,
+        excerpt: row.excerpt,
+        date: (row.published_at || row.updated_at || '').slice(0, 10),
+        tags: parseJSON(row.tags_json, []),
+        content: parseJSON(row.content_json, [])
+    });
+});

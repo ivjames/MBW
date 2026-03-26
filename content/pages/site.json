@@ -1,0 +1,145 @@
+{
+    "company": {
+        "name": "DeepDigital",
+        "email": "maurice@marketingbuzzworthy.com",
+        "phone": "1-800-123-4567",
+        "supportPhone": "1-800-123-4569",
+        "addressLines": [
+            "2231 Sycamore Lake Road",
+            "Green Bay, WI 54304"
+        ]
+    },
+    "nav": [
+        {
+            "label": "Home",
+            "href": "index.html",
+            "page": "home"
+        },
+        {
+            "label": "Services",
+            "href": "services.html",
+            "page": "services",
+            "children": [
+                {
+                    "label": "Marketing",
+                    "href": "marketing.html",
+                    "page": "marketing"
+                },
+                {
+                    "label": "Development",
+                    "href": "development.html",
+                    "page": "development"
+                },
+                {
+                    "label": "Web Design",
+                    "href": "web-design.html",
+                    "page": "web-design"
+                },
+                {
+                    "label": "SEO Optimisation",
+                    "href": "seo-optimisation.html",
+                    "page": "seo-optimisation"
+                },
+                {
+                    "label": "Ecommerce",
+                    "href": "ecommerce.html",
+                    "page": "ecommerce"
+                },
+                {
+                    "label": "Branding",
+                    "href": "branding.html",
+                    "page": "branding"
+                }
+            ]
+        },
+        {
+            "label": "About",
+            "href": "about.html",
+            "page": "about"
+        },
+        {
+            "label": "Contact",
+            "href": "contact.html",
+            "page": "contact"
+        }
+    ],
+    "servicePills": [
+        {
+            "label": "Marketing",
+            "href": "marketing.html",
+            "page": "marketing"
+        },
+        {
+            "label": "Development",
+            "href": "development.html",
+            "page": "development"
+        },
+        {
+            "label": "Web Design",
+            "href": "web-design.html",
+            "page": "web-design"
+        },
+        {
+            "label": "SEO Optimisation",
+            "href": "seo-optimisation.html",
+            "page": "seo-optimisation"
+        },
+        {
+            "label": "Ecommerce",
+            "href": "ecommerce.html",
+            "page": "ecommerce"
+        },
+        {
+            "label": "Branding",
+            "href": "branding.html",
+            "page": "branding"
+        }
+    ],
+    "footer": {
+        "tagline": "Conversion-focused digital agency. Strategy, design, and development aligned.",
+        "columns": [
+            {
+                "title": "Services",
+                "links": [
+                    {
+                        "label": "Marketing",
+                        "href": "marketing.html"
+                    },
+                    {
+                        "label": "Development",
+                        "href": "development.html"
+                    },
+                    {
+                        "label": "Web Design",
+                        "href": "web-design.html"
+                    },
+                    {
+                        "label": "SEO Optimisation",
+                        "href": "seo-optimisation.html"
+                    },
+                    {
+                        "label": "Ecommerce",
+                        "href": "ecommerce.html"
+                    },
+                    {
+                        "label": "Branding",
+                        "href": "branding.html"
+                    }
+                ]
+            },
+            {
+                "title": "Company",
+                "links": [
+                    {
+                        "label": "About",
+                        "href": "about.html"
+                    },
+                    {
+                        "label": "Contact",
+                        "href": "contact.html"
+                    }
+                ]
+            }
+        ]
+    }
+}
