@@ -49,32 +49,32 @@
   "servicePills": [
     {
       "label": "Marketing",
-      "href": "marketing.html",
+      "href": "marketing",
       "page": "marketing"
     },
     {
       "label": "Development",
-      "href": "development.html",
+      "href": "development",
       "page": "development"
     },
     {
       "label": "Web Design",
-      "href": "web-design.html",
+      "href": "web-design",
       "page": "web-design"
     },
     {
       "label": "SEO Optimisation",
-      "href": "seo-optimisation.html",
+      "href": "seo-optimisation",
       "page": "seo-optimisation"
     },
     {
       "label": "Ecommerce",
-      "href": "ecommerce.html",
+      "href": "ecommerce",
       "page": "ecommerce"
     },
     {
       "label": "Branding",
-      "href": "branding.html",
+      "href": "branding",
       "page": "branding"
     }
   ],
@@ -86,27 +86,27 @@
         "links": [
           {
             "label": "Marketing",
-            "href": "marketing.html"
+            "href": "marketing"
           },
           {
             "label": "Development",
-            "href": "development.html"
+            "href": "development"
           },
           {
             "label": "Web Design",
-            "href": "web-design.html"
+            "href": "web-design"
           },
           {
             "label": "SEO Optimisation",
-            "href": "seo-optimisation.html"
+            "href": "seo-optimisation"
           },
           {
             "label": "Ecommerce",
-            "href": "ecommerce.html"
+            "href": "ecommerce"
           },
           {
             "label": "Branding",
-            "href": "branding.html"
+            "href": "branding"
           }
         ]
       },
@@ -115,11 +115,11 @@
         "links": [
           {
             "label": "About",
-            "href": "about.html"
+            "href": "about"
           },
           {
             "label": "Contact",
-            "href": "contact.html"
+            "href": "contact"
           }
         ]
       }

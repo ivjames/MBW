@@ -6,17 +6,17 @@
         "ctas": [
             {
                 "label": "Book a Strategy Call",
-                "href": "contact.html",
+                "href": "contact",
                 "variant": "primary"
             },
             {
                 "label": "See Services",
-                "href": "services.html",
+                "href": "services",
                 "variant": "secondary"
             },
             {
                 "label": "About the Team",
-                "href": "about.html",
+                "href": "about",
                 "variant": "ghost"
             }
         ],
@@ -283,12 +283,12 @@
         "actions": [
             {
                 "label": "Start the Project",
-                "href": "contact.html",
+                "href": "contact",
                 "variant": "primary"
             },
             {
                 "label": "Review Services",
-                "href": "services.html",
+                "href": "services",
                 "variant": "secondary"
             }
         ]

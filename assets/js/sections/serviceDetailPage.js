@@ -72,8 +72,8 @@ export function ServiceDetailPage(data, servicePills, currentPage) {
                                     createElement('div', {
                                         className: 'hero-cta-row',
                                         children: [
-                                            Button({ label: 'Contact Us', href: 'contact.html', variant: 'primary' }),
-                                            Button({ label: 'View All Services', href: 'services.html', variant: 'secondary' })
+                                            Button({ label: 'Contact Us', href: 'contact', variant: 'primary' }),
+                                            Button({ label: 'View All Services', href: 'services', variant: 'secondary' })
                                         ]
                                     })
                                 ]

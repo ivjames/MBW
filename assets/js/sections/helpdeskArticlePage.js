@@ -81,7 +81,7 @@ export function HelpdeskArticlePage(data = {}) {
                                     createElement('a', {
                                         className: 'blog-back-link',
                                         text: '← Back to Topic',
-                                        attrs: { href: `topic.html?slug=${topic}` }
+                                        attrs: { href: `topic?slug=${topic}` }
                                     }),
                                     createElement('div', {
                                         className: 'eyebrow',
@@ -195,12 +195,12 @@ export function HelpdeskArticlePage(data = {}) {
                                                 children: [
                                                     Button({
                                                         label: 'Back to Article List',
-                                                        href: `article.html?slug=${topic}`,
+                                                        href: `article?slug=${topic}`,
                                                         variant: 'secondary'
                                                     }),
                                                     Button({
                                                         label: 'Helpdesk Home',
-                                                        href: 'helpdesk.html',
+                                                        href: 'helpdesk',
                                                         variant: 'primary'
                                                     })
                                                 ]

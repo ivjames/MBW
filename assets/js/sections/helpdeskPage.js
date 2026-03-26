@@ -16,7 +16,7 @@ function TopicCard(topic) {
                     createElement('a', {
                         text: topic.title || '',
                         attrs: {
-                            href: `topic.html?slug=${topic.slug || ''}`
+                            href: `topic?slug=${topic.slug || ''}`
                         }
                     })
                 ]
@@ -41,7 +41,7 @@ function FaqList(title, items = []) {
                     createElement('a', {
                         className: 'helpdesk-faq-link',
                         attrs: {
-                            href: `article.html?slug=${item.slug || ''}`
+                            href: `article?slug=${item.slug || ''}`
                         },
                         children: [
                             createElement('div', {

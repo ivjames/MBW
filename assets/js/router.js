@@ -3,13 +3,28 @@ export function resolveRoute() {
     const params = new URLSearchParams(window.location.search);
     const slug = params.get('slug');
 
+    if (path === '/blog' && slug) {
+        return { page: 'post', path, slug };
+    }
+
+    if (path === '/helpdesk' && slug) {
+        return { page: 'topic', path, slug };
+    }
+
+    if (path === '/topic' && slug) {
+        return { page: 'topic', path, slug };
+    }
+
+    if (path === '/article' && slug) {
+        return { page: 'article', path, slug };
+    }
+
     const routeMap = {
         '/': 'home',
         '/services': 'services',
         '/works': 'works',
-        '/blog': slug ? 'post' : 'blog',
-        '/helpdesk': slug ? 'topic' : 'helpdesk',
-        '/article': 'article',
+        '/blog': 'blog',
+        '/helpdesk': 'helpdesk',
         '/about': 'about',
         '/contact': 'contact',
         '/marketing': 'marketing',

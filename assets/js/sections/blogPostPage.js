@@ -77,7 +77,7 @@ export function BlogPostPage(data) {
                                     createElement('a', {
                                         className: 'blog-back-link',
                                         text: '← Back to Blog',
-                                        attrs: { href: 'blog.html' }
+                                        attrs: { href: 'blog' }
                                     }),
                                     createElement('div', {
                                         className: 'eyebrow',
@@ -202,12 +202,12 @@ export function BlogPostPage(data) {
                                                 children: [
                                                     Button({
                                                         label: 'Contact Us',
-                                                        href: 'contact.html',
+                                                        href: 'contact',
                                                         variant: 'primary'
                                                     }),
                                                     Button({
                                                         label: 'View Services',
-                                                        href: 'services.html',
+                                                        href: 'services',
                                                         variant: 'secondary'
                                                     })
                                                 ]

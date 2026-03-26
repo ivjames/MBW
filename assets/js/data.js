@@ -8,22 +8,22 @@ export const siteData = {
   },
 
   nav: [
-    { label: "Home", href: "index.html", page: "home" },
+    { label: "Home", href: "index", page: "home" },
     {
       label: "Services",
-      href: "services.html",
+      href: "services",
       page: "services",
       children: [
-        { label: "Marketing", href: "marketing.html", page: "marketing" },
-        { label: "Development", href: "development.html", page: "development" },
-        { label: "Web Design", href: "web-design.html", page: "web-design" },
-        { label: "SEO Optimisation", href: "seo-optimisation.html", page: "seo-optimisation" },
-        { label: "Ecommerce", href: "ecommerce.html", page: "ecommerce" },
-        { label: "Branding", href: "branding.html", page: "branding" }
+        { label: "Marketing", href: "marketing", page: "marketing" },
+        { label: "Development", href: "development", page: "development" },
+        { label: "Web Design", href: "web-design", page: "web-design" },
+        { label: "SEO Optimisation", href: "seo-optimisation", page: "seo-optimisation" },
+        { label: "Ecommerce", href: "ecommerce", page: "ecommerce" },
+        { label: "Branding", href: "branding", page: "branding" }
       ]
     },
-    { label: "About", href: "about.html", page: "about" },
-    { label: "Contact", href: "contact.html", page: "contact" }
+    { label: "About", href: "about", page: "about" },
+    { label: "Contact", href: "contact", page: "contact" }
   ],
 
   home: {
@@ -32,9 +32,9 @@ export const siteData = {
       title: "Websites that make your business easier to <span class=\"highlight\">choose</span>.",
       lead: "We redesign underperforming sites, sharpen positioning, and build growth campaigns that turn traffic into qualified leads and revenue. The system is modular, flex-first, and built to self-host cleanly.",
       ctas: [
-        { label: "Book a Strategy Call", href: "contact.html", variant: "primary" },
-        { label: "See Services", href: "services.html", variant: "secondary" },
-        { label: "About the Team", href: "about.html", variant: "ghost" }
+        { label: "Book a Strategy Call", href: "contact", variant: "primary" },
+        { label: "See Services", href: "services", variant: "secondary" },
+        { label: "About the Team", href: "about", variant: "ghost" }
       ],
       proof: [
         "50+ launches delivered",
@@ -151,18 +151,18 @@ export const siteData = {
       title: "Ready to replace the template with a real offer?",
       body: "Use this starter as the base for a static self-hosted build, then swap placeholder metrics, case studies, and contact routing with real business content.",
       actions: [
-        { label: "Start the Project", href: "contact.html", variant: "primary" },
-        { label: "Review Services", href: "services.html", variant: "secondary" }
+        { label: "Start the Project", href: "contact", variant: "primary" },
+        { label: "Review Services", href: "services", variant: "secondary" }
       ]
     }
   },
   servicePills: [
-    { label: "Marketing", href: "marketing.html", page: "marketing" },
-    { label: "Development", href: "development.html", page: "development" },
-    { label: "Web Design", href: "web-design.html", page: "web-design" },
-    { label: "SEO Optimisation", href: "seo-optimisation.html", page: "seo-optimisation" },
-    { label: "Ecommerce", href: "ecommerce.html", page: "ecommerce" },
-    { label: "Branding", href: "branding.html", page: "branding" }
+    { label: "Marketing", href: "marketing", page: "marketing" },
+    { label: "Development", href: "development", page: "development" },
+    { label: "Web Design", href: "web-design", page: "web-design" },
+    { label: "SEO Optimisation", href: "seo-optimisation", page: "seo-optimisation" },
+    { label: "Ecommerce", href: "ecommerce", page: "ecommerce" },
+    { label: "Branding", href: "branding", page: "branding" }
   ],
   servicesPage: {
     hero: {

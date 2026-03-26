@@ -11,7 +11,7 @@ function BlogCard(post) {
             createElement('a', {
                 className: 'blog-index-media',
                 attrs: {
-                    href: `blog-post.html?slug=${post.slug}`,
+                    href: `blog?slug=${post.slug}`,
                     'aria-label': post.title
                 },
                 children: [
@@ -47,7 +47,7 @@ function BlogCard(post) {
 
                     createElement('a', {
                         className: 'blog-index-title-link',
-                        attrs: { href: `blog-post.html?slug=${post.slug}` },
+                        attrs: { href: `blog?slug=${post.slug}` },
                         children: [
                             createElement('h3', {
                                 className: 'blog-index-title',
@@ -78,7 +78,7 @@ function BlogCard(post) {
                         children: [
                             Button({
                                 label: 'Read Article',
-                                href: `blog-post.html?slug=${post.slug}`,
+                                href: `blog?slug=${post.slug}`,
                                 variant: 'secondary'
                             })
                         ]

@@ -16,7 +16,7 @@ function ArticleCard(article = {}) {
                     createElement('a', {
                         text: article.title || '',
                         attrs: {
-                            href: `article.html?slug=${article.slug || ''}`
+                            href: `article?slug=${article.slug || ''}`
                         }
                     })
                 ]
@@ -99,7 +99,7 @@ export function HelpdeskTopicPage(data = {}) {
                                             createElement('a', {
                                                 className: 'button button-secondary',
                                                 text: 'All Topics',
-                                                attrs: { href: 'helpdesk.html' }
+                                                attrs: { href: 'helpdesk' }
                                             })
                                         ]
                                     })

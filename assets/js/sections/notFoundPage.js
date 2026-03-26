@@ -37,9 +37,9 @@ export function NotFoundPage() {
                   createElement('div', {
                     className: 'hero-cta-row',
                     children: [
-                      Button({ label: 'Go Home', href: 'index.html', variant: 'primary' }),
-                      Button({ label: 'Browse Blog', href: 'blog.html', variant: 'secondary' }),
-                      Button({ label: 'Open Helpdesk', href: 'helpdesk.html', variant: 'secondary' })
+                      Button({ label: 'Go Home', href: 'index', variant: 'primary' }),
+                      Button({ label: 'Browse Blog', href: 'blog', variant: 'secondary' }),
+                      Button({ label: 'Open Helpdesk', href: 'helpdesk', variant: 'secondary' })
                     ]
                   })
                 ]

@@ -31,6 +31,8 @@ async function boot() {
 
   headerMount.appendChild(Navbar({ nav: site.nav, currentPage: page }));
 
+  console.log('[page]', page);
+
   const pageMap = {
     home: () => HomePage({ home: pageContent, ...site }),
     services: () => ServicesPage(pageContent),
