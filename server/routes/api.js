@@ -45,31 +45,31 @@ apiRouter.get('/site', (_req, res) => {
             addressLines: ['2231 Sycamore Lake Road', 'Green Bay, WI 54304']
         },
         nav: [
-            { label: 'Home', href: 'index.html', page: 'home' },
+            { label: 'Home', href: '/index', page: 'home' },
             {
-                label: 'Services', href: 'services.html', page: 'services',
+                label: 'Services', href: '/services', page: 'services',
                 children: [
-                    { label: 'Marketing', href: 'marketing.html', page: 'marketing' },
-                    { label: 'Development', href: 'development.html', page: 'development' },
-                    { label: 'Web Design', href: 'web-design.html', page: 'web-design' },
-                    { label: 'SEO Optimisation', href: 'seo-optimisation.html', page: 'seo-optimisation' },
-                    { label: 'Ecommerce', href: 'ecommerce.html', page: 'ecommerce' },
-                    { label: 'Branding', href: 'branding.html', page: 'branding' }
+                    { label: 'Marketing', href: '/marketing', page: 'marketing' },
+                    { label: 'Development', href: '/development', page: 'development' },
+                    { label: 'Web Design', href: '/web-design', page: 'web-design' },
+                    { label: 'SEO Optimisation', href: '/seo-optimisation', page: 'seo-optimisation' },
+                    { label: 'Ecommerce', href: '/ecommerce', page: 'ecommerce' },
+                    { label: 'Branding', href: '/branding', page: 'branding' }
                 ]
             },
-            { label: 'Works', href: 'works.html', page: 'works' },
-            { label: 'Blog', href: 'blog.html', page: 'blog' },
-            { label: 'Helpdesk', href: 'helpdesk.html', page: 'helpdesk' },
-            { label: 'About', href: 'about.html', page: 'about' },
-            { label: 'Contact', href: 'contact.html', page: 'contact' }
+            { label: 'Works', href: '/works', page: 'works' },
+            { label: 'Blog', href: '/blog', page: 'blog' },
+            { label: 'Helpdesk', href: '/helpdesk', page: 'helpdesk' },
+            { label: 'About', href: '/about', page: 'about' },
+            { label: 'Contact', href: '/contact', page: 'contact' }
         ],
         servicePills: [
-            { label: 'Marketing', href: 'marketing.html', page: 'marketing' },
-            { label: 'Development', href: 'development.html', page: 'development' },
-            { label: 'Web Design', href: 'web-design.html', page: 'web-design' },
-            { label: 'SEO Optimisation', href: 'seo-optimisation.html', page: 'seo-optimisation' },
-            { label: 'Ecommerce', href: 'ecommerce.html', page: 'ecommerce' },
-            { label: 'Branding', href: 'branding.html', page: 'branding' }
+            { label: 'Marketing', href: '/marketing', page: 'marketing' },
+            { label: 'Development', href: '/development', page: 'development' },
+            { label: 'Web Design', href: '/web-design', page: 'web-design' },
+            { label: 'SEO Optimisation', href: '/seo-optimisation', page: 'seo-optimisation' },
+            { label: 'Ecommerce', href: '/ecommerce', page: 'ecommerce' },
+            { label: 'Branding', href: '/branding', page: 'branding' }
         ]
     });
 });

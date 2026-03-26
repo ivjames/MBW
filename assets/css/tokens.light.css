@@ -1,20 +1,21 @@
 :root {
   color-scheme: light;
-  --bg: #F4F4F5;
-  --bg-elevated: #FFFFFF;
-  --surface-1: rgba(255, 255, 255, 0.92);
-  --surface-2: rgba(255, 255, 255, 0.98);
-  --surface-3: #F9FAFB;
-  --surface-solid: #FFFFFF;
-  --line-soft: rgba(31, 39, 50, 0.10);
-  --line-strong: rgba(31, 39, 50, 0.16);
+  --bg: #f6f8fc;
+  --bg-elevated: #ffffff;
+  --surface-1: rgba(255, 255, 255, 0.94);
+  --surface-2: rgba(248, 250, 255, 0.98);
+  --surface-3: #eef2fb;
+  --surface-solid: #ffffff;
 
-  --text-1: #1F2732;
-  --text-2: #45556C;
-  --text-3: #7F7F7F;
-  --text-dark: #FFFFFF;
+  --line-soft: rgba(16, 24, 40, 0.08);
+  --line-strong: rgba(16, 24, 40, 0.14);
 
-  --brand-yellow: #FF497C;
+  --text-1: #0f1728;
+  --text-2: #334155;
+  --text-3: #64748b;
+  --text-dark: #0b0d12;
+
+  --brand-yellow: #d4bd00;
   --brand-yellow-soft: rgba(255, 73, 124, 0.10);
   --brand-yellow-glow: rgba(255, 73, 124, 0.20);
   --brand-blue: #3371B7;

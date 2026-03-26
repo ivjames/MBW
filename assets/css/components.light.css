@@ -1,3 +1,12 @@
+body {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(51, 113, 183, 0.08), transparent 30%),
+    radial-gradient(circle at 88% 14%, rgba(241, 137, 76, 0.08), transparent 24%),
+    radial-gradient(circle at 52% 100%, rgba(212, 189, 0, 0.05), transparent 26%),
+    linear-gradient(180deg, #f8faff 0%, #f3f6fc 44%, #eef3fb 100%);
+  color: var(--text-1);
+}
+
 .site-header {
   position: sticky;
   top: 0;
@@ -2233,4 +2242,135 @@
 .theme-toggle:hover,
 .theme-toggle:focus-visible {
   transform: translateY(-1px);
+}
+
+/* brute */
+body {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(51, 113, 183, 0.08), transparent 30%),
+    radial-gradient(circle at 88% 14%, rgba(241, 137, 76, 0.08), transparent 24%),
+    radial-gradient(circle at 52% 100%, rgba(212, 189, 0, 0.05), transparent 26%),
+    linear-gradient(180deg, #f8faff 0%, #f3f6fc 44%, #eef3fb 100%);
+  color: var(--text-1);
+}
+
+.site-header {
+  background: rgba(255, 255, 255, 0.84);
+  border-bottom: 1px solid var(--line-soft);
+  backdrop-filter: blur(10px);
+}
+
+.brand-name,
+.nav-links a,
+.nav-item>a,
+.submenu a {
+  color: var(--text-1);
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.submenu a:hover,
+.submenu a:focus-visible,
+.submenu a[aria-current="page"] {
+  color: var(--brand-blue);
+}
+
+.submenu {
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-1);
+}
+
+.card,
+.feature-card,
+.process-card,
+.cta-card,
+.contact-form,
+.dashboard,
+.hero-image-card,
+.gallery-card,
+.blog-index-card,
+.helpdesk-faq-card,
+.helpdesk-topic-card,
+.helpdesk-article-card {
+  background: var(--surface-1);
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-1);
+}
+
+.button-primary,
+.btn-primary {
+  background: var(--brand-yellow);
+  color: #111;
+  border: 1px solid rgba(212, 189, 0, 0.28);
+  box-shadow: 0 10px 24px rgba(212, 189, 0, 0.14);
+}
+
+.button-primary:hover,
+.button-primary:focus-visible,
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  filter: brightness(1.03);
+}
+
+.button-secondary,
+.btn-secondary,
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--text-1);
+  border: 1px solid var(--line-strong);
+}
+
+.service-pill,
+.gallery-filter,
+.blog-index-tag,
+.blog-post-tag,
+.gallery-metric {
+  background: rgba(51, 113, 183, 0.08);
+  border: 1px solid rgba(51, 113, 183, 0.12);
+  color: var(--text-1);
+}
+
+.service-pill.is-active,
+.gallery-filter.is-active {
+  background: rgba(212, 189, 0, 0.12);
+  border-color: rgba(212, 189, 0, 0.24);
+  color: #7b6900;
+}
+
+.card-copy,
+.blog-index-excerpt,
+.blog-post-excerpt,
+.helpdesk-faq-link-meta,
+.metric-label,
+.chart-label,
+.author-line {
+  color: var(--text-2);
+}
+
+.blog-post-meta-item,
+.helpdesk-faq-link-meta,
+.chart-label {
+  color: var(--text-3);
+}
+
+.site-header .submenu {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid rgba(16, 24, 40, 0.14) !important;
+  box-shadow: 0 12px 32px rgba(31, 39, 50, 0.10) !important;
+}
+
+.site-header .submenu a {
+  color: var(--text-1) !important;
+}
+
+.site-header .submenu a:hover,
+.site-header .submenu a:focus-visible,
+.site-header .submenu a[aria-current="page"] {
+  background: rgba(51, 113, 183, 0.08) !important;
+  color: var(--brand-blue) !important;
+}
+
+.site-header .nav-item.has-submenu>a {
+  color: var(--text-1) !important;
 }
