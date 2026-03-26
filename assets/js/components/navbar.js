@@ -44,13 +44,13 @@ export function Navbar({ nav, currentPage }) {
 
   const brand = createElement('a', {
     className: 'brand-lockup',
-    attrs: { href: '/', 'aria-label': 'DeepDigital home' },
+    attrs: { href: '/', 'aria-label': 'Buzzworthy home' },
     children: [
       createElement('img', {
         className: 'brand-mark-image',
         attrs: {
           src: '/assets/images/logo-mark.png',
-          alt: 'DeepDigital logo mark'
+          alt: 'Buzzworthy logo mark'
         }
       }),
       createElement('div', {
@@ -58,7 +58,7 @@ export function Navbar({ nav, currentPage }) {
         children: [
           createElement('span', {
             className: 'brand-name',
-            text: 'DeepDigital'
+            text: 'Buzzworthy'
           })
         ]
       })
