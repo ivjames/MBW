@@ -58,90 +58,98 @@ function renderBlock(block = {}) {
     }
 }
 
+function ArticleHeader(data = {}) {
+    const topic = data.topic || 'helpdesk';
+
+    return createElement('section', {
+        className: 'section helpdesk-article-header-section',
+        children: [
+            createElement('div', {
+                className: 'container helpdesk-article-header-wrap',
+                children: [
+                    createElement('a', {
+                        className: 'blog-back-link',
+                        text: '← Back to Topic',
+                        attrs: { href: `/helpdesk?slug=${topic}` }
+                    }),
+
+                    createElement('h1', {
+                        className: 'helpdesk-article-title',
+                        text: data.title || 'Help Article'
+                    }),
+
+                    data.excerpt
+                        ? createElement('p', {
+                            className: 'helpdesk-article-excerpt',
+                            text: data.excerpt
+                        })
+                        : null
+                ].filter(Boolean)
+            })
+        ]
+    });
+}
+
+function OptionalHero(data = {}) {
+    if (!data.hero) return null;
+
+    return createElement('section', {
+        className: 'section blog-post-hero-section',
+        children: [
+            createElement('div', {
+                className: 'container blog-post-hero-shell',
+                children: [
+                    createElement('div', {
+                        className: 'blog-post-hero-copy reveal',
+                        children: [
+                            data.hero.eyebrow
+                                ? createElement('div', {
+                                    className: 'eyebrow',
+                                    text: data.hero.eyebrow
+                                })
+                                : null,
+                            data.hero.title
+                                ? createElement('h2', {
+                                    className: 'blog-post-title',
+                                    text: data.hero.title
+                                })
+                                : null,
+                            data.hero.lead
+                                ? createElement('p', {
+                                    className: 'blog-post-excerpt',
+                                    text: data.hero.lead
+                                })
+                                : null
+                        ].filter(Boolean)
+                    }),
+                    data.hero.image
+                        ? createElement('div', {
+                            className: 'blog-post-hero-media reveal',
+                            children: [
+                                createElement('img', {
+                                    attrs: {
+                                        src: data.hero.image,
+                                        alt: data.hero.title || data.title || 'Article hero image'
+                                    }
+                                })
+                            ]
+                        })
+                        : null
+                ].filter(Boolean)
+            })
+        ]
+    });
+}
+
 export function HelpdeskArticlePage(data = {}) {
-    const title = data.title || 'Help Article';
-    const excerpt = data.excerpt || '';
-    const date = data.date || '';
-    const tags = data.tags || [];
     const topic = data.topic || 'helpdesk';
     const content = data.content || [];
 
     return createElement('div', {
         className: 'blog-post-page',
         children: [
-            createElement('section', {
-                className: 'section blog-post-hero-section',
-                children: [
-                    createElement('div', {
-                        className: 'container blog-post-hero-shell',
-                        children: [
-                            createElement('div', {
-                                className: 'blog-post-hero-copy reveal',
-                                children: [
-                                    createElement('a', {
-                                        className: 'blog-back-link',
-                                        text: '← Back to Topic',
-                                        attrs: { href: `topic?slug=${topic}` }
-                                    }),
-                                    createElement('div', {
-                                        className: 'eyebrow',
-                                        text: 'Help Article'
-                                    }),
-                                    createElement('h1', {
-                                        className: 'blog-post-title',
-                                        text: title
-                                    }),
-                                    excerpt
-                                        ? createElement('p', {
-                                            className: 'blog-post-excerpt',
-                                            text: excerpt
-                                        })
-                                        : null,
-                                    createElement('div', {
-                                        className: 'blog-post-meta',
-                                        children: [
-                                            date
-                                                ? createElement('span', {
-                                                    className: 'blog-post-meta-item',
-                                                    text: date
-                                                })
-                                                : null,
-                                            topic
-                                                ? createElement('span', {
-                                                    className: 'blog-post-meta-item',
-                                                    text: topic
-                                                })
-                                                : null
-                                        ].filter(Boolean)
-                                    }),
-                                    tags.length
-                                        ? createElement('div', {
-                                            className: 'blog-post-tags',
-                                            children: tags.map(tag =>
-                                                createElement('span', {
-                                                    className: 'blog-post-tag',
-                                                    text: tag
-                                                })
-                                            )
-                                        })
-                                        : null
-                                ].filter(Boolean)
-                            }),
-                            createElement('div', {
-                                className: 'blog-post-hero-media reveal',
-                                children: [
-                                    createElement('img', {
-                                        attrs: {
-                                            src: `https://picsum.photos/seed/helpdesk-article-${data.slug || 'default'}/1600/1000`,
-                                            alt: title
-                                        }
-                                    })
-                                ]
-                            })
-                        ]
-                    })
-                ]
-            }),
+            ArticleHeader(data),
+            OptionalHero(data),
 
             createElement('section', {
                 className: 'section blog-post-body-section',
@@ -150,7 +158,7 @@ export function HelpdeskArticlePage(data = {}) {
                         className: 'container blog-post-layout',
                         children: [
                             createElement('article', {
-                                className: 'blog-post-topic reveal',
+                                className: 'blog-post-article reveal',
                                 children: content.map(renderBlock)
                             }),
                             createElement('aside', {
@@ -161,20 +169,22 @@ export function HelpdeskArticlePage(data = {}) {
                                         children: [
                                             createElement('div', {
                                                 className: 'eyebrow',
-                                                text: 'Topic'
+                                                text: 'Article'
                                             }),
                                             createElement('h3', {
                                                 className: 'card-title',
                                                 text: 'Details'
                                             }),
-                                            createElement('p', {
-                                                className: 'card-copy',
-                                                text: `Topic: ${topic}`
-                                            }),
-                                            date
+                                            data.topic
                                                 ? createElement('p', {
                                                     className: 'card-copy',
-                                                    text: `Published: ${date}`
+                                                    text: `Topic: ${data.topic}`
+                                                })
+                                                : null,
+                                            data.date
+                                                ? createElement('p', {
+                                                    className: 'card-copy',
+                                                    text: `Published: ${data.date}`
                                                 })
                                                 : null
                                         ].filter(Boolean)
@@ -194,13 +204,13 @@ export function HelpdeskArticlePage(data = {}) {
                                                 className: 'hero-cta-row',
                                                 children: [
                                                     Button({
-                                                        label: 'Back to Article List',
-                                                        href: `article?slug=${topic}`,
+                                                        label: 'Back to Topic',
+                                                        href: `/helpdesk?slug=${topic}`,
                                                         variant: 'secondary'
                                                     }),
                                                     Button({
                                                         label: 'Helpdesk Home',
-                                                        href: 'helpdesk',
+                                                        href: '/helpdesk',
                                                         variant: 'primary'
                                                     })
                                                 ]
@@ -213,6 +223,6 @@ export function HelpdeskArticlePage(data = {}) {
                     })
                 ]
             })
-        ]
+        ].filter(Boolean)
     });
 }

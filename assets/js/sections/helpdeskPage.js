@@ -83,7 +83,7 @@ export function HelpdeskPage(data = {}) {
                 eyebrow: hero.eyebrow || 'Helpdesk',
                 title: hero.title || 'How can we help?',
                 lead: hero.lead || 'Search FAQs, browse support topics, and open individual help articles.',
-                image: hero.image || 'https://picsum.photos/seed/deepdigital-helpdesk/1600/1000'
+                image: hero.image || 'https://picsum.photos/seed/buzzworthy-helpdesk/1600/1000'
             }),
 
             createElement('section', {

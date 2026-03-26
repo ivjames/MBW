@@ -7,7 +7,7 @@ import { Card } from '../primitives/card.js';
 export function ServicesPage(data) {
   return createElement('div', {
     children: [
-      PageHero({ ...data.hero, image: 'https://picsum.photos/seed/deepdigital-services/1400/900' }),
+      PageHero({ ...data.hero, image: 'https://picsum.photos/seed/buzzworthy-services/1400/900' }),
       createElement('section', {
         className: 'section',
         children: [

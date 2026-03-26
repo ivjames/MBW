@@ -1,6 +1,6 @@
 export const siteData = {
   company: {
-    name: "DeepDigital",
+    name: "Buzzworthy",
     email: "maurice@marketingbuzzworthy.com",
     phone: "1-800-123-4567",
     supportPhone: "1-800-123-4569",
@@ -63,7 +63,7 @@ export const siteData = {
         text: "The new site finally matches the quality of our service. Lead quality improved within the first month.",
         author: "Operations Director, NorthPeak Legal"
       },
-      image: "https://picsum.photos/seed/deepdigital-hero-a/1600/900"
+      image: "https://picsum.photos/seed/buzzworthy-hero-a/1600/900"
     },
 
     logos: ["NorthPeak", "Aster", "Axiom", "BlueHarbor", "MetricForge", "PrimeLayer"],
@@ -94,7 +94,7 @@ export const siteData = {
         badge: "B2B Professional Services",
         title: "NorthPeak Legal",
         body: "Repositioned the firm, rebuilt core service pages, and tightened consultation flows to improve trust and lead quality for a multi-location practice.",
-        image: "https://picsum.photos/seed/deepdigital-case-legal/1400/900",
+        image: "https://picsum.photos/seed/buzzworthy-case-legal/1400/900",
         stats: [
           { value: "+41%", label: "Qualified leads" },
           { value: "+28%", label: "Consult bookings" },
@@ -105,7 +105,7 @@ export const siteData = {
         badge: "Growth-Stage SaaS",
         title: "MetricForge",
         body: "Rebuilt the homepage and demand-gen landing flow around a clearer product story, stronger proof, and sharper user segmentation.",
-        image: "https://picsum.photos/seed/deepdigital-case-saas/1400/900",
+        image: "https://picsum.photos/seed/buzzworthy-case-saas/1400/900",
         stats: [
           { value: "+52%", label: "Demo requests" },
           { value: "+33%", label: "Activation rate" },
@@ -116,7 +116,7 @@ export const siteData = {
         badge: "Industrial Services",
         title: "BlueHarbor Systems",
         body: "Rebuilt a dense legacy site into a cleaner technical platform with better hierarchy, stronger lead routing, and easier decision paths.",
-        image: "https://picsum.photos/seed/deepdigital-case-industrial/1400/900",
+        image: "https://picsum.photos/seed/buzzworthy-case-industrial/1400/900",
         stats: [
           { value: "+31%", label: "Quote requests" },
           { value: "+22%", label: "Qualified sessions" },
@@ -143,7 +143,7 @@ export const siteData = {
     },
 
     testimonial: {
-      quote: "DeepDigital replaced a generic website with a system our team can extend without degrading the design or the message.",
+      quote: "Buzzworthy replaced a generic website with a system our team can extend without degrading the design or the message.",
       author: "Maya Chen, CEO at Aster Advisory"
     },
 
@@ -214,7 +214,7 @@ export const siteData = {
       { label: "Buyer type", value: "B2B", trend: "Longer sales cycle" },
       { label: "Approach", value: "Lead-generating", trend: "Conversion focused" }
     ],
-    image: "https://picsum.photos/seed/deepdigital-about-a/1600/1000"
+    image: "https://picsum.photos/seed/buzzworthy-about-a/1600/1000"
   },
 
   contactPage: {
@@ -229,7 +229,7 @@ export const siteData = {
       { kicker: "Write Us", title: "Email", copy: "maurice@marketingbuzzworthy.com" },
       { kicker: "Visit Us", title: "Office", copy: "2231 Sycamore Lake Road\nGreen Bay, WI 54304" }
     ],
-    image: "https://picsum.photos/seed/deepdigital-contact-a/1600/1000"
+    image: "https://picsum.photos/seed/buzzworthy-contact-a/1600/1000"
   },
 
   servicePages: {
@@ -237,7 +237,7 @@ export const siteData = {
       eyebrow: "Service",
       title: "Marketing",
       lead: "We use strategic marketing tactics that have been proven to work. Social networks, PPC campaigns. We can do it all for your company!",
-      image: "https://picsum.photos/seed/deepdigital-marketing/1600/1000",
+      image: "https://picsum.photos/seed/buzzworthy-marketing/1600/1000",
       sections: [
         {
           title: "Campaign Strategy",
@@ -258,7 +258,7 @@ export const siteData = {
       eyebrow: "Service",
       title: "Development",
       lead: "Custom programming for most complex functions you can think. No more headaches. Focus on your business and let it grow fast!",
-      image: "https://picsum.photos/seed/deepdigital-development/1600/1000",
+      image: "https://picsum.photos/seed/buzzworthy-development/1600/1000",
       sections: [
         {
           title: "Custom Features",
@@ -279,7 +279,7 @@ export const siteData = {
       eyebrow: "Service",
       title: "Web Design",
       lead: "Powerful web design that will out-perform your strongest competitors. Let us help you with that. Get a free quote. Lorem ipsum dolor sit amet, consetetur.",
-      image: "https://picsum.photos/seed/deepdigital-web-design/1600/1000",
+      image: "https://picsum.photos/seed/buzzworthy-web-design/1600/1000",
       sections: [
         {
           title: "Conversion-Focused Layouts",
@@ -300,7 +300,7 @@ export const siteData = {
       eyebrow: "Service",
       title: "SEO Optimisation",
       lead: "Optimizing our web designs to rank on the first page of Google is our specialty. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
-      image: "https://picsum.photos/seed/deepdigital-seo/1600/1000",
+      image: "https://picsum.photos/seed/buzzworthy-seo/1600/1000",
       sections: [
         {
           title: "Technical SEO",
@@ -321,7 +321,7 @@ export const siteData = {
       eyebrow: "Service",
       title: "Ecommerce",
       lead: "We build your online store using a flexible, modular platform that allows you to expand and grow your website easily as your business grows.",
-      image: "https://picsum.photos/seed/deepdigital-ecommerce/1600/1000",
+      image: "https://picsum.photos/seed/buzzworthy-ecommerce/1600/1000",
       sections: [
         {
           title: "Flexible Storefronts",
@@ -342,7 +342,7 @@ export const siteData = {
       eyebrow: "Service",
       title: "Branding",
       lead: "A solid brand strategy, logo and guidelines help you to get recognized. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
-      image: "https://picsum.photos/seed/deepdigital-branding/1600/1000",
+      image: "https://picsum.photos/seed/buzzworthy-branding/1600/1000",
       sections: [
         {
           title: "Brand Strategy",

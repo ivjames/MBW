@@ -1,13 +1,13 @@
 {
     "meta": {
-        "title": "DeepDigital — Development",
-        "description": "DeepDigital development services."
+        "title": "Buzzworthy — Development",
+        "description": "Buzzworthy development services."
     },
     "hero": {
         "eyebrow": "Service",
         "title": "Development",
         "lead": "Custom programming for most complex functions you can think. No more headaches. Focus on your business and let it grow fast!",
-        "image": "https://picsum.photos/seed/deepdigital-development/1600/1000"
+        "image": "https://picsum.photos/seed/buzzworthy-development/1600/1000"
     },
     "sections": [
         {

@@ -38,7 +38,7 @@ apiRouter.post('/contact', (req, res) => {
 apiRouter.get('/site', (_req, res) => {
     res.json({
         company: {
-            name: 'DeepDigital',
+            name: 'Buzzworthy',
             email: 'maurice@marketingbuzzworthy.com',
             phone: '1-800-123-4567',
             supportPhone: '1-800-123-4569',
@@ -85,13 +85,13 @@ apiRouter.get('/blog', (_req, res) => {
         title: row.title,
         excerpt: row.excerpt,
         date: (row.published_at || row.updated_at || '').slice(0, 10),
-        author: row.author || 'DeepDigital',
+      author: row.author || 'Buzzworthy',
         image: row.cover_image,
         tags: ['Blog']
     }));
 
     res.json({
-        hero: { image: 'https://picsum.photos/seed/deepdigital-blog-hero/1600/1000' },
+        hero: { image: 'https://picsum.photos/seed/buzzworthy-blog-hero/1600/1000' },
         intro: {
             title: 'Articles with better framing',
             lead: 'A cleaner blog index should feel more like a publication and less like a random card grid.'
@@ -113,7 +113,7 @@ apiRouter.get('/blog/:slug', (req, res) => {
         title: row.title,
         excerpt: row.excerpt,
         date: (row.published_at || row.updated_at || '').slice(0, 10),
-        author: row.author || 'DeepDigital',
+        author: row.author || 'Buzzworthy',
         image: row.cover_image,
         tags: ['Blog'],
         content: parseJSON(row.content_json, [])
@@ -143,7 +143,7 @@ apiRouter.get('/helpdesk', (_req, res) => {
             eyebrow: 'Helpdesk',
             title: 'How can we help?',
             lead: 'Search FAQs, browse support topics, and open individual help articles.',
-            image: 'https://picsum.photos/seed/deepdigital-helpdesk/1600/1000'
+            image: 'https://picsum.photos/seed/buzzworthy-helpdesk/1600/1000'
         },
         topics,
         popular: rows.slice(0, 3),

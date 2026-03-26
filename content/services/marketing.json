@@ -1,13 +1,13 @@
 {
   "meta": {
-    "title": "DeepDigital — Marketing",
-    "description": "DeepDigital marketing services."
+    "title": "Buzzworthy — Marketing",
+    "description": "Buzzworthy marketing services."
   },
   "hero": {
     "eyebrow": "Service",
     "title": "Marketing",
     "lead": "We use strategic marketing tactics that have been proven to work. Social networks, PPC campaigns. We can do it all for your company!",
-    "image": "https://picsum.photos/seed/deepdigital-marketing/1600/1000"
+    "image": "https://picsum.photos/seed/buzzworthy-marketing/1600/1000"
   },
   "sections": [
     {

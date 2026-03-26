@@ -1,13 +1,13 @@
 {
     "meta": {
-        "title": "DeepDigital — Web Design",
-        "description": "DeepDigital web design services."
+        "title": "Buzzworthy — Web Design",
+        "description": "Buzzworthy web design services."
     },
     "hero": {
         "eyebrow": "Service",
         "title": "Web Design",
         "lead": "Powerful web design that will out-perform your strongest competitors. Let us help you with that. Get a free quote.",
-        "image": "https://picsum.photos/seed/deepdigital-web-design/1600/1000"
+        "image": "https://picsum.photos/seed/buzzworthy-web-design/1600/1000"
     },
     "sections": [
         {

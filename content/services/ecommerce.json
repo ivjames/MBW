@@ -1,13 +1,13 @@
 {
     "meta": {
-        "title": "DeepDigital — Ecommerce",
-        "description": "DeepDigital ecommerce services."
+        "title": "Buzzworthy — Ecommerce",
+        "description": "Buzzworthy ecommerce services."
     },
     "hero": {
         "eyebrow": "Service",
         "title": "Ecommerce",
         "lead": "We build your online store using a flexible, modular platform that allows you to expand and grow your website easily.",
-        "image": "https://picsum.photos/seed/deepdigital-ecommerce/1600/1000"
+        "image": "https://picsum.photos/seed/buzzworthy-ecommerce/1600/1000"
     },
     "sections": [
         {

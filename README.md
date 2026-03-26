@@ -1,4 +1,4 @@
-# DeepDigital Demo Site + Node Backend
+# Buzzworthy Demo Site + Node Backend
 
 Static multipage frontend with a small Node backend for contact form demo submissions.
 

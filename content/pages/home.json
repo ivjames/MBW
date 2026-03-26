@@ -83,7 +83,7 @@
             "text": "The new site finally matches the quality of our service. Lead quality improved within the first month.",
             "author": "Operations Director, NorthPeak Legal"
         },
-        "image": "https://picsum.photos/seed/deepdigital-hero-a/1600/900"
+        "image": "https://picsum.photos/seed/buzzworthy-hero-a/1600/900"
     },
     "logos": [
         {
@@ -148,7 +148,7 @@
             "badge": "B2B Professional Services",
             "title": "NorthPeak Legal",
             "body": "Repositioned the firm, rebuilt core service pages, and tightened consultation flows to improve trust and lead quality for a multi-location practice.",
-            "image": "https://picsum.photos/seed/deepdigital-case-legal/1400/900",
+            "image": "https://picsum.photos/seed/buzzworthy-case-legal/1400/900",
             "stats": [
                 {
                     "value": "+41%",
@@ -168,7 +168,7 @@
             "badge": "Growth-Stage SaaS",
             "title": "MetricForge",
             "body": "Rebuilt the homepage and demand-gen landing flow around a clearer product story, stronger proof, and sharper user segmentation.",
-            "image": "https://picsum.photos/seed/deepdigital-case-saas/1400/900",
+            "image": "https://picsum.photos/seed/buzzworthy-case-saas/1400/900",
             "stats": [
                 {
                     "value": "+52%",
@@ -188,7 +188,7 @@
             "badge": "Industrial Services",
             "title": "BlueHarbor Systems",
             "body": "Rebuilt a dense legacy site into a cleaner technical platform with better hierarchy, stronger lead routing, and easier decision paths.",
-            "image": "https://picsum.photos/seed/deepdigital-case-industrial/1400/900",
+            "image": "https://picsum.photos/seed/buzzworthy-case-industrial/1400/900",
             "stats": [
                 {
                     "value": "+31%",
@@ -274,7 +274,7 @@
         ]
     },
     "testimonial": {
-        "quote": "DeepDigital replaced a generic website with a system our team can extend without degrading the design or the message.",
+        "quote": "Buzzworthy replaced a generic website with a system our team can extend without degrading the design or the message.",
         "author": "Maya Chen, CEO at Aster Advisory"
     },
     "cta": {

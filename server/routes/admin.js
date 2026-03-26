@@ -41,7 +41,7 @@ function shell(title, content) {
         title,
         `<div class="top">
       <div>
-        <h1 class="h1">DeepDigital Admin</h1>
+        <h1 class="h1">Buzzworthy Admin</h1>
         <div class="muted">SQLite-backed admin for posts and helpdesk content</div>
       </div>
       <div class="actions">
@@ -119,7 +119,7 @@ function postForm(row = {}) {
     <input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" />
     <textarea name="excerpt" placeholder="Excerpt">${esc(row.excerpt || '')}</textarea>
     <input name="cover_image" placeholder="Cover image URL" value="${esc(row.cover_image || '')}" />
-    <input name="author" placeholder="Author" value="${esc(row.author || 'DeepDigital')}" />
+    <input name="author" placeholder="Author" value="${esc(row.author || 'Buzzworthy')}" />
     <select name="status">
       <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>draft</option>
       <option value="published" ${row.status === 'published' ? 'selected' : ''}>published</option>
@@ -186,7 +186,7 @@ adminRouter.post('/posts', (req, res) => {
         title,
         excerpt: req.body.excerpt || '',
         cover_image: req.body.cover_image || '',
-        author: req.body.author || 'DeepDigital',
+    author: req.body.author || 'Buzzworthy',
         status: req.body.status || 'draft',
         published_at: req.body.status === 'published' ? now : null,
         content_json: req.body.content_json || '[]',
@@ -213,7 +213,7 @@ adminRouter.post('/posts/:id', (req, res) => {
         title,
         excerpt: req.body.excerpt || '',
         cover_image: req.body.cover_image || '',
-        author: req.body.author || 'DeepDigital',
+    author: req.body.author || 'Buzzworthy',
         status: req.body.status || 'draft',
         published_at: req.body.status === 'published' ? now : null,
         content_json: req.body.content_json || '[]',

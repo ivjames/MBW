@@ -96,7 +96,7 @@ export function BlogPage(data) {
                 eyebrow: 'Blog',
                 title: 'Insights, structure, and practical breakdowns.',
                 lead: 'Short articles on design, marketing, SEO, development, and system thinking.',
-                image: data.hero?.image || 'https://picsum.photos/seed/deepdigital-blog-hero/1600/1000'
+                image: data.hero?.image || 'https://picsum.photos/seed/buzzworthy-blog-hero/1600/1000'
             }),
 
             createElement('section', {

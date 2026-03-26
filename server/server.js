@@ -34,5 +34,5 @@ app.get('*', (req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`DeepDigital server running at http://localhost:${PORT}`);
+  console.log(`Buzzworthy server running at http://localhost:${PORT}`);
 });

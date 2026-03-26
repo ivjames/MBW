@@ -3,7 +3,7 @@
         "eyebrow": "Selected work",
         "title": "Previous projects, presented as a browsable gallery.",
         "lead": "Use this page to show recent work, visual direction, project categories, and short business context without forcing users into a heavy case-study flow.",
-        "image": "https://picsum.photos/seed/deepdigital-works-hero/1600/1000"
+        "image": "https://picsum.photos/seed/buzzworthy-works-hero/1600/1000"
     },
     "intro": {
         "title": "Interactive project gallery",
@@ -22,7 +22,7 @@
         {
             "title": "NorthPeak Legal",
             "category": "Web Design",
-            "image": "https://picsum.photos/seed/deepdigital-work-legal/1400/1000",
+            "image": "https://picsum.photos/seed/buzzworthy-work-legal/1400/1000",
             "summary": "Service-page redesign focused on trust, clarity, and consultation conversion.",
             "metrics": [
                 "+41% qualified leads",
@@ -32,7 +32,7 @@
         {
             "title": "MetricForge",
             "category": "Development",
-            "image": "https://picsum.photos/seed/deepdigital-work-saas/1400/1000",
+            "image": "https://picsum.photos/seed/buzzworthy-work-saas/1400/1000",
             "summary": "Modular marketing site rebuild with cleaner product story and stronger user flow.",
             "metrics": [
                 "+52% demo requests",
@@ -42,7 +42,7 @@
         {
             "title": "BlueHarbor Systems",
             "category": "Marketing",
-            "image": "https://picsum.photos/seed/deepdigital-work-industrial/1400/1000",
+            "image": "https://picsum.photos/seed/buzzworthy-work-industrial/1400/1000",
             "summary": "Campaign landing pages and message cleanup for an industrial services brand.",
             "metrics": [
                 "+31% quote requests",
@@ -52,7 +52,7 @@
         {
             "title": "Aster Advisory",
             "category": "Branding",
-            "image": "https://picsum.photos/seed/deepdigital-work-brand/1400/1000",
+            "image": "https://picsum.photos/seed/buzzworthy-work-brand/1400/1000",
             "summary": "Brand system refresh with tighter visual language and stronger executive positioning.",
             "metrics": [
                 "Brand refresh",
@@ -62,7 +62,7 @@
         {
             "title": "HarborCart",
             "category": "Ecommerce",
-            "image": "https://picsum.photos/seed/deepdigital-work-ecommerce/1400/1000",
+            "image": "https://picsum.photos/seed/buzzworthy-work-ecommerce/1400/1000",
             "summary": "Ecommerce UX refresh focused on product discovery and checkout simplification.",
             "metrics": [
                 "Higher AOV",
@@ -72,7 +72,7 @@
         {
             "title": "SignalRank",
             "category": "SEO",
-            "image": "https://picsum.photos/seed/deepdigital-work-seo/1400/1000",
+            "image": "https://picsum.photos/seed/buzzworthy-work-seo/1400/1000",
             "summary": "SEO structure and content improvements to support discoverability and ranking.",
             "metrics": [
                 "Technical cleanup",
