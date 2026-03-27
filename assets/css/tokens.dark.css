@@ -6,6 +6,7 @@
   --surface-2: rgba(23, 23, 32, 0.92);
   --surface-3: rgba(30, 29, 44, 0.98);
   --surface-solid: #12121a;
+  --surface-glass-bg: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
   --line-soft: rgba(179, 194, 242, 0.12);
   --line-strong: rgba(179, 194, 242, 0.24);
 
@@ -32,6 +33,8 @@
   --glow-yellow: 0 0 0 1px rgba(247,227,11,.16), 0 0 30px rgba(247,227,11,.14);
   --glow-blue: 0 0 0 1px rgba(179,194,242,.18), 0 0 28px rgba(179,194,242,.14);
   --glow-purple: 0 0 0 1px rgba(115,92,221,.16), 0 0 28px rgba(115,92,221,.14);
+  --eyebrow-bg: rgba(255,255,255,0.04);
+  --section-divider-color: rgba(255,255,255,0.14);
 
   --radius-sm: 14px;
   --radius-md: 20px;
@@ -73,7 +76,10 @@
 *::before,
 *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  background: var(--bg);
+  scroll-behavior: smooth;
+}
 
 body {
   margin: 0;

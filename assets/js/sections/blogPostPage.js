@@ -1,113 +1,33 @@
 import { createElement } from '../primitives/element.js';
-import { Button } from '../primitives/button.js';
-import { Card } from '../primitives/card.js';
+import { PageHero } from '../components/pageHero.js';
+import { ArticleBody } from '../components/articleBody.js';
+import { MetaRow } from '../components/metaRow.js';
+import { SidebarCard } from '../components/sidebarCard.js';
+import { CtaPanel } from '../components/ctaPanel.js';
 
-function renderBlock(block) {
-    switch (block.type) {
-        case 'heading':
-            return createElement('h2', {
-                className: 'blog-post-heading',
-                text: block.text
-            });
-
-        case 'subheading':
-            return createElement('h3', {
-                className: 'blog-post-subheading',
-                text: block.text
-            });
-
-        case 'image':
-            return createElement('figure', {
-                className: 'blog-post-figure',
-                children: [
-                    createElement('img', {
-                        attrs: {
-                            src: block.src,
-                            alt: block.alt || ''
-                        }
-                    }),
-                    block.caption
-                        ? createElement('figcaption', {
-                            className: 'blog-post-caption',
-                            text: block.caption
-                        })
-                        : null
-                ].filter(Boolean)
-            });
-
-        case 'quote':
-            return createElement('blockquote', {
-                className: 'blog-post-quote',
-                text: block.text
-            });
-
-        case 'list':
-            return createElement('ul', {
-                className: 'blog-post-list',
-                children: (block.items || []).map(item =>
-                    createElement('li', { text: item })
-                )
-            });
-
-        case 'paragraph':
-        default:
-            return createElement('p', {
-                className: 'blog-post-paragraph',
-                text: block.text
-            });
-    }
-}
-
-export function BlogPostPage(data) {
+export function BlogPostPage(data = {}) {
     const tags = data.tags || [];
-    const content = data.content || [];
+    const meta = [data.date, data.author].filter(Boolean);
 
     return createElement('div', {
-        className: 'blog-post-page',
         children: [
+            PageHero({
+                eyebrow: 'Blog',
+                title: data.title || '',
+                lead: data.excerpt || '',
+                image: data.image || '',
+                meta
+            }),
+
             createElement('section', {
-                className: 'section blog-post-hero-section',
+                className: 'section section-tight-top',
                 children: [
                     createElement('div', {
-                        className: 'container blog-post-hero-shell',
+                        className: 'container blog-post-layout',
                         children: [
                             createElement('div', {
-                                className: 'blog-post-hero-copy reveal',
+                                className: 'blog-post-main reveal',
                                 children: [
-                                    createElement('a', {
-                                        className: 'blog-back-link',
-                                        text: '← Back to Blog',
-                                        attrs: { href: 'blog' }
-                                    }),
-                                    createElement('div', {
-                                        className: 'eyebrow',
-                                        text: 'Blog'
-                                    }),
-                                    createElement('h1', {
-                                        className: 'blog-post-title',
-                                        text: data.title || ''
-                                    }),
-                                    createElement('p', {
-                                        className: 'blog-post-excerpt',
-                                        text: data.excerpt || ''
-                                    }),
-                                    createElement('div', {
-                                        className: 'blog-post-meta',
-                                        children: [
-                                            data.date
-                                                ? createElement('span', {
-                                                    className: 'blog-post-meta-item',
-                                                    text: data.date
-                                                })
-                                                : null,
-                                            data.author
-                                                ? createElement('span', {
-                                                    className: 'blog-post-meta-item',
-                                                    text: data.author
-                                                })
-                                                : null
-                                        ].filter(Boolean)
-                                    }),
                                     tags.length
                                         ? createElement('div', {
                                             className: 'blog-post-tags',
@@ -118,100 +38,26 @@ export function BlogPostPage(data) {
                                                 })
                                             )
                                         })
-                                        : null
+                                        : null,
+                                    ArticleBody(data.content || [])
                                 ].filter(Boolean)
-                            }),
-                            data.image
-                                ? createElement('div', {
-                                    className: 'blog-post-hero-media reveal',
-                                    children: [
-                                        createElement('img', {
-                                            attrs: {
-                                                src: data.image,
-                                                alt: data.title || 'Blog featured image'
-                                            }
-                                        })
-                                    ]
-                                })
-                                : null
-                        ].filter(Boolean)
-                    })
-                ]
-            }),
-
-            createElement('section', {
-                className: 'section blog-post-body-section',
-                children: [
-                    createElement('div', {
-                        className: 'container blog-post-layout',
-                        children: [
-                            createElement('article', {
-                                className: 'blog-post-article reveal',
-                                children: content.map(renderBlock)
                             }),
                             createElement('aside', {
                                 className: 'blog-post-sidebar reveal',
                                 children: [
-                                    Card({
-                                        className: 'blog-sidebar-card compact-card',
+                                    SidebarCard({
+                                        eyebrow: 'Article',
+                                        title: 'Post details',
                                         children: [
-                                            createElement('div', {
-                                                className: 'eyebrow',
-                                                text: 'Article'
-                                            }),
-                                            createElement('h3', {
-                                                className: 'card-title',
-                                                text: 'Post details'
-                                            }),
-                                            createElement('div', {
-                                                className: 'blog-sidebar-meta',
-                                                children: [
-                                                    data.author
-                                                        ? createElement('p', {
-                                                            className: 'card-copy',
-                                                            text: `Author: ${data.author}`
-                                                        })
-                                                        : null,
-                                                    data.date
-                                                        ? createElement('p', {
-                                                            className: 'card-copy',
-                                                            text: `Published: ${data.date}`
-                                                        })
-                                                        : null
-                                                ].filter(Boolean)
-                                            })
+                                            MetaRow(meta, 'meta-row-stack')
                                         ]
                                     }),
-                                    Card({
-                                        className: 'blog-sidebar-card compact-card',
-                                        children: [
-                                            createElement('div', {
-                                                className: 'eyebrow',
-                                                text: 'Next step'
-                                            }),
-                                            createElement('h3', {
-                                                className: 'card-title',
-                                                text: 'Need help applying this?'
-                                            }),
-                                            createElement('p', {
-                                                className: 'card-copy',
-                                                text: 'Turn ideas from the blog into a usable project, service page, or conversion-focused redesign.'
-                                            }),
-                                            createElement('div', {
-                                                className: 'hero-cta-row',
-                                                children: [
-                                                    Button({
-                                                        label: 'Contact Us',
-                                                        href: 'contact',
-                                                        variant: 'primary'
-                                                    }),
-                                                    Button({
-                                                        label: 'View Services',
-                                                        href: 'services',
-                                                        variant: 'secondary'
-                                                    })
-                                                ]
-                                            })
+                                    CtaPanel({
+                                        title: 'Need help applying this?',
+                                        body: 'Turn ideas from the blog into a usable project, service page, or conversion-focused redesign.',
+                                        actions: [
+                                            { label: 'Contact Us', href: '/contact', variant: 'primary' },
+                                            { label: 'View Services', href: '/services', variant: 'secondary' }
                                         ]
                                     })
                                 ]

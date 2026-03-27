@@ -1,23 +1,51 @@
 import { createElement } from '../primitives/element.js';
 
-export function LogoBand(logos) {
+function normalizeLogo(item) {
+  if (typeof item === 'string') {
+    return {
+      label: item,
+      image: ''
+    };
+  }
+
+  if (!item || typeof item !== 'object') {
+    return {
+      label: '',
+      image: ''
+    };
+  }
+
+  return {
+    label: item.label || item.name || item.title || item.text || '',
+    image: item.image || item.src || item.logo || ''
+  };
+}
+
+export function LogoBand(items = [], className = '') {
   return createElement('div', {
-    className: 'logo-band reveal',
-    children: logos.map((logo) => {
-      const label = document.createElement('span');
-      label.className = 'logo-label';
-      label.textContent = logo.name || '';
+    className: `logo-band ${className}`.trim(),
+    children: items.map(rawItem => {
+      const item = normalizeLogo(rawItem);
 
       return createElement('div', {
-        className: 'logo-item',
+        className: 'logo-item reveal',
         children: [
-          createElement('img', {
-            src: logo.image,
-            alt: logo.name || '',
-            title: logo.name || ''
-          }),
-          label
-        ]
+          item.image
+            ? createElement('img', {
+              className: 'logo-item-image',
+              attrs: {
+                src: item.image,
+                alt: item.label || 'Client logo'
+              }
+            })
+            : null,
+          item.label
+            ? createElement('span', {
+              className: 'logo-item-text',
+              text: item.label
+            })
+            : null
+        ].filter(Boolean)
       });
     })
   });

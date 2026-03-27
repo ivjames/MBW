@@ -52,6 +52,7 @@ function shell(title, content) {
     <div class="grid">
       <aside class="sidebar stack">
         <a class="btn" href="/admin">Overview</a>
+        <a class="btn" href="/admin/pages">Pages</a>
         <a class="btn" href="/admin/posts">Posts</a>
         <a class="btn" href="/admin/topics">Topics</a>
         <a class="btn" href="/admin/articles">Articles</a>
@@ -128,6 +129,50 @@ function postForm(row = {}) {
     <div class="actions">
       <button class="btn-primary" type="submit">Save</button>
       ${row.id ? `<a class="btn" href="/admin/posts/${row.id}/delete">Delete</a>` : ''}
+    </div>
+  </form>`;
+}
+
+function pageForm(row = {}) {
+  return `<form class="stack" method="post" action="${row.id ? `/admin/pages/${row.id}` : '/admin/pages'}">
+    <input name="title" placeholder="Title" value="${esc(row.title || '')}" />
+    <input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" />
+    <select name="page_type">
+      <option value="standard" ${row.page_type === 'standard' ? 'selected' : ''}>standard</option>
+      <option value="landing" ${row.page_type === 'landing' ? 'selected' : ''}>landing</option>
+      <option value="service" ${row.page_type === 'service' ? 'selected' : ''}>service</option>
+      <option value="article" ${row.page_type === 'article' ? 'selected' : ''}>article</option>
+    </select>
+    <select name="status">
+      <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>draft</option>
+      <option value="published" ${row.status === 'published' ? 'selected' : ''}>published</option>
+    </select>
+    <input name="seo_title" placeholder="SEO title" value="${esc(row.seo_title || '')}" />
+    <textarea name="seo_description" placeholder="SEO description">${esc(row.seo_description || '')}</textarea>
+    <div class="actions">
+      <button class="btn-primary" type="submit">Save</button>
+      ${row.id ? `<a class="btn" href="/admin/pages/${row.id}/delete">Delete</a>` : ''}
+    </div>
+  </form>`;
+}
+
+function sectionForm(section = {}, pageId) {
+  return `<form class="stack" method="post" action="${section.id ? `/admin/sections/${section.id}` : `/admin/pages/${pageId}/sections`}">
+    <select name="section_type">
+      <option value="pageHero" ${section.section_type === 'pageHero' ? 'selected' : ''}>pageHero</option>
+      <option value="sectionHeader" ${section.section_type === 'sectionHeader' ? 'selected' : ''}>sectionHeader</option>
+      <option value="featureGrid" ${section.section_type === 'featureGrid' ? 'selected' : ''}>featureGrid</option>
+      <option value="processGrid" ${section.section_type === 'processGrid' ? 'selected' : ''}>processGrid</option>
+      <option value="ctaPanel" ${section.section_type === 'ctaPanel' ? 'selected' : ''}>ctaPanel</option>
+      <option value="articleBody" ${section.section_type === 'articleBody' ? 'selected' : ''}>articleBody</option>
+      <option value="gallery" ${section.section_type === 'gallery' ? 'selected' : ''}>gallery</option>
+      <option value="logoBand" ${section.section_type === 'logoBand' ? 'selected' : ''}>logoBand</option>
+    </select>
+    <input name="sort_order" type="number" value="${esc(section.sort_order ?? 0)}" />
+    <textarea name="props_json">${esc(section.props_json || '{}')}</textarea>
+    <div class="actions">
+      <button class="btn-primary" type="submit">Save</button>
+      ${section.id ? `<a class="btn" href="/admin/sections/${section.id}/delete">Delete</a>` : ''}
     </div>
   </form>`;
 }
@@ -446,4 +491,169 @@ adminRouter.post('/articles/:id', (req, res) => {
 adminRouter.get('/articles/:id/delete', (req, res) => {
     db.prepare('DELETE FROM helpdesk_articles WHERE id = ?').run(req.params.id);
     res.redirect('/admin/articles');
+});
+
+adminRouter.get('/pages', (_req, res) => {
+  const rows = db.prepare(`
+    SELECT *
+    FROM pages
+    ORDER BY updated_at DESC
+  `).all();
+
+  res.send(shell('Pages', `
+    <div class="top" style="margin:0">
+      <h2>Pages</h2>
+      <a class="btn-primary" href="/admin/pages/new">New Page</a>
+    </div>
+    <table class="table">
+      <thead><tr><th>Title</th><th>Slug</th><th>Type</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        ${rows.map(r => `
+          <tr>
+            <td><strong>${esc(r.title)}</strong></td>
+            <td>${esc(r.slug)}</td>
+            <td>${esc(r.page_type)}</td>
+            <td>${esc(r.status)}</td>
+            <td><a class="btn" href="/admin/pages/${r.id}">Edit</a></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `));
+});
+
+adminRouter.get('/pages/:id', (req, res) => {
+  const row = db.prepare('SELECT * FROM pages WHERE id = ?').get(req.params.id);
+  if (!row) return res.status(404).send('Not found');
+
+  const sections = db.prepare(`
+    SELECT *
+    FROM page_sections
+    WHERE page_id = ?
+    ORDER BY sort_order ASC, id ASC
+  `).all(req.params.id);
+
+  res.send(shell('Edit Page', `
+    <h2>Edit Page</h2>
+    ${pageForm(row)}
+    <div class="top" style="margin:1rem 0 0">
+      <h3>Sections</h3>
+      <a class="btn-primary" href="/admin/pages/${row.id}/sections/new">Add Section</a>
+    </div>
+    <table class="table">
+      <thead><tr><th>Type</th><th>Sort</th><th>Props</th><th></th></tr></thead>
+      <tbody>
+        ${sections.map(s => `
+          <tr>
+            <td>${esc(s.section_type)}</td>
+            <td>${s.sort_order}</td>
+            <td><code>${esc(s.props_json.slice(0, 140))}</code></td>
+            <td><a class="btn" href="/admin/sections/${s.id}">Edit</a></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `));
+});
+
+adminRouter.post('/pages', (req, res) => {
+  const now = nowIso();
+  const title = String(req.body.title || '').trim();
+
+  db.prepare(`
+    INSERT INTO pages (slug, title, page_type, status, seo_title, seo_description, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    slugify(req.body.slug || title),
+    title,
+    req.body.page_type || 'standard',
+    req.body.status || 'draft',
+    req.body.seo_title || '',
+    req.body.seo_description || '',
+    now,
+    now
+  );
+
+  res.redirect('/admin/pages');
+});
+
+adminRouter.post('/pages/:id', (req, res) => {
+  const now = nowIso();
+  const title = String(req.body.title || '').trim();
+
+  db.prepare(`
+    UPDATE pages
+    SET slug=?, title=?, page_type=?, status=?, seo_title=?, seo_description=?, updated_at=?
+    WHERE id=?
+  `).run(
+    slugify(req.body.slug || title),
+    title,
+    req.body.page_type || 'standard',
+    req.body.status || 'draft',
+    req.body.seo_title || '',
+    req.body.seo_description || '',
+    now,
+    req.params.id
+  );
+
+  res.redirect(`/admin/pages/${req.params.id}`);
+});
+
+adminRouter.get('/pages/:id/delete', (req, res) => {
+  db.prepare('DELETE FROM pages WHERE id = ?').run(req.params.id);
+  res.redirect('/admin/pages');
+});
+
+adminRouter.get('/pages/:id/sections/new', (req, res) => {
+  res.send(shell('New Section', `<h2>New Section</h2>${sectionForm({ sort_order: 0 }, req.params.id)}`));
+});
+
+adminRouter.post('/pages/:id/sections', (req, res) => {
+  const now = nowIso();
+
+  db.prepare(`
+    INSERT INTO page_sections (page_id, section_type, sort_order, props_json, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).run(
+    req.params.id,
+    req.body.section_type || 'sectionHeader',
+    Number(req.body.sort_order || 0),
+    req.body.props_json || '{}',
+    now,
+    now
+  );
+
+  res.redirect(`/admin/pages/${req.params.id}`);
+});
+
+adminRouter.get('/sections/:id', (req, res) => {
+  const row = db.prepare('SELECT * FROM page_sections WHERE id = ?').get(req.params.id);
+  if (!row) return res.status(404).send('Not found');
+
+  res.send(shell('Edit Section', `<h2>Edit Section</h2>${sectionForm(row, row.page_id)}`));
+});
+
+adminRouter.post('/sections/:id', (req, res) => {
+  const now = nowIso();
+  const row = db.prepare('SELECT page_id FROM page_sections WHERE id = ?').get(req.params.id);
+
+  db.prepare(`
+    UPDATE page_sections
+    SET section_type=?, sort_order=?, props_json=?, updated_at=?
+    WHERE id=?
+  `).run(
+    req.body.section_type || 'sectionHeader',
+    Number(req.body.sort_order || 0),
+    req.body.props_json || '{}',
+    now,
+    req.params.id
+  );
+
+  res.redirect(`/admin/pages/${row.page_id}`);
+});
+
+adminRouter.get('/sections/:id/delete', (req, res) => {
+  const row = db.prepare('SELECT page_id FROM page_sections WHERE id = ?').get(req.params.id);
+  db.prepare('DELETE FROM page_sections WHERE id = ?').run(req.params.id);
+  res.redirect(`/admin/pages/${row.page_id}`);
 });

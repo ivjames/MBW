@@ -1,62 +1,31 @@
 import { loadSiteContent } from './contentLoader.js';
-import { resolveRoute } from './router.js';
+import { resolveRoute, navigate } from './router.js';
 import { initTheme, toggleTheme } from './theme.js';
-
 import { Navbar } from './components/navbar.js';
 import { Footer } from './components/footer.js';
-
-import { HomePage } from './sections/home.js';
-import { ServicesPage } from './sections/servicesPage.js';
-import { WorksPage } from './sections/worksPage.js';
-import { BlogPage } from './sections/blogPage.js';
-import { BlogPostPage } from './sections/blogPostPage.js';
-import { HelpdeskPage } from './sections/helpdeskPage.js';
-import { HelpdeskTopicPage } from './sections/helpdeskTopicPage.js';
-import { HelpdeskArticlePage } from './sections/helpdeskArticlePage.js';
-import { AboutPage } from './sections/aboutPage.js';
-import { ContactPage } from './sections/contactPage.js';
-import { ServiceDetailPage } from './sections/serviceDetailPage.js';
+import { renderPage } from './renderers/renderPage.js';
 
 const headerMount = document.getElementById('site-header');
 const appMount = document.getElementById('app');
 const footerMount = document.getElementById('site-footer');
 
+initTheme();
+
 async function boot() {
-  const { page } = resolveRoute();
+  const route = resolveRoute();
+  const { page } = route;
+
   const { site, pageContent } = await loadSiteContent(page);
 
   headerMount.innerHTML = '';
   appMount.innerHTML = '';
   footerMount.innerHTML = '';
 
-  headerMount.appendChild(Navbar({ nav: site.nav, currentPage: page }));
-
-  console.log('[page]', page);
-
-  const pageMap = {
-    home: () => HomePage({ home: pageContent, ...site }),
-    services: () => ServicesPage(pageContent),
-    works: () => WorksPage(pageContent),
-    blog: () => BlogPage(pageContent),
-    post: () => BlogPostPage(pageContent),
-    helpdesk: () => HelpdeskPage(pageContent),
-    topic: () => HelpdeskTopicPage(pageContent),
-    article: () => HelpdeskArticlePage(pageContent),
-    about: () => AboutPage(pageContent),
-    contact: () => ContactPage(pageContent, site.company),
-    marketing: () => ServiceDetailPage(pageContent, site.servicePills, 'marketing'),
-    development: () => ServiceDetailPage(pageContent, site.servicePills, 'development'),
-    'web-design': () => ServiceDetailPage(pageContent, site.servicePills, 'web-design'),
-    'seo-optimisation': () => ServiceDetailPage(pageContent, site.servicePills, 'seo-optimisation'),
-    ecommerce: () => ServiceDetailPage(pageContent, site.servicePills, 'ecommerce'),
-    branding: () => ServiceDetailPage(pageContent, site.servicePills, 'branding')
-  };
-
-  appMount.appendChild((pageMap[page] || pageMap.home)());
-  footerMount.appendChild(Footer(site.company));
+  headerMount.appendChild(Navbar({ nav: site.nav || [], currentPage: page }));
+  appMount.appendChild(renderPage(page, pageContent, site));
+  footerMount.appendChild(Footer(site.company || {}));
 
   initUI();
-  initTheme();
 }
 
 function initUI() {
@@ -70,7 +39,18 @@ function initUI() {
   });
 
   navLinks?.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => header?.classList.remove('is-open'));
+    link.addEventListener('click', event => {
+      const href = link.getAttribute('href') || '';
+
+      if (!href.startsWith('/') || href.startsWith('/api') || href.startsWith('/admin')) {
+        header?.classList.remove('is-open');
+        return;
+      }
+
+      event.preventDefault();
+      header?.classList.remove('is-open');
+      navigate(href);
+    });
   });
 
   themeToggle?.addEventListener('click', () => {
@@ -91,7 +71,9 @@ function initUI() {
   const form = document.getElementById('contactForm');
   const status = document.getElementById('formStatus');
 
-  if (form && status) {
+  if (form && status && !form.dataset.bound) {
+    form.dataset.bound = 'true';
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       status.textContent = '';
@@ -130,6 +112,27 @@ function initUI() {
       }
     });
   }
+
+  const helpdeskSearch = document.getElementById('helpdeskSearch');
+  const topicGrid = document.getElementById('helpdeskTopicGrid');
+
+  if (helpdeskSearch && topicGrid && !helpdeskSearch.dataset.bound) {
+    helpdeskSearch.dataset.bound = 'true';
+
+    helpdeskSearch.addEventListener('input', () => {
+      const query = helpdeskSearch.value.trim().toLowerCase();
+
+      topicGrid.querySelectorAll('.helpdesk-topic-card').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = !query || text.includes(query) ? '' : 'none';
+      });
+
+      document.querySelectorAll('.helpdesk-faq-link').forEach(link => {
+        const text = link.textContent.toLowerCase();
+        link.style.display = !query || text.includes(query) ? '' : 'none';
+      });
+    });
+  }
 }
 
 window.addEventListener('app:navigate', boot);
@@ -137,29 +140,11 @@ window.addEventListener('popstate', boot);
 
 boot().catch((error) => {
   console.error(error);
-
-  loadJSON('/api/site')
-    .then((site) => {
-      headerMount.innerHTML = '';
-      footerMount.innerHTML = '';
-
-      if (site?.nav?.length) {
-        headerMount.appendChild(Navbar({ nav: site.nav, currentPage: 'not-found' }));
-      }
-
-      if (site?.company) {
-        footerMount.appendChild(Footer(site.company));
-      }
-    })
-    .catch((siteError) => {
-      console.error(siteError);
-      headerMount.innerHTML = '';
-      footerMount.innerHTML = '';
-    })
-    .finally(() => {
-      appMount.innerHTML = '';
-      appMount.appendChild(NotFoundPage());
-      initUI();
-      initTheme();
-    });
+  appMount.innerHTML = `
+    <section class="section">
+      <div class="container">
+        <p>Failed to load site content.</p>
+      </div>
+    </section>
+  `;
 });

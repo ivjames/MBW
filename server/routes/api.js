@@ -200,3 +200,29 @@ apiRouter.get('/helpdesk/article/:slug', (req, res) => {
         content: parseJSON(row.content_json, [])
     });
 });
+
+apiRouter.get('/pages/:slug', (req, res) => {
+    const page = db.prepare(`
+    SELECT id, slug, title, page_type, status, seo_title, seo_description
+    FROM pages
+    WHERE slug = ? AND status = 'published'
+  `).get(req.params.slug);
+
+    if (!page) return res.status(404).json({ error: 'Not found' });
+
+    const sections = db.prepare(`
+    SELECT id, section_type, sort_order, props_json
+    FROM page_sections
+    WHERE page_id = ?
+    ORDER BY sort_order ASC, id ASC
+  `).all(page.id);
+
+    res.json({
+        slug: page.slug,
+        title: page.title,
+        page_type: page.page_type,
+        seo_title: page.seo_title,
+        seo_description: page.seo_description,
+        sections
+    });
+});

@@ -1,13 +1,13 @@
 import { createElement } from '../primitives/element.js';
-import { PageHero } from './pageHero.js';
-import { SectionHeader } from '../primitives/sectionParts.js';
-import { Card } from '../primitives/card.js';
+import { PageHero } from '../components/pageHero.js';
+import { SectionHeader } from '../components/sectionHeader.js';
+import { CtaPanel } from '../components/ctaPanel.js';
 import { Gallery } from '../components/gallery.js';
 
-export function WorksPage(data) {
+export function WorksPage(data = {}) {
     return createElement('div', {
         children: [
-            PageHero(data.hero),
+            PageHero(data.hero || {}),
 
             createElement('section', {
                 className: 'section',
@@ -35,18 +35,12 @@ export function WorksPage(data) {
                     createElement('div', {
                         className: 'container',
                         children: [
-                            Card({
-                                className: 'cta-card reveal compact-card',
-                                children: [
-                                    createElement('div', { className: 'eyebrow', text: 'Next step' }),
-                                    createElement('h3', {
-                                        className: 'card-title',
-                                        text: data.cta?.title || 'Need deeper case studies?'
-                                    }),
-                                    createElement('p', {
-                                        className: 'card-copy',
-                                        text: data.cta?.body || 'Replace this gallery with detailed case-study pages when you are ready.'
-                                    })
+                            CtaPanel({
+                                title: data.cta?.title || 'Need deeper case studies?',
+                                body: data.cta?.body || 'Replace this gallery with detailed case-study pages when you are ready.',
+                                actions: [
+                                    { label: 'Contact Us', href: '/contact', variant: 'primary' },
+                                    { label: 'View Services', href: '/services', variant: 'secondary' }
                                 ]
                             })
                         ]

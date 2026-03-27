@@ -1,14 +1,15 @@
 import { createElement } from '../primitives/element.js';
-import { PageHero } from './pageHero.js';
+import { PageHero } from '../components/pageHero.js';
 import { Card } from '../primitives/card.js';
+import { SectionHeader } from '../components/sectionHeader.js';
 
-function TopicCard(topic) {
+function TopicCard(topic = {}) {
     return Card({
         className: 'feature-card reveal helpdesk-topic-card',
         children: [
             createElement('div', {
                 className: 'card-kicker',
-                text: (topic.icon || topic.title || '?').slice(0, 1)
+                text: (topic.title || '?').slice(0, 1)
             }),
             createElement('h3', {
                 className: 'card-title',
@@ -16,7 +17,7 @@ function TopicCard(topic) {
                     createElement('a', {
                         text: topic.title || '',
                         attrs: {
-                            href: `topic?slug=${topic.slug || ''}`
+                            href: `/helpdesk?slug=${topic.slug || ''}`
                         }
                     })
                 ]
@@ -40,9 +41,7 @@ function FaqList(title, items = []) {
                 children: items.map(item =>
                     createElement('a', {
                         className: 'helpdesk-faq-link',
-                        attrs: {
-                            href: `article?slug=${item.slug || ''}`
-                        },
+                        attrs: { href: `/article?slug=${item.slug || ''}` },
                         children: [
                             createElement('div', {
                                 className: 'helpdesk-faq-link-main',
@@ -79,12 +78,7 @@ export function HelpdeskPage(data = {}) {
 
     return createElement('div', {
         children: [
-            PageHero({
-                eyebrow: hero.eyebrow || 'Helpdesk',
-                title: hero.title || 'How can we help?',
-                lead: hero.lead || 'Search FAQs, browse support topics, and open individual help articles.',
-                image: hero.image || 'https://picsum.photos/seed/buzzworthy-helpdesk/1600/1000'
-            }),
+            PageHero(hero),
 
             createElement('section', {
                 className: 'section',
@@ -92,6 +86,11 @@ export function HelpdeskPage(data = {}) {
                     createElement('div', {
                         className: 'container',
                         children: [
+                            SectionHeader({
+                                eyebrow: 'Topics',
+                                title: 'Browse support topics and common questions.',
+                                lead: 'Find the right support area, then drill into individual help articles.'
+                            }),
                             createElement('div', {
                                 className: 'helpdesk-search-wrap reveal',
                                 children: [
@@ -105,7 +104,6 @@ export function HelpdeskPage(data = {}) {
                                     })
                                 ]
                             }),
-
                             createElement('div', {
                                 className: 'feature-grid helpdesk-topic-grid',
                                 attrs: { id: 'helpdeskTopicGrid' },

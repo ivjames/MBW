@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "migrate": "node migrate.js"
+    "migrate": "node migrate.js",
+    "import:pages": "node importPages.js"
   },
   "dependencies": {
     "better-sqlite3": "^11.7.0",
