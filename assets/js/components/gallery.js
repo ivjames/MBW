@@ -45,7 +45,16 @@ function GalleryCard(project = {}, openModal) {
                                 })
                             )
                         })
-                        : null
+                        : null,
+                    project.slug
+                        ? createElement('a', {
+                            className: 'gallery-detail-link',
+                            text: 'View project',
+                            attrs: {
+                                href: `/works?slug=${project.slug}`
+                            }
+                        })
+                        : null,
                 ].filter(Boolean)
             })
         ]
@@ -126,6 +135,15 @@ function renderModalContent(modal, project = {}) {
                                         text: metric
                                     })
                                 )
+                            })
+                            : null,
+                        project.slug
+                            ? createElement('a', {
+                                className: 'gallery-detail-link',
+                                text: 'View project',
+                                attrs: {
+                                    href: `/works?slug=${project.slug}`
+                                }
                             })
                             : null
                     ].filter(Boolean)

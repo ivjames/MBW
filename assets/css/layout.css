@@ -19,3 +19,52 @@
     grid-template-columns: 1fr;
   }
 }
+
+.cta-panel,
+.cta-card {
+  padding: 1.5rem 1.5rem 1.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  min-height: unset !important;
+}
+
+.cta-panel .eyebrow,
+.cta-card .eyebrow {
+  margin: 0 0 1rem;
+}
+
+.cta-panel .card-title,
+.cta-card .card-title {
+  margin: 0 0 1rem;
+  line-height: 1.2;
+}
+
+.cta-panel .card-copy,
+.cta-card .card-copy {
+  margin: 0 0 1rem;
+  line-height: 1.6;
+  /* max-width: 52ch; */
+}
+
+.cta-panel .hero-cta-row,
+.cta-card .hero-cta-row {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.gallery-detail-link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 0.35rem;
+  font-weight: 700;
+  color: var(--brand-blue);
+}
+
+.gallery-detail-link:hover,
+.gallery-detail-link:focus-visible {
+  color: var(--brand-yellow);
+}

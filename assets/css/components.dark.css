@@ -702,6 +702,16 @@
   transform: translateY(0);
 }
 
+.page-hero .reveal,
+.page-hero-shell .reveal,
+.hero-section .reveal,
+.service-subnav-bar .reveal,
+.pill-nav.reveal,
+.helpdesk-article-header-section .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 @media (max-width: 1024px) {
   .hero-shell,
   .dual-panel,

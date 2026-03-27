@@ -53,6 +53,7 @@ function shell(title, content) {
       <aside class="sidebar stack">
         <a class="btn" href="/admin">Overview</a>
         <a class="btn" href="/admin/pages">Pages</a>
+        <a class="btn" href="/admin/works">Works</a>
         <a class="btn" href="/admin/posts">Posts</a>
         <a class="btn" href="/admin/topics">Topics</a>
         <a class="btn" href="/admin/articles">Articles</a>
@@ -60,6 +61,26 @@ function shell(title, content) {
       <main class="panel stack">${content}</main>
     </div>`
     );
+}
+
+function workForm(row = {}) {
+  return `<form class="stack" method="post" action="${row.id ? `/admin/works/${row.id}` : '/admin/works'}">
+    <input name="title" placeholder="Title" value="${esc(row.title || '')}" />
+    <input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" />
+    <input name="category" placeholder="Category" value="${esc(row.category || '')}" />
+    <textarea name="summary" placeholder="Summary">${esc(row.summary || '')}</textarea>
+    <input name="hero_image" placeholder="Hero image URL" value="${esc(row.hero_image || '')}" />
+    <select name="status">
+      <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>draft</option>
+      <option value="published" ${row.status === 'published' ? 'selected' : ''}>published</option>
+    </select>
+    <textarea name="metrics_json">${esc(row.metrics_json || '[]')}</textarea>
+    <textarea name="content_json">${esc(row.content_json || '[{"type":"paragraph","text":"Project summary"}]')}</textarea>
+    <div class="actions">
+      <button class="btn-primary" type="submit">Save</button>
+      ${row.id ? `<a class="btn" href="/admin/works/${row.id}/delete">Delete</a>` : ''}
+    </div>
+  </form>`;
 }
 
 adminRouter.get('/login', (_req, res) => {
@@ -656,4 +677,118 @@ adminRouter.get('/sections/:id/delete', (req, res) => {
   const row = db.prepare('SELECT page_id FROM page_sections WHERE id = ?').get(req.params.id);
   db.prepare('DELETE FROM page_sections WHERE id = ?').run(req.params.id);
   res.redirect(`/admin/pages/${row.page_id}`);
+});
+
+adminRouter.get('/works', (_req, res) => {
+  const rows = db.prepare(`
+    SELECT *
+    FROM works
+    ORDER BY datetime(updated_at) DESC
+  `).all();
+
+  res.send(shell('Works', `
+    <div class="top" style="margin:0">
+      <h2>Works</h2>
+      <a class="btn-primary" href="/admin/works/new">New Work Item</a>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>Slug</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(r => `
+          <tr>
+            <td>
+              <strong>${esc(r.title)}</strong>
+              <div class="muted">${esc(r.summary || '')}</div>
+            </td>
+            <td>${esc(r.category || '')}</td>
+            <td>${esc(r.status || '')}</td>
+            <td>${esc(r.slug || '')}</td>
+            <td><a class="btn" href="/admin/works/${r.id}">Edit</a></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `));
+});
+
+adminRouter.get('/works/new', (_req, res) => {
+  res.send(shell('New Work Item', `<h2>New Work Item</h2>${workForm({ status: 'draft' })}`));
+});
+
+adminRouter.get('/works/:id', (req, res) => {
+  const row = db.prepare('SELECT * FROM works WHERE id = ?').get(req.params.id);
+  if (!row) return res.status(404).send('Not found');
+
+  res.send(shell('Edit Work Item', `<h2>Edit Work Item</h2>${workForm(row)}`));
+});
+
+adminRouter.post('/works', (req, res) => {
+  const now = nowIso();
+  const title = String(req.body.title || '').trim();
+
+  db.prepare(`
+    INSERT INTO works (
+      slug, title, category, summary, hero_image, metrics_json, content_json, status, created_at, updated_at
+    ) VALUES (
+      @slug, @title, @category, @summary, @hero_image, @metrics_json, @content_json, @status, @created_at, @updated_at
+    )
+  `).run({
+    slug: slugify(req.body.slug || title),
+    title,
+    category: req.body.category || '',
+    summary: req.body.summary || '',
+    hero_image: req.body.hero_image || '',
+    metrics_json: req.body.metrics_json || '[]',
+    content_json: req.body.content_json || '[]',
+    status: req.body.status || 'draft',
+    created_at: now,
+    updated_at: now
+  });
+
+  res.redirect('/admin/works');
+});
+
+adminRouter.post('/works/:id', (req, res) => {
+  const now = nowIso();
+  const title = String(req.body.title || '').trim();
+
+  db.prepare(`
+    UPDATE works
+    SET slug=@slug,
+        title=@title,
+        category=@category,
+        summary=@summary,
+        hero_image=@hero_image,
+        metrics_json=@metrics_json,
+        content_json=@content_json,
+        status=@status,
+        updated_at=@updated_at
+    WHERE id=@id
+  `).run({
+    id: req.params.id,
+    slug: slugify(req.body.slug || title),
+    title,
+    category: req.body.category || '',
+    summary: req.body.summary || '',
+    hero_image: req.body.hero_image || '',
+    metrics_json: req.body.metrics_json || '[]',
+    content_json: req.body.content_json || '[]',
+    status: req.body.status || 'draft',
+    updated_at: now
+  });
+
+  res.redirect('/admin/works');
+});
+
+adminRouter.get('/works/:id/delete', (req, res) => {
+  db.prepare('DELETE FROM works WHERE id = ?').run(req.params.id);
+  res.redirect('/admin/works');
 });

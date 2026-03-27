@@ -7,11 +7,11 @@ export function resolveRoute() {
         return { page: 'post', path, slug };
     }
 
-    if (path === '/helpdesk' && slug) {
-        return { page: 'topic', path, slug };
+    if (path === '/works' && slug) {
+        return { page: 'work', path, slug };
     }
 
-    if (path === '/topic' && slug) {
+    if (path === '/helpdesk' && slug) {
         return { page: 'topic', path, slug };
     }
 
@@ -25,6 +25,7 @@ export function resolveRoute() {
         '/works': 'works',
         '/blog': 'blog',
         '/helpdesk': 'helpdesk',
+        '/article': 'article',
         '/about': 'about',
         '/contact': 'contact',
         '/marketing': 'marketing',

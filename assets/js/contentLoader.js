@@ -55,6 +55,21 @@ export async function loadSiteContent(page) {
     };
   }
 
+  if (page === 'works') {
+    return {
+      site,
+      pageContent: await loadJSON('/api/works')
+    };
+  }
+
+  if (page === 'work') {
+    if (!slug) throw new Error('Missing work slug.');
+    return {
+      site,
+      pageContent: await loadJSON(`/api/works/${slug}`)
+    };
+  }
+
   const dbPageSlugs = new Set([
     'about',
     'services',

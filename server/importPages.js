@@ -56,128 +56,371 @@ function insertSection(pageId, sectionType, sortOrder, props) {
 }
 
 function importAbout() {
-    const data = readJSON('content/pages/about.json');
     const slug = 'about';
 
     clearPageBySlug(slug);
 
     const pageId = insertPage({
         slug,
-        title: data.hero?.title || 'About',
+        title: 'About Us',
         pageType: 'standard',
-        seoTitle: data.hero?.title || 'About',
-        seoDescription: data.hero?.lead || ''
+        seoTitle: 'About Us',
+        seoDescription: 'About DeepDigital'
     });
 
     let sort = 10;
 
-    if (data.hero) {
-        insertSection(pageId, 'pageHero', sort, data.hero);
-        sort += 10;
-    }
+    insertSection(pageId, 'pageHero', sort, {
+        eyebrow: 'About Us',
+        title: 'Getting online is easy. Succeeding online is a different story.',
+        lead: 'We build web design, marketing, and branding systems that do more than look modern. They clarify the offer, support trust, and help turn attention into qualified leads.',
+        image: 'https://picsum.photos/seed/deepdigital-about-main/1600/1000',
+        meta: ['Web Design', 'Marketing', 'Branding'],
+        actions: [
+            { label: 'Book a Call', href: '/contact', variant: 'primary' },
+            { label: 'View Services', href: '/services', variant: 'secondary' }
+        ]
+    });
+    sort += 10;
 
-    if (data.intro) {
-        insertSection(pageId, 'sectionHeader', sort, data.intro);
-        sort += 10;
-    }
+    insertSection(pageId, 'sectionHeader', sort, {
+        eyebrow: 'Why we exist',
+        title: 'Built around growth, not just presentation.',
+        lead: 'A strong site should do more than look polished. It should help visitors understand what the business does, why it matters, and what to do next.'
+    });
+    sort += 10;
 
-    if (Array.isArray(data.blocks) && data.blocks.length) {
-        insertSection(pageId, 'featureGrid', sort, { items: data.blocks });
-        sort += 10;
-    }
+    insertSection(pageId, 'featureGrid', sort, {
+        items: [
+            {
+                kicker: '01',
+                title: 'Web Design That Performs',
+                copy: 'We design pages for trust, clarity, and conversion instead of treating design as decoration.'
+            },
+            {
+                kicker: '02',
+                title: 'Marketing With Structure',
+                copy: 'Marketing, branding, SEO, and development work better when they reinforce each other.'
+            },
+            {
+                kicker: '03',
+                title: 'B2B-Aware Thinking',
+                copy: 'Messaging, website structure, and content all play a different role when the sales cycle is longer.'
+            }
+        ]
+    });
+    sort += 10;
 
-    if (data.story?.title || (Array.isArray(data.story?.steps) && data.story.steps.length)) {
-        if (data.story?.eyebrow || data.story?.title || data.story?.lead) {
-            insertSection(pageId, 'sectionHeader', sort, {
-                eyebrow: data.story.eyebrow,
-                title: data.story.title,
-                lead: data.story.lead
-            });
-            sort += 10;
-        }
+    insertSection(pageId, 'sectionHeader', sort, {
+        eyebrow: 'How we work',
+        title: 'Strategy, design, development, and support are one system.',
+        lead: 'The public site lays out a four-step flow: strategy, design, develop, and support.'
+    });
+    sort += 10;
 
-        insertSection(pageId, 'processGrid', sort, {
-            items: data.story?.steps || []
-        });
-        sort += 10;
-    }
+    insertSection(pageId, 'processGrid', sort, {
+        items: [
+            {
+                step: '01',
+                title: 'Strategy',
+                copy: 'We define the competition, audience, and what is already working before making design decisions.'
+            },
+            {
+                step: '02',
+                title: 'Design',
+                copy: 'We shape the layout, hierarchy, color system, and brand presentation into something clear and usable.'
+            },
+            {
+                step: '03',
+                title: 'Develop',
+                copy: 'We turn approved direction into a working site or modular content system that can actually be maintained.'
+            },
+            {
+                step: '04',
+                title: 'Support',
+                copy: 'Launch is not the end state. Design, marketing, and maintenance continue to support growth after the site goes live.'
+            }
+        ]
+    });
+    sort += 10;
 
-    if (data.values?.title || (Array.isArray(data.values?.items) && data.values.items.length)) {
-        insertSection(pageId, 'sectionHeader', sort, {
-            eyebrow: data.values.eyebrow,
-            title: data.values.title,
-            lead: data.values.lead || ''
-        });
-        sort += 10;
+    insertSection(pageId, 'sectionHeader', sort, {
+        eyebrow: 'What matters',
+        title: 'Clear positioning. Stronger trust. Better lead quality.',
+        lead: ''
+    });
+    sort += 10;
 
-        insertSection(pageId, 'featureGrid', sort, {
-            items: data.values.items || []
-        });
-        sort += 10;
-    }
+    insertSection(pageId, 'featureGrid', sort, {
+        items: [
+            {
+                title: 'Clarity over clutter',
+                copy: 'Visitors should understand what the company does, who it helps, and why it is credible without digging.'
+            },
+            {
+                title: 'Systems over one-offs',
+                copy: 'Design, development, branding, and marketing should reinforce each other instead of competing for attention.'
+            },
+            {
+                title: 'Growth over vanity',
+                copy: 'The goal is not just a nicer site. The goal is a site that supports real business outcomes.'
+            }
+        ]
+    });
+    sort += 10;
 
-    if (data.cta) {
-        insertSection(pageId, 'ctaPanel', sort, {
-            title: data.cta.title || '',
-            body: data.cta.body || '',
-            actions: [
-                { label: 'Contact Us', href: '/contact', variant: 'primary' },
-                { label: 'View Services', href: '/services', variant: 'secondary' }
-            ]
-        });
-    }
+    insertSection(pageId, 'ctaPanel', sort, {
+        title: 'Need a cleaner About page than the template version?',
+        body: 'This page replaces generic agency filler with a more credible story built around actual services, process, and business value.',
+        actions: [
+            { label: 'Contact Us', href: '/contact', variant: 'primary' },
+            { label: 'View Services', href: '/services', variant: 'secondary' }
+        ]
+    });
 
     console.log(`Imported page: ${slug}`);
 }
 
-function importServices() {
-    const data = readJSON('content/pages/services.json');
-    const slug = 'services';
-
-    clearPageBySlug(slug);
-
-    const pageId = insertPage({
-        slug,
-        title: data.hero?.title || 'Services',
-        pageType: 'standard',
-        seoTitle: data.hero?.title || 'Services',
-        seoDescription: data.hero?.lead || ''
+function importAllServicePages() {
+    importServicePage({
+        slug: 'marketing',
+        title: 'Marketing',
+        description: 'We use strategic marketing tactics that have been proven to work. But strategy only matters when it is tied to the right audience, the right offer, and a system that can turn attention into qualified leads.',
+        heroImage: 'https://picsum.photos/seed/deepdigital-marketing/1600/1000',
+        mainItems: [
+            {
+                title: 'Campaign Strategy',
+                copy: 'We start by clarifying who you want to reach, what they actually care about, and what kind of campaign structure makes sense for your market. That keeps the work focused and prevents wasted spend.'
+            },
+            {
+                title: 'Paid and Social',
+                copy: 'From PPC campaigns to social media support, we help put the right message in front of the right audience with a cleaner path from click to conversion.'
+            },
+            {
+                title: 'Positioning and Offer Clarity',
+                copy: 'Strong marketing is not only distribution. It depends on a clear offer, a stronger value story, and landing pages that support belief instead of creating friction.'
+            },
+            {
+                title: 'Lead-Generation Focus',
+                copy: 'The goal is not just reach. The goal is qualified demand. We align traffic, messaging, and page structure around lead quality rather than vanity numbers.'
+            }
+        ],
+        includeItems: [
+            'Campaign planning',
+            'Audience targeting',
+            'Paid media support',
+            'Landing-page messaging',
+            'Lead-generation optimization',
+            'Performance review'
+        ],
+        processItems: [
+            { step: '01', title: 'Define', copy: 'Clarify audience, offer, and acquisition priorities.' },
+            { step: '02', title: 'Build', copy: 'Shape campaigns, messaging, and supporting pages.' },
+            { step: '03', title: 'Improve', copy: 'Tighten based on performance and lead quality.' }
+        ],
+        ctaTitle: 'Need a marketing system that actually supports sales?',
+        ctaBody: 'Replace broad filler with real channels, campaign examples, and proof once you have live client work.'
     });
 
-    let sort = 10;
-
-    if (data.hero) {
-        insertSection(pageId, 'pageHero', sort, {
-            ...data.hero,
-            image: data.hero?.image || 'https://picsum.photos/seed/deepdigital-services/1600/1000'
-        });
-        sort += 10;
-    }
-
-    insertSection(pageId, 'sectionHeader', sort, {
-        eyebrow: 'Core services',
-        title: 'A broader service stack, organized clearly.',
-        lead: 'Marketing, development, design, SEO, ecommerce, and branding are grouped into a cleaner service architecture.'
+    importServicePage({
+        slug: 'development',
+        title: 'Development',
+        description: 'Custom programming for the most complex functions you can think of. We build the systems, modules, and integrations that remove friction from your operations and make the site easier to grow.',
+        heroImage: 'https://picsum.photos/seed/deepdigital-development/1600/1000',
+        mainItems: [
+            {
+                title: 'Custom Features',
+                copy: 'We build custom functionality for business workflows, integrations, and content systems that cannot be solved well with templates alone.'
+            },
+            {
+                title: 'Modular Architecture',
+                copy: 'Clean structure matters. A modular codebase makes the site easier to extend, easier to maintain, and less likely to collapse into technical debt later.'
+            },
+            {
+                title: 'Business Workflow Support',
+                copy: 'Development is not just about visible UI. It also includes the behind-the-scenes logic that makes publishing, routing, forms, and internal processes more reliable.'
+            },
+            {
+                title: 'Self-Hosted Practicality',
+                copy: 'We favor systems that are understandable, portable, and maintainable. That means fewer hidden dependencies and a cleaner handoff when the project grows.'
+            }
+        ],
+        includeItems: [
+            'Custom modules',
+            'Content systems',
+            'API integrations',
+            'Form and workflow logic',
+            'Refactoring and cleanup',
+            'Deployment support'
+        ],
+        processItems: [
+            { step: '01', title: 'Scope', copy: 'Define the functional requirements and system constraints.' },
+            { step: '02', title: 'Build', copy: 'Develop modular features in a clean, testable structure.' },
+            { step: '03', title: 'Stabilize', copy: 'Refine edge cases, handoff paths, and maintainability.' }
+        ],
+        ctaTitle: 'Need custom development without a fragile mess?',
+        ctaBody: 'Replace filler with real integrations, architecture notes, and before-and-after workflow examples.'
     });
-    sort += 10;
 
-    if (Array.isArray(data.services) && data.services.length) {
-        insertSection(pageId, 'featureGrid', sort, { items: data.services });
-        sort += 10;
-    }
-
-    insertSection(pageId, 'sectionHeader', sort, {
-        eyebrow: 'Delivery model',
-        title: 'Strategy through support.',
-        lead: 'The public site outlines a four-part path: strategy, design, develop, and support.'
+    importServicePage({
+        slug: 'web-design',
+        title: 'Web Design',
+        description: 'Powerful web design should do more than look modern. It should make your business easier to understand, easier to trust, and easier to choose.',
+        heroImage: 'https://picsum.photos/seed/deepdigital-web-design/1600/1000',
+        mainItems: [
+            {
+                title: 'Conversion-First Design',
+                copy: 'We design around decision-making, trust, and action. Layout, copy structure, and visual hierarchy are built to support conversion rather than decoration.'
+            },
+            {
+                title: 'Clear Information Architecture',
+                copy: 'A strong site helps visitors understand what you do, how you help, and what to do next without forcing them to hunt for relevance.'
+            },
+            {
+                title: 'Brand-Aligned Presentation',
+                copy: 'Color, typography, imagery, and spacing should reinforce the business story. Design is stronger when it expresses positioning, not just style.'
+            },
+            {
+                title: 'Competitive Differentiation',
+                copy: 'Your strongest competitors already look credible. Good design closes that credibility gap and helps push beyond it with a clearer and more deliberate presentation.'
+            }
+        ],
+        includeItems: [
+            'Homepage design',
+            'Service-page design',
+            'Responsive layouts',
+            'Wireframes and hierarchy',
+            'Brand-aligned UI direction',
+            'Conversion-focused page structure'
+        ],
+        processItems: [
+            { step: '01', title: 'Clarify', copy: 'Define audience, positioning, and decision paths.' },
+            { step: '02', title: 'Design', copy: 'Build layouts, hierarchy, and visual language.' },
+            { step: '03', title: 'Refine', copy: 'Tighten usability, messaging flow, and polish.' }
+        ],
+        ctaTitle: 'Need a website that performs better than it looks?',
+        ctaBody: 'Replace filler with screenshots, page examples, and specific conversion outcomes as project proof accumulates.'
     });
-    sort += 10;
 
-    if (Array.isArray(data.process) && data.process.length) {
-        insertSection(pageId, 'processGrid', sort, { items: data.process });
-    }
+    importServicePage({
+        slug: 'seo-optimisation',
+        title: 'SEO Optimisation',
+        description: 'Optimizing web design to rank well is not an afterthought. It starts with structure, clarity, crawlability, and content that supports the way real users search.',
+        heroImage: 'https://picsum.photos/seed/deepdigital-seo/1600/1000',
+        mainItems: [
+            {
+                title: 'Technical SEO Foundations',
+                copy: 'We improve metadata, heading structure, internal linking, crawlability, and page organization so search engines can understand the site more clearly.'
+            },
+            {
+                title: 'Content Structure',
+                copy: 'SEO performs better when page content is organized around real questions, real services, and clear user intent instead of generic copy blocks.'
+            },
+            {
+                title: 'Design + SEO Alignment',
+                copy: 'A site that looks good but hides its meaning will struggle. We align design decisions with discoverability so form and function support ranking together.'
+            },
+            {
+                title: 'Longer-Term Discoverability',
+                copy: 'The goal is not a gimmick. It is a site structure that can support future content, future services, and stronger visibility over time.'
+            }
+        ],
+        includeItems: [
+            'Technical SEO review',
+            'On-page structure',
+            'Metadata cleanup',
+            'Heading and hierarchy fixes',
+            'Internal-linking guidance',
+            'Content-structure support'
+        ],
+        processItems: [
+            { step: '01', title: 'Audit', copy: 'Review structure, visibility, and technical friction.' },
+            { step: '02', title: 'Improve', copy: 'Fix page-level and structural issues.' },
+            { step: '03', title: 'Extend', copy: 'Create a stronger base for future growth and content.' }
+        ],
+        ctaTitle: 'Need stronger discoverability without shallow SEO filler?',
+        ctaBody: 'Replace this with keyword targets, audits, and measurable traffic or lead improvements as you build out proof.'
+    });
 
-    console.log(`Imported page: ${slug}`);
+    importServicePage({
+        slug: 'ecommerce',
+        title: 'Ecommerce',
+        description: 'We build online stores on flexible, modular systems that make it easier to grow the catalog, improve product discovery, and reduce purchase friction over time.',
+        heroImage: 'https://picsum.photos/seed/deepdigital-ecommerce/1600/1000',
+        mainItems: [
+            {
+                title: 'Scalable Storefront Structure',
+                copy: 'A storefront should be built for growth, not only launch. We shape ecommerce systems so they can expand without turning navigation and catalog structure into chaos.'
+            },
+            {
+                title: 'Product Discovery',
+                copy: 'Product pages, category pages, and navigation paths should help users find what matters quickly instead of forcing unnecessary browsing effort.'
+            },
+            {
+                title: 'Checkout Friction Reduction',
+                copy: 'Every unnecessary step costs revenue. We simplify decision paths and reduce interface friction to support cleaner purchase behavior.'
+            },
+            {
+                title: 'Modular Platform Thinking',
+                copy: 'A flexible platform makes it easier to add products, promotions, content, and future functionality as the business grows.'
+            }
+        ],
+        includeItems: [
+            'Storefront UX',
+            'Category and product-page structure',
+            'Navigation refinement',
+            'Checkout simplification',
+            'Modular platform planning',
+            'Growth-ready content architecture'
+        ],
+        processItems: [
+            { step: '01', title: 'Map', copy: 'Define catalog structure, buyer paths, and friction points.' },
+            { step: '02', title: 'Design', copy: 'Shape storefront, product experience, and purchase flow.' },
+            { step: '03', title: 'Improve', copy: 'Refine usability, navigation, and growth readiness.' }
+        ],
+        ctaTitle: 'Building an online store that needs to grow with you?',
+        ctaBody: 'Replace filler with platform choices, merchandising logic, and real commerce metrics once projects are live.'
+    });
+
+    importServicePage({
+        slug: 'branding',
+        title: 'Branding',
+        description: 'A solid brand strategy, logo system, and set of guidelines make it easier to be recognized, remembered, and trusted across every touchpoint.',
+        heroImage: 'https://picsum.photos/seed/deepdigital-branding/1600/1000',
+        mainItems: [
+            {
+                title: 'Brand Strategy',
+                copy: 'A good brand starts with positioning. We help define how the business should sound, what it should emphasize, and where it should differentiate.'
+            },
+            {
+                title: 'Identity Systems',
+                copy: 'Logos, color systems, typography, and supporting visual rules create consistency and reduce the visual drift that weakens credibility.'
+            },
+            {
+                title: 'Guidelines That Scale',
+                copy: 'A brand is more useful when it can be applied clearly by more than one person. Guidelines make the system easier to reuse across pages, campaigns, and materials.'
+            },
+            {
+                title: 'Recognition Through Consistency',
+                copy: 'Consistency is not about rigid sameness. It is about giving the business a recognizable and trustworthy presence wherever it appears.'
+            }
+        ],
+        includeItems: [
+            'Positioning support',
+            'Logo and identity direction',
+            'Color and type systems',
+            'Brand guidelines',
+            'Voice and presentation alignment',
+            'Cross-channel consistency'
+        ],
+        processItems: [
+            { step: '01', title: 'Define', copy: 'Clarify positioning, audience, and message priorities.' },
+            { step: '02', title: 'Design', copy: 'Shape the identity system and brand presentation.' },
+            { step: '03', title: 'Systematize', copy: 'Package guidelines so the brand can be applied consistently.' }
+        ],
+        ctaTitle: 'Need a brand that feels more credible and more coherent?',
+        ctaBody: 'Replace filler with identity examples, logo systems, and before-and-after brand work once you have visual proof.'
+    });
 }
 
 function importWorks() {
@@ -366,18 +609,94 @@ function importServiceDetail(filename, slugOverride = null) {
     console.log(`Imported service page: ${slug}`);
 }
 
-function main() {
-    importHome();
-    importAbout();
-    importServices();
-    importWorks();
+function importServicePage({
+    slug,
+    title,
+    description,
+    heroImage,
+    mainItems,
+    includeItems,
+    processItems,
+    ctaTitle,
+    ctaBody
+}) {
+    clearPageBySlug(slug);
 
-    importServiceDetail('marketing.json');
-    importServiceDetail('development.json');
-    importServiceDetail('web-design.json');
-    importServiceDetail('seo-optimisation.json');
-    importServiceDetail('ecommerce.json');
-    importServiceDetail('branding.json');
+    const pageId = insertPage({
+        slug,
+        title,
+        pageType: 'service',
+        seoTitle: title,
+        seoDescription: description
+    });
+
+    let sort = 10;
+
+    insertSection(pageId, 'pageHero', sort, {
+        eyebrow: 'Service',
+        title,
+        lead: description,
+        image: heroImage
+    });
+    sort += 10;
+
+    insertSection(pageId, 'featureGrid', sort, {
+        items: mainItems
+    });
+    sort += 10;
+
+    insertSection(pageId, 'sectionHeader', sort, {
+        eyebrow: 'Scope',
+        title: 'What this includes',
+        lead: 'A practical view of the core deliverables and support areas inside this service.'
+    });
+    sort += 10;
+
+    insertSection(pageId, 'featureGrid', sort, {
+        items: includeItems.map(item => ({
+            title: item,
+            copy: ''
+        }))
+    });
+    sort += 10;
+
+    insertSection(pageId, 'sectionHeader', sort, {
+        eyebrow: 'Process',
+        title: `How ${title.toLowerCase()} work moves`,
+        lead: 'A compact view of how the work progresses from planning through refinement.'
+    });
+    sort += 10;
+
+    insertSection(pageId, 'processGrid', sort, {
+        items: processItems
+    });
+    sort += 10;
+
+    insertSection(pageId, 'ctaPanel', sort, {
+        title: ctaTitle,
+        body: ctaBody,
+        actions: [
+            { label: 'Contact Us', href: '/contact', variant: 'primary' },
+            { label: 'View All Services', href: '/services', variant: 'secondary' }
+        ]
+    });
+
+    console.log(`Imported service page: ${slug}`);
+}
+
+function main() {
+    // importHome();
+    // importAbout();
+    importAllServicePages();
+    // importWorks();
+
+
+    // importServiceDetail('marketing.json');
+    // importServiceDetail('development.json');
+    // importServiceDetail('web-design.json');
+    // importServiceDetail('seo-optimisation.json');
+    // importServiceDetail('ecommerce.json');
+    // importServiceDetail('branding.json');
 
     console.log('Page import complete.');
 }

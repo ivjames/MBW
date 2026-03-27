@@ -1,4 +1,6 @@
 import { HomePage } from '../sections/home.js';
+import { WorksPage } from '../sections/worksPage.js';
+import { WorkDetailPage } from '../sections/workDetailPage.js';
 import { BlogPage } from '../sections/blogPage.js';
 import { BlogPostPage } from '../sections/blogPostPage.js';
 import { HelpdeskPage } from '../sections/helpdeskPage.js';
@@ -9,6 +11,14 @@ import { DbPage } from '../sections/dbPage.js';
 
 function renderHome(pageContent, site) {
     return HomePage({ home: pageContent, ...site });
+}
+
+function renderWorks(pageContent) {
+    return WorksPage(pageContent);
+}
+
+function renderWorkDetail(pageContent) {
+    return WorkDetailPage(pageContent);
 }
 
 function renderBlog(pageContent) {
@@ -44,13 +54,15 @@ const rendererMap = {
 
     about: renderDbPage,
     services: renderDbPage,
-    works: renderDbPage,
     marketing: renderDbPage,
     development: renderDbPage,
     'web-design': renderDbPage,
     'seo-optimisation': renderDbPage,
     ecommerce: renderDbPage,
     branding: renderDbPage,
+
+    works: renderWorks,
+    work: renderWorkDetail,
 
     blog: renderBlog,
     post: renderBlogPost,

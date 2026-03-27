@@ -17,13 +17,15 @@ async function boot() {
 
   const { site, pageContent } = await loadSiteContent(page);
 
-  headerMount.innerHTML = '';
-  appMount.innerHTML = '';
-  footerMount.innerHTML = '';
+  const nextHeader = Navbar({ nav: site.nav || [], currentPage: page });
+  const nextPage = renderPage(page, pageContent, site);
+  const nextFooter = Footer(site.company || {});
 
-  headerMount.appendChild(Navbar({ nav: site.nav || [], currentPage: page }));
-  appMount.appendChild(renderPage(page, pageContent, site));
-  footerMount.appendChild(Footer(site.company || {}));
+  headerMount.innerHTML = '';
+  headerMount.appendChild(nextHeader);
+
+  appMount.replaceChildren(nextPage);
+  footerMount.replaceChildren(nextFooter);
 
   initUI();
 }

@@ -18,10 +18,8 @@ function setStaticHref(id, file) {
 
 export function applyTheme(theme) {
     const safeTheme = theme === 'light' ? 'light' : 'dark';
-    
-    document.documentElement.style.background = safeTheme === 'light' ? '#f6f8fc' : '#000000';
 
-    setHref('theme-tokens', safeTheme, 'tokens');
+    setStaticHref('theme-tokens', 'tokens');
     setStaticHref('theme-utilities', 'utilities');
     setStaticHref('theme-layout', 'layout');
     setHref('theme-components', safeTheme, 'components');

@@ -226,3 +226,59 @@ apiRouter.get('/pages/:slug', (req, res) => {
         sections
     });
 });
+
+apiRouter.get('/works', (_req, res) => {
+    const projects = db.prepare(`
+    SELECT slug, title, category, summary, hero_image, metrics_json
+    FROM works
+    WHERE status = 'published'
+    ORDER BY title ASC
+  `).all().map(row => ({
+        slug: row.slug,
+        title: row.title,
+        category: row.category,
+        image: row.hero_image,
+        summary: row.summary,
+        metrics: JSON.parse(row.metrics_json || '[]')
+    }));
+
+    res.json({
+        hero: {
+            eyebrow: 'Selected work',
+            title: 'Previous projects, presented as a browsable gallery.',
+            lead: 'Use this page to show recent work, visual direction, project categories, and short business context without forcing users into a heavy case-study flow.',
+            image: 'https://picsum.photos/seed/deepdigital-works-hero/1600/1000'
+        },
+        intro: {
+            title: 'Interactive project gallery',
+            lead: 'Each project can be filtered by category and opened in a lightweight viewer.'
+        },
+        filters: ['All', ...new Set(projects.map(p => p.category).filter(Boolean))],
+        projects,
+        cta: {
+            title: 'Want a deeper case study section later?',
+            body: 'This gallery can evolve into full case studies with before-and-after pages, metrics, process notes, and testimonial blocks.'
+        }
+    });
+});
+
+apiRouter.get('/works/:slug', (req, res) => {
+    const row = db.prepare(`
+    SELECT *
+    FROM works
+    WHERE slug = ? AND status = 'published'
+  `).get(req.params.slug);
+
+    if (!row) return res.status(404).json({ error: 'Not found' });
+
+    res.json({
+        slug: row.slug,
+        title: row.title,
+        category: row.category,
+        excerpt: row.summary,
+        image: row.hero_image,
+        tags: [row.category].filter(Boolean),
+        metrics: JSON.parse(row.metrics_json || '[]'),
+        content: JSON.parse(row.content_json || '[]')
+    });
+});
