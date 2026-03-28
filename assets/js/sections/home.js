@@ -72,7 +72,7 @@ export function HomePage(data = {}) {
                 title: 'Marketing, development, and design working as one system.',
                 lead: 'The homepage should introduce the service stack clearly without forcing users to dig through separate pages before they understand the offer.'
               }),
-              FeatureGrid(services)
+              FeatureGrid(services, 'services-grid-3up')
             ]
           })
         ]

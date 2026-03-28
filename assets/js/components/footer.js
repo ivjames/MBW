@@ -52,7 +52,7 @@ export function Footer(company = {}) {
           createElement('img', {
             className: 'footer-logo-mark',
             attrs: {
-              src: '/assets/images/logo-mark.webp',
+              src: '/assets/images/logo-mark.svg',
               alt: '',
               'aria-hidden': 'true',
               width: '780',

@@ -3,30 +3,61 @@ import { PageHero } from '../components/pageHero.js';
 import { Card } from '../primitives/card.js';
 import { SectionHeader } from '../components/sectionHeader.js';
 
+function resolveTopicIcon(topic = {}) {
+    const key = `${topic.slug || ''} ${topic.title || ''} ${topic.description || ''}`.toLowerCase();
+
+    if (key.includes('account') || key.includes('profile') || key.includes('user')) return 'fa-user-gear';
+    if (key.includes('billing') || key.includes('payment') || key.includes('invoice')) return 'fa-credit-card';
+    if (key.includes('security') || key.includes('privacy') || key.includes('access')) return 'fa-shield-halved';
+    if (key.includes('integrat') || key.includes('api') || key.includes('connect')) return 'fa-plug-circle-bolt';
+    if (key.includes('perform') || key.includes('speed') || key.includes('optimi')) return 'fa-gauge-high';
+    if (key.includes('email') || key.includes('message') || key.includes('notify')) return 'fa-envelope-open-text';
+    if (key.includes('report') || key.includes('analytics') || key.includes('metric')) return 'fa-chart-line';
+    return 'fa-circle-question';
+}
+
 function TopicCard(topic = {}) {
     return Card({
         className: 'feature-card reveal helpdesk-topic-card',
         children: [
             createElement('div', {
-                className: 'card-kicker',
-                text: (topic.title || '?').slice(0, 1)
-            }),
-            createElement('h3', {
-                className: 'card-title',
+                className: 'card-title-row',
                 children: [
-                    createElement('a', {
-                        text: topic.title || '',
-                        attrs: {
-                            href: `/helpdesk?slug=${topic.slug || ''}`
-                        }
+                    createElement('div', {
+                        className: 'card-icon',
+                        children: [
+                            createElement('i', {
+                                attrs: {
+                                    class: `fa-solid ${resolveTopicIcon(topic)}`,
+                                    'aria-hidden': 'true'
+                                }
+                            })
+                        ]
+                    }),
+                    createElement('h3', {
+                        className: 'card-title',
+                        children: [
+                            createElement('a', {
+                                text: topic.title || '',
+                                attrs: {
+                                    href: `/helpdesk?slug=${topic.slug || ''}`
+                                }
+                            })
+                        ]
                     })
                 ]
             }),
+            topic.description
+                ? createElement('p', {
+                    className: 'card-copy',
+                    text: topic.description
+                })
+                : null,
             createElement('p', {
                 className: 'card-copy',
                 text: `${topic.count || 0} article${(topic.count || 0) === 1 ? '' : 's'}`
             })
-        ]
+        ].filter(Boolean)
     });
 }
 

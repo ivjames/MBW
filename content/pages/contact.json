@@ -6,22 +6,22 @@
     },
     "methods": [
         {
-            "kicker": "Call Us",
+            "icon": "fa-phone",
             "title": "New Accounts",
             "copy": "1-800-123-4567"
         },
         {
-            "kicker": "Call Us",
+            "icon": "fa-phone",
             "title": "Support",
             "copy": "1-800-123-4569"
         },
         {
-            "kicker": "Write Us",
+            "icon": "fa-envelope",
             "title": "Email",
             "copy": "maurice@marketingbuzzworthy.com"
         },
         {
-            "kicker": "Visit Us",
+            "icon": "fa-location-dot",
             "title": "Office",
             "copy": "2231 Sycamore Lake Road\nGreen Bay, WI 54304"
         }

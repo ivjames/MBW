@@ -23,10 +23,20 @@ export function ContactPage(data, company) {
                       Card({
                         className: 'feature-card contact-method-card reveal',
                         children: [
-                          createElement('div', { className: 'eyebrow', text: item.kicker }),
-                          createElement('h3', { className: 'card-title', text: item.title }),
+                          item.icon
+                            ? createElement('div', {
+                              className: 'card-title-row',
+                              children: [
+                                createElement('div', {
+                                  className: 'card-icon',
+                                  children: [createElement('i', { attrs: { class: `fa-solid ${item.icon}` } })]
+                                }),
+                                createElement('h3', { className: 'card-title', text: item.title })
+                              ]
+                            })
+                            : createElement('h3', { className: 'card-title', text: item.title }),
                           createElement('p', { className: 'card-copy multiline', text: item.copy })
-                        ]
+                        ].filter(Boolean)
                       })
                     )
                   }),

@@ -17,7 +17,7 @@ export async function resolvePageRenderer(page) {
 
     if (dbPages.has(page)) {
         const { DbPage } = await import('../sections/dbPage.js');
-        return pageContent => DbPage(pageContent);
+        return (pageContent, site) => DbPage(pageContent, site, page);
     }
 
     if (page === 'works') {

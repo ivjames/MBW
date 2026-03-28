@@ -4,6 +4,26 @@ import { PageHero } from '../components/pageHero.js';
 import { SectionHeader } from '../components/sectionHeader.js';
 import { CtaPanel } from '../components/ctaPanel.js';
 
+function normalizeKicker(value) {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'number') return String(value).padStart(2, '0');
+
+  const text = String(value).trim();
+  if (!text) return '';
+  if (/^\d+$/.test(text)) return text.padStart(2, '0');
+  return '';
+}
+
+function normalizeStep(value) {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'number') return String(value).padStart(2, '0');
+
+  const text = String(value).trim();
+  if (!text) return '';
+  if (/^\d+$/.test(text)) return text.padStart(2, '0');
+  return text;
+}
+
 export function AboutPage(data = {}) {
   const hero = data.hero || {};
   const intro = data.intro || {};
@@ -45,19 +65,36 @@ export function AboutPage(data = {}) {
                   Card({
                     className: 'feature-card reveal',
                     children: [
-                      createElement('div', {
-                        className: 'card-kicker',
-                        text: item.kicker || ''
-                      }),
-                      createElement('h3', {
-                        className: 'card-title',
-                        text: item.title || ''
-                      }),
+                      (() => {
+                        const kickerText = normalizeKicker(item.kicker);
+                        const isNumericKicker = /^\d+$/.test(kickerText);
+
+                        if (isNumericKicker) {
+                          return createElement('div', {
+                            className: 'card-title-row',
+                            children: [
+                              createElement('div', {
+                                className: 'card-kicker-lead',
+                                text: kickerText
+                              }),
+                              createElement('h3', {
+                                className: 'card-title',
+                                text: item.title || ''
+                              })
+                            ]
+                          });
+                        }
+
+                        return createElement('h3', {
+                          className: 'card-title',
+                          text: item.title || ''
+                        });
+                      })(),
                       createElement('p', {
                         className: 'card-copy',
                         text: item.copy || ''
                       })
-                    ]
+                    ].filter(Boolean)
                   })
                 )
               }),
@@ -89,12 +126,17 @@ export function AboutPage(data = {}) {
                       className: 'process-card reveal',
                       children: [
                         createElement('div', {
-                          className: 'process-step',
-                          text: step.step || ''
-                        }),
-                        createElement('h3', {
-                          className: 'card-title',
-                          text: step.title || ''
+                          className: 'card-title-row',
+                          children: [
+                            createElement('div', {
+                              className: 'process-step',
+                              text: normalizeStep(step.step)
+                            }),
+                            createElement('h3', {
+                              className: 'card-title',
+                              text: step.title || ''
+                            })
+                          ]
                         }),
                         createElement('p', {
                           className: 'card-copy',

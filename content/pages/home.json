@@ -87,9 +87,11 @@
     },
     "services": [
         {
-            "kicker": "01",
             "title": "Marketing",
-            "copy": "We use strategic marketing tactics that have been proven to work.",
+            "href": "/marketing",
+            "icon": "fa-bullhorn",
+            "copy": "Campaign architecture and messaging strategy built around qualified pipeline, not vanity traffic.",
+            "detail": "We connect offer framing, landing flow, and follow-up loops so acquisition and conversion work as one system.",
             "tokens": [
                 "Campaign strategy",
                 "Lead generation",
@@ -97,9 +99,11 @@
             ]
         },
         {
-            "kicker": "02",
             "title": "Development",
-            "copy": "Custom programming for most complex functions you can think.",
+            "href": "/development",
+            "icon": "fa-code",
+            "copy": "Custom build work focused on speed, maintainability, and content operations your team can actually manage.",
+            "detail": "From data models to reusable components, we ship production-ready features without brittle handoff debt.",
             "tokens": [
                 "Custom features",
                 "Clean handoff",
@@ -107,9 +111,11 @@
             ]
         },
         {
-            "kicker": "03",
             "title": "Web Design",
-            "copy": "Powerful web design that will out-perform your strongest competitors.",
+            "href": "/web-design",
+            "icon": "fa-palette",
+            "copy": "Conversion-first UI built to clarify positioning, reduce friction, and increase action on high-intent pages.",
+            "detail": "We prioritize hierarchy, trust signals, and mobile behavior so the experience supports both brand and revenue goals.",
             "tokens": [
                 "Conversion-focused",
                 "Responsive UX",
@@ -216,7 +222,6 @@
         "lead": "The template uses tokens, utilities, primitives, section modules, and data-driven composition.",
         "pillars": [
             {
-                "kicker": "T",
                 "title": "Tokens",
                 "copy": "Color, spacing, radius, type, glow, and shadows live in a dedicated token layer.",
                 "tokens": [
@@ -226,7 +231,6 @@
                 ]
             },
             {
-                "kicker": "U",
                 "title": "Utilities",
                 "copy": "Flex and container helpers create layout discipline without inline-style sprawl.",
                 "tokens": [
@@ -236,7 +240,6 @@
                 ]
             },
             {
-                "kicker": "P",
                 "title": "Primitives",
                 "copy": "Buttons, cards, and charts expose variants and enforce consistent design behavior.",
                 "tokens": [
@@ -246,7 +249,6 @@
                 ]
             },
             {
-                "kicker": "S",
                 "title": "Sections",
                 "copy": "Hero, services, slider, system panels, and CTA are assembled from data and modules.",
                 "tokens": [

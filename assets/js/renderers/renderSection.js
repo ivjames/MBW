@@ -8,6 +8,29 @@ import { ArticleBody } from '../components/articleBody.js';
 import { Gallery } from '../components/gallery.js';
 import { LogoBand } from '../components/logoBand.js';
 
+const serviceHrefByTitle = {
+    marketing: '/marketing',
+    development: '/development',
+    'web design': '/web-design',
+    'seo optimisation': '/seo-optimisation',
+    'seo optimization': '/seo-optimisation',
+    ecommerce: '/ecommerce',
+    branding: '/branding'
+};
+
+function withServiceHref(item = {}) {
+    if (item.href) return item;
+
+    const title = String(item.title || '').trim().toLowerCase();
+    const href = serviceHrefByTitle[title];
+    if (!href) return item;
+
+    return {
+        ...item,
+        href
+    };
+}
+
 function parseProps(section = {}) {
     try {
         return JSON.parse(section.props_json || '{}');
@@ -28,13 +51,18 @@ const sectionMap = {
                 })
             ]
         }),
-    featureGrid: props =>
+    featureGrid: (props, context = {}) =>
         createElement('section', {
             className: 'section section-tight-top',
             children: [
                 createElement('div', {
                     className: 'container',
-                    children: [FeatureGrid(props.items || [])]
+                    children: [
+                        FeatureGrid(
+                            (props.items || []).map(withServiceHref),
+                            context.pageSlug === 'services' ? 'services-grid-3up' : ''
+                        )
+                    ]
                 })
             ]
         }),
@@ -90,7 +118,7 @@ const sectionMap = {
         })
 };
 
-export function renderSection(section = {}) {
+export function renderSection(section = {}, context = {}) {
     const renderer = sectionMap[section.section_type];
     if (!renderer) {
         return createElement('section', {
@@ -109,5 +137,5 @@ export function renderSection(section = {}) {
         });
     }
 
-    return renderer(parseProps(section));
+    return renderer(parseProps(section), context);
 }
