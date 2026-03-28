@@ -1,78 +1,70 @@
-import { HomePage } from '../sections/home.js';
-import { WorksPage } from '../sections/worksPage.js';
-import { WorkDetailPage } from '../sections/workDetailPage.js';
-import { BlogPage } from '../sections/blogPage.js';
-import { BlogPostPage } from '../sections/blogPostPage.js';
-import { HelpdeskPage } from '../sections/helpdeskPage.js';
-import { HelpdeskTopicPage } from '../sections/helpdeskTopicPage.js';
-import { HelpdeskArticlePage } from '../sections/helpdeskArticlePage.js';
-import { ContactPage } from '../sections/contactPage.js';
-import { DbPage } from '../sections/dbPage.js';
+const dbPages = new Set([
+    'about',
+    'services',
+    'marketing',
+    'development',
+    'web-design',
+    'seo-optimisation',
+    'ecommerce',
+    'branding'
+]);
 
-function renderHome(pageContent, site) {
-    return HomePage({ home: pageContent, ...site });
+export async function resolvePageRenderer(page) {
+    if (page === 'home' || !page) {
+        const { HomePage } = await import('../sections/home.js');
+        return (pageContent, site) => HomePage({ home: pageContent, ...site });
+    }
+
+    if (dbPages.has(page)) {
+        const { DbPage } = await import('../sections/dbPage.js');
+        return pageContent => DbPage(pageContent);
+    }
+
+    if (page === 'works') {
+        const { WorksPage } = await import('../sections/worksPage.js');
+        return pageContent => WorksPage(pageContent);
+    }
+
+    if (page === 'work') {
+        const { WorkDetailPage } = await import('../sections/workDetailPage.js');
+        return pageContent => WorkDetailPage(pageContent);
+    }
+
+    if (page === 'blog') {
+        const { BlogPage } = await import('../sections/blogPage.js');
+        return pageContent => BlogPage(pageContent);
+    }
+
+    if (page === 'post') {
+        const { BlogPostPage } = await import('../sections/blogPostPage.js');
+        return pageContent => BlogPostPage(pageContent);
+    }
+
+    if (page === 'helpdesk') {
+        const { HelpdeskPage } = await import('../sections/helpdeskPage.js');
+        return pageContent => HelpdeskPage(pageContent);
+    }
+
+    if (page === 'topic') {
+        const { HelpdeskTopicPage } = await import('../sections/helpdeskTopicPage.js');
+        return pageContent => HelpdeskTopicPage(pageContent);
+    }
+
+    if (page === 'article') {
+        const { HelpdeskArticlePage } = await import('../sections/helpdeskArticlePage.js');
+        return pageContent => HelpdeskArticlePage(pageContent);
+    }
+
+    if (page === 'contact') {
+        const { ContactPage } = await import('../sections/contactPage.js');
+        return (pageContent, site) => ContactPage(pageContent, site.company);
+    }
+
+    const { HomePage } = await import('../sections/home.js');
+    return (pageContent, site) => HomePage({ home: pageContent, ...site });
 }
 
-function renderWorks(pageContent) {
-    return WorksPage(pageContent);
-}
-
-function renderWorkDetail(pageContent) {
-    return WorkDetailPage(pageContent);
-}
-
-function renderBlog(pageContent) {
-    return BlogPage(pageContent);
-}
-
-function renderBlogPost(pageContent) {
-    return BlogPostPage(pageContent);
-}
-
-function renderHelpdesk(pageContent) {
-    return HelpdeskPage(pageContent);
-}
-
-function renderHelpdeskTopic(pageContent) {
-    return HelpdeskTopicPage(pageContent);
-}
-
-function renderHelpdeskArticle(pageContent) {
-    return HelpdeskArticlePage(pageContent);
-}
-
-function renderContact(pageContent, site) {
-    return ContactPage(pageContent, site.company);
-}
-
-function renderDbPage(pageContent) {
-    return DbPage(pageContent);
-}
-
-const rendererMap = {
-    home: renderHome,
-
-    about: renderDbPage,
-    services: renderDbPage,
-    marketing: renderDbPage,
-    development: renderDbPage,
-    'web-design': renderDbPage,
-    'seo-optimisation': renderDbPage,
-    ecommerce: renderDbPage,
-    branding: renderDbPage,
-
-    works: renderWorks,
-    work: renderWorkDetail,
-
-    blog: renderBlog,
-    post: renderBlogPost,
-    helpdesk: renderHelpdesk,
-    topic: renderHelpdeskTopic,
-    article: renderHelpdeskArticle,
-    contact: renderContact
-};
-
-export function renderPage(page, pageContent, site) {
-    const renderer = rendererMap[page] || rendererMap.home;
+export async function renderPage(page, pageContent, site) {
+    const renderer = await resolvePageRenderer(page);
     return renderer(pageContent, site);
 }

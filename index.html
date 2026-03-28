@@ -6,9 +6,13 @@
   <meta name="description" content="Marketing Buzzworthy is a conversion-focused digital agency in Green Bay, WI. We redesign underperforming websites, sharpen positioning, and run growth campaigns that turn traffic into qualified leads." />
   <title>Buzzworthy</title>
   <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link id="theme-tokens" rel="stylesheet" href="/assets/css/tokens.css">
+  <link id="theme-utilities" rel="stylesheet" href="/assets/css/utilities.css">
+  <link id="theme-layout" rel="stylesheet" href="/assets/css/layout.css">
+  <link id="theme-components" rel="stylesheet" href="/assets/css/components.css">
 
   <script>
     (function () {
@@ -16,21 +20,6 @@
       var safeTheme = theme === 'light' ? 'light' : 'dark';
 
       document.documentElement.setAttribute('data-theme', safeTheme);
-
-      var files = [
-        ['theme-tokens', '/assets/css/tokens.css'],
-        ['theme-utilities', '/assets/css/utilities.css'],
-        ['theme-layout', '/assets/css/layout.css'],
-        ['theme-components', '/assets/css/components.css']
-      ];
-
-      for (var i = 0; i < files.length; i++) {
-        var id = files[i][0];
-        var href = files[i][1];
-        document.write(
-          '<link id="' + id + '" rel="stylesheet" href="' + href + '">'
-        );
-      }
     })();
   </script>
 

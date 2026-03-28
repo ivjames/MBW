@@ -83,7 +83,7 @@
             "text": "The new site finally matches the quality of our service. Lead quality improved within the first month.",
             "author": "Operations Director, NorthPeak Legal"
         },
-        "image": "https://picsum.photos/seed/buzzworthy-hero-a/1600/900"
+        "image": "https://picsum.photos/seed/buzzworthy-hero-a/533/300.webp"
     },
     "services": [
         {
@@ -120,27 +120,33 @@
     "logos": [
         {
             "name": "NorthPeak",
-            "image": "assets/logos/logo_1.png"
+            "image": "assets/logos/logo_1.png",
+            "href": "/works?slug=northpeak-legal"
         },
         {
             "name": "Aster",
-            "image": "assets/logos/logo_2.png"
+            "image": "assets/logos/logo_2.png",
+            "href": "/works?slug=aster-advisory"
         },
         {
             "name": "Axiom",
-            "image": "assets/logos/logo_3.png"
+            "image": "assets/logos/logo_3.png",
+            "href": "/works"
         },
         {
             "name": "BlueHarbor",
-            "image": "assets/logos/logo_4.png"
+            "image": "assets/logos/logo_4.png",
+            "href": "/works?slug=blueharbor-systems"
         },
         {
             "name": "MetricForge",
-            "image": "assets/logos/logo_5.png"
+            "image": "assets/logos/logo_5.png",
+            "href": "/works?slug=metricforge"
         },
         {
             "name": "PrimeLayer",
-            "image": "assets/logos/logo_6.png"
+            "image": "assets/logos/logo_6.png",
+            "href": "/works"
         }
     ],
     "cases": [
@@ -148,7 +154,7 @@
             "badge": "B2B Professional Services",
             "title": "NorthPeak Legal",
             "body": "Repositioned the firm, rebuilt core service pages, and tightened consultation flows to improve trust and lead quality for a multi-location practice.",
-            "image": "https://picsum.photos/seed/buzzworthy-case-legal/1400/900",
+            "image": "https://picsum.photos/seed/buzzworthy-case-legal/586/330.webp",
             "stats": [
                 {
                     "value": "+41%",
@@ -168,7 +174,7 @@
             "badge": "Growth-Stage SaaS",
             "title": "MetricForge",
             "body": "Rebuilt the homepage and demand-gen landing flow around a clearer product story, stronger proof, and sharper user segmentation.",
-            "image": "https://picsum.photos/seed/buzzworthy-case-saas/1400/900",
+            "image": "https://picsum.photos/seed/buzzworthy-case-saas/586/330.webp",
             "stats": [
                 {
                     "value": "+52%",
@@ -188,7 +194,7 @@
             "badge": "Industrial Services",
             "title": "BlueHarbor Systems",
             "body": "Rebuilt a dense legacy site into a cleaner technical platform with better hierarchy, stronger lead routing, and easier decision paths.",
-            "image": "https://picsum.photos/seed/buzzworthy-case-industrial/1400/900",
+            "image": "https://picsum.photos/seed/buzzworthy-case-industrial/586/330.webp",
             "stats": [
                 {
                     "value": "+31%",

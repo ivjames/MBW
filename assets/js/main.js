@@ -3,7 +3,7 @@ import { resolveRoute, navigate } from './router.js';
 import { initTheme, toggleTheme } from './theme.js';
 import { Navbar } from './components/navbar.js';
 import { Footer } from './components/footer.js';
-import { renderPage } from './renderers/renderPage.js';
+import { resolvePageRenderer } from './renderers/renderPage.js';
 
 const headerMount = document.getElementById('site-header');
 const appMount = document.getElementById('app');
@@ -13,14 +13,26 @@ let detachHeaderScrollState = null;
 
 initTheme();
 
+function resetScrollPosition() {
+  if (window.scrollY <= 1) {
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    window.scrollTo(0, 0);
+  });
+}
+
 async function boot() {
   const route = resolveRoute();
   const { page } = route;
+  const rendererPromise = resolvePageRenderer(page);
 
   const { site, pageContent } = await loadSiteContent(page);
+  const renderPage = await rendererPromise;
 
   const nextHeader = Navbar({ nav: site.nav || [], currentPage: page });
-  const nextPage = renderPage(page, pageContent, site);
+  const nextPage = renderPage(pageContent, site);
   const nextFooter = Footer(site.company || {});
 
   headerMount.innerHTML = '';
@@ -28,6 +40,7 @@ async function boot() {
 
   appMount.replaceChildren(nextPage);
   footerMount.replaceChildren(nextFooter);
+  resetScrollPosition();
 
   initUI();
 }
@@ -147,15 +160,35 @@ function bindHeaderScrollState(header) {
     return null;
   }
 
+  let scheduled = false;
+  let isScrolled = null;
+
   const syncHeaderState = () => {
-    header.classList.toggle('is-scrolled', window.scrollY > 12);
+    scheduled = false;
+    const nextIsScrolled = window.scrollY > 12;
+
+    if (nextIsScrolled === isScrolled) {
+      return;
+    }
+
+    isScrolled = nextIsScrolled;
+    header.classList.toggle('is-scrolled', isScrolled);
+  };
+
+  const onScroll = () => {
+    if (scheduled) {
+      return;
+    }
+
+    scheduled = true;
+    window.requestAnimationFrame(syncHeaderState);
   };
 
   syncHeaderState();
-  window.addEventListener('scroll', syncHeaderState, { passive: true });
+  window.addEventListener('scroll', onScroll, { passive: true });
 
   return () => {
-    window.removeEventListener('scroll', syncHeaderState);
+    window.removeEventListener('scroll', onScroll);
   };
 }
 

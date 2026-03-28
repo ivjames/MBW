@@ -74,7 +74,7 @@ function importAbout() {
         eyebrow: 'About Us',
         title: 'Getting online is easy. Succeeding online is a different story.',
         lead: 'We build web design, marketing, and branding systems that do more than look modern. They clarify the offer, support trust, and help turn attention into qualified leads.',
-        image: 'https://picsum.photos/seed/deepdigital-about-main/1600/1000',
+        image: 'https://picsum.photos/seed/deepdigital-about-main/467/300.webp',
         meta: ['Web Design', 'Marketing', 'Branding'],
         actions: [
             { label: 'Book a Call', href: '/contact', variant: 'primary' },
@@ -186,7 +186,7 @@ function importAllServicePages() {
         slug: 'marketing',
         title: 'Marketing',
         description: 'We use strategic marketing tactics that have been proven to work. But strategy only matters when it is tied to the right audience, the right offer, and a system that can turn attention into qualified leads.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-marketing/1600/1000',
+        heroImage: 'https://picsum.photos/seed/deepdigital-marketing/467/300.webp',
         mainItems: [
             {
                 title: 'Campaign Strategy',
@@ -226,7 +226,7 @@ function importAllServicePages() {
         slug: 'development',
         title: 'Development',
         description: 'Custom programming for the most complex functions you can think of. We build the systems, modules, and integrations that remove friction from your operations and make the site easier to grow.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-development/1600/1000',
+        heroImage: 'https://picsum.photos/seed/deepdigital-development/467/300.webp',
         mainItems: [
             {
                 title: 'Custom Features',
@@ -266,7 +266,7 @@ function importAllServicePages() {
         slug: 'web-design',
         title: 'Web Design',
         description: 'Powerful web design should do more than look modern. It should make your business easier to understand, easier to trust, and easier to choose.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-web-design/1600/1000',
+        heroImage: 'https://picsum.photos/seed/deepdigital-web-design/467/300.webp',
         mainItems: [
             {
                 title: 'Conversion-First Design',
@@ -306,7 +306,7 @@ function importAllServicePages() {
         slug: 'seo-optimisation',
         title: 'SEO Optimisation',
         description: 'Optimizing web design to rank well is not an afterthought. It starts with structure, clarity, crawlability, and content that supports the way real users search.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-seo/1600/1000',
+        heroImage: 'https://picsum.photos/seed/deepdigital-seo/467/300.webp',
         mainItems: [
             {
                 title: 'Technical SEO Foundations',
@@ -346,7 +346,7 @@ function importAllServicePages() {
         slug: 'ecommerce',
         title: 'Ecommerce',
         description: 'We build online stores on flexible, modular systems that make it easier to grow the catalog, improve product discovery, and reduce purchase friction over time.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-ecommerce/1600/1000',
+        heroImage: 'https://picsum.photos/seed/deepdigital-ecommerce/467/300.webp',
         mainItems: [
             {
                 title: 'Scalable Storefront Structure',
@@ -386,7 +386,7 @@ function importAllServicePages() {
         slug: 'branding',
         title: 'Branding',
         description: 'A solid brand strategy, logo system, and set of guidelines make it easier to be recognized, remembered, and trusted across every touchpoint.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-branding/1600/1000',
+        heroImage: 'https://picsum.photos/seed/deepdigital-branding/467/300.webp',
         mainItems: [
             {
                 title: 'Brand Strategy',
@@ -810,7 +810,7 @@ function importBlogContent() {
         slug: 'conversion-focused-web-design-basics',
         title: 'Conversion-Focused Web Design Basics',
         excerpt: 'Why most websites fail to convert and how to fix them with clearer structure, stronger trust signals, and more deliberate decision paths.',
-        coverImage: 'https://picsum.photos/seed/blog-1/1600/1000',
+        coverImage: 'https://picsum.photos/seed/blog-1/467/300.webp',
         content: [
             {
                 type: 'paragraph',
@@ -826,7 +826,7 @@ function importBlogContent() {
             },
             {
                 type: 'image',
-                src: 'https://picsum.photos/seed/blog-1-inline/1400/900',
+                src: 'https://picsum.photos/seed/blog-1-inline/586/330.webp',
                 alt: 'Website wireframe and content hierarchy',
                 caption: 'Strong hierarchy reduces decision friction.'
             },
@@ -866,7 +866,7 @@ function importBlogContent() {
         slug: 'seo-starts-with-structure',
         title: 'SEO Starts With Structure',
         excerpt: 'Search performance depends on architecture, internal linking, page hierarchy, and semantic clarity long before it depends on volume publishing.',
-        coverImage: 'https://picsum.photos/seed/blog-2/1600/1000',
+        coverImage: 'https://picsum.photos/seed/blog-2/467/300.webp',
         content: [
             {
                 type: 'paragraph',
@@ -882,7 +882,7 @@ function importBlogContent() {
             },
             {
                 type: 'image',
-                src: 'https://picsum.photos/seed/blog-2-inline/1400/900',
+                src: 'https://picsum.photos/seed/blog-2-inline/586/330.webp',
                 alt: 'Site map and SEO structure',
                 caption: 'Stronger architecture makes content more useful to both users and search engines.'
             },
@@ -914,7 +914,7 @@ function importBlogContent() {
         slug: 'why-modular-marketing-sites-age-better',
         title: 'Why Modular Marketing Sites Age Better',
         excerpt: 'A modular site is easier to extend, easier to reframe, and much less likely to collapse into a redesign every time the business evolves.',
-        coverImage: 'https://picsum.photos/seed/blog-3/1600/1000',
+        coverImage: 'https://picsum.photos/seed/blog-3/467/300.webp',
         content: [
             {
                 type: 'paragraph',
@@ -930,7 +930,7 @@ function importBlogContent() {
             },
             {
                 type: 'image',
-                src: 'https://picsum.photos/seed/blog-3-inline/1400/900',
+                src: 'https://picsum.photos/seed/blog-3-inline/586/330.webp',
                 alt: 'Modular design system mockup',
                 caption: 'Reusable blocks make future iteration easier.'
             },
@@ -1018,7 +1018,7 @@ function importHelpdeskContent() {
             },
             {
                 type: 'image',
-                src: 'https://picsum.photos/seed/helpdesk-coverage-overview/1400/900',
+                src: 'https://picsum.photos/seed/helpdesk-coverage-overview/586/330.webp',
                 alt: 'Coverage illustration',
                 caption: 'Clear boundaries reduce ambiguity and improve delivery.'
             },

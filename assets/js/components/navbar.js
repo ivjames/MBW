@@ -49,7 +49,7 @@ export function Navbar({ nav, currentPage }) {
       createElement('img', {
         className: 'brand-mark-image',
         attrs: {
-          src: '/assets/images/logo-mark.png',
+          src: '/assets/images/logo-mark.webp',
           alt: 'Buzzworthy logo mark'
         }
       }),

@@ -280,9 +280,9 @@
   --line-soft: rgba(16, 24, 40, 0.08);
   --line-strong: rgba(16, 24, 40, 0.14);
 
-  --text-1: #0f1728;
-  --text-2: #334155;
-  --text-3: #64748b;
+  --text-1: #060c18;
+    --text-2: #1c2e42;
+    --text-3: #566780;
   --text-dark: #0b0d12;
 
   --brand-yellow: #d4bd00;

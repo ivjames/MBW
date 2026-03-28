@@ -11,7 +11,7 @@ export function NotFoundPage() {
         eyebrow: '404',
         title: 'This page could not be found.',
         lead: 'The link may be outdated, the content may have moved, or the URL may be incomplete.',
-        image: 'https://picsum.photos/seed/buzzworthy-404/1600/1000'
+        image: 'https://picsum.photos/seed/buzzworthy-404/1600/1000.webp'
       }),
       createElement('section', {
         className: 'section',

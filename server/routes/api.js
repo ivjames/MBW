@@ -91,7 +91,7 @@ apiRouter.get('/blog', (_req, res) => {
     }));
 
     res.json({
-        hero: { image: 'https://picsum.photos/seed/buzzworthy-blog-hero/1600/1000' },
+        hero: { image: 'https://picsum.photos/seed/buzzworthy-blog-hero/467/300.webp' },
         intro: {
             title: 'Articles with better framing',
             lead: 'A cleaner blog index should feel more like a publication and less like a random card grid.'
@@ -143,7 +143,7 @@ apiRouter.get('/helpdesk', (_req, res) => {
             eyebrow: 'Helpdesk',
             title: 'How can we help?',
             lead: 'Search FAQs, browse support topics, and open individual help articles.',
-            image: 'https://picsum.photos/seed/buzzworthy-helpdesk/1600/1000'
+            image: 'https://picsum.photos/seed/buzzworthy-helpdesk/467/300.webp'
         },
         topics,
         popular: rows.slice(0, 3),
@@ -247,7 +247,7 @@ apiRouter.get('/works', (_req, res) => {
             eyebrow: 'Selected work',
             title: 'Previous projects, presented as a browsable gallery.',
             lead: 'Use this page to show recent work, visual direction, project categories, and short business context without forcing users into a heavy case-study flow.',
-            image: 'https://picsum.photos/seed/deepdigital-works-hero/1600/1000'
+            image: 'https://picsum.photos/seed/deepdigital-works-hero/467/300.webp'
         },
         intro: {
             title: 'Interactive project gallery',

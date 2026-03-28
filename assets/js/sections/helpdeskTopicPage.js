@@ -17,7 +17,7 @@ export function HelpdeskTopicPage(data = {}) {
                 eyebrow: 'Helpdesk Topic',
                 title: data.title || 'Topic',
                 lead: data.description || '',
-                image: `https://picsum.photos/seed/helpdesk-${data.slug || 'topic'}/1600/1000`
+                image: `https://picsum.photos/seed/helpdesk-${data.slug || 'topic'}/1600/1000.webp`
             }),
 
             createElement('section', {

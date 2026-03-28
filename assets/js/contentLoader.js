@@ -12,62 +12,27 @@ export async function loadJSON(path) {
 
 export async function loadSiteContent(page) {
   const { slug } = resolveRoute();
-  const site = await loadJSON('/api/site');
+  const sitePromise = loadJSON('/api/site');
+  let pagePromise;
 
   if (page === 'blog') {
-    return {
-      site,
-      pageContent: await loadJSON('/api/blog')
-    };
-  }
-
-  if (page === 'post') {
+    pagePromise = loadJSON('/api/blog');
+  } else if (page === 'post') {
     if (!slug) throw new Error('Missing blog slug.');
-
-    return {
-      site,
-      pageContent: await loadJSON(`/api/blog/${slug}`)
-    };
-  }
-
-  if (page === 'helpdesk') {
-    return {
-      site,
-      pageContent: await loadJSON('/api/helpdesk')
-    };
-  }
-
-  if (page === 'topic') {
+    pagePromise = loadJSON(`/api/blog/${slug}`);
+  } else if (page === 'helpdesk') {
+    pagePromise = loadJSON('/api/helpdesk');
+  } else if (page === 'topic') {
     if (!slug) throw new Error('Missing topic slug.');
-
-    return {
-      site,
-      pageContent: await loadJSON(`/api/helpdesk/topic/${slug}`)
-    };
-  }
-
-  if (page === 'article') {
+    pagePromise = loadJSON(`/api/helpdesk/topic/${slug}`);
+  } else if (page === 'article') {
     if (!slug) throw new Error('Missing article slug.');
-
-    return {
-      site,
-      pageContent: await loadJSON(`/api/helpdesk/article/${slug}`)
-    };
-  }
-
-  if (page === 'works') {
-    return {
-      site,
-      pageContent: await loadJSON('/api/works')
-    };
-  }
-
-  if (page === 'work') {
+    pagePromise = loadJSON(`/api/helpdesk/article/${slug}`);
+  } else if (page === 'works') {
+    pagePromise = loadJSON('/api/works');
+  } else if (page === 'work') {
     if (!slug) throw new Error('Missing work slug.');
-    return {
-      site,
-      pageContent: await loadJSON(`/api/works/${slug}`)
-    };
+    pagePromise = loadJSON(`/api/works/${slug}`);
   }
 
   const dbPageSlugs = new Set([
@@ -82,22 +47,20 @@ export async function loadSiteContent(page) {
     'branding'
   ]);
 
-  if (dbPageSlugs.has(page)) {
-    return {
-      site,
-      pageContent: await loadJSON(`/api/pages/${page}`)
-    };
+  if (!pagePromise && dbPageSlugs.has(page)) {
+    pagePromise = loadJSON(`/api/pages/${page}`);
   }
 
-  const filePageMap = {
-    home: '/content/pages/home.json',
-    contact: '/content/pages/contact.json'
-  };
+  if (!pagePromise) {
+    const filePageMap = {
+      home: '/content/pages/home.json',
+      contact: '/content/pages/contact.json'
+    };
 
-  const path = filePageMap[page] || filePageMap.home;
+    const path = filePageMap[page] || filePageMap.home;
+    pagePromise = loadJSON(path);
+  }
 
-  return {
-    site,
-    pageContent: await loadJSON(path)
-  };
+  const [site, pageContent] = await Promise.all([sitePromise, pagePromise]);
+  return { site, pageContent };
 }
