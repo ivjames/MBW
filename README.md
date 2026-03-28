@@ -11,7 +11,7 @@ Static multipage frontend with a small Node backend for contact form demo submis
 ## Backend
 - `server/server.js`
 - `POST /api/contact`
-- Demo mode only: submissions are logged to the Node console
+- Simulates a mailbox by writing contact messages to SQLite (`contact_messages`)
 
 ## Run
 ```bash
@@ -22,6 +22,12 @@ npm start
 
 Then open:
 `http://localhost:3000`
+
+## Mailbox Simulation (Admin)
+Contact form submissions are stored in SQLite and viewable in Admin:
+- Visit `/admin/mailbox` after logging in.
+- Messages are marked read when opened.
+- You can delete messages from the mailbox view.
 
 ## Notes
 - The contact form posts JSON to the Node backend.

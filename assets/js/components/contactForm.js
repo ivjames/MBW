@@ -15,7 +15,7 @@ export function ContactForm() {
     <div class="form-intro">
       <div class="eyebrow">Project inquiry</div>
       <h3 class="card-title">Tell us what you need.</h3>
-      <p class="card-copy">This demo submits JSON to a small Node backend and logs the payload to the server console.</p>
+      <p class="card-copy">This form stores your message in the admin mailbox for review.</p>
     </div>
 
     <div class="form-grid">

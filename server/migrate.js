@@ -65,6 +65,23 @@ CREATE TABLE IF NOT EXISTS works (
 );
 `);
 
+db.exec(`
+CREATE TABLE IF NOT EXISTS contact_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL DEFAULT '',
+    email TEXT NOT NULL DEFAULT '',
+    company TEXT DEFAULT '',
+    phone TEXT DEFAULT '',
+    service TEXT DEFAULT '',
+    budget TEXT DEFAULT '',
+    message TEXT NOT NULL DEFAULT '',
+    user_agent TEXT DEFAULT '',
+    ip_address TEXT DEFAULT '',
+    status TEXT NOT NULL DEFAULT 'new',
+    created_at TEXT NOT NULL
+);
+`);
+
 const now = nowIso();
 
 if (!db.prepare('SELECT 1 FROM posts LIMIT 1').get()) {

@@ -1,5 +1,6 @@
 import express from 'express';
 import { db } from '../db.js';
+import { saveContactMessage } from '../mail.js';
 
 export const apiRouter = express.Router();
 
@@ -7,7 +8,7 @@ const parseJSON = (v, fallback) => {
     try { return JSON.parse(v || ''); } catch { return fallback; }
 };
 
-apiRouter.post('/contact', (req, res) => {
+apiRouter.post('/contact', async (req, res) => {
     const {
         name = '',
         email = '',
@@ -24,15 +25,40 @@ apiRouter.post('/contact', (req, res) => {
         return res.status(400).json({ ok: false, message: 'Name, email, and message are required.' });
     }
 
-    console.log({
-        submittedAt: new Date().toISOString(),
-        name, email, company, phone, service, budget, message
-    });
+    try {
+        saveContactMessage(
+            {
+                name,
+                email,
+                company,
+                phone,
+                service,
+                budget,
+                message
+            },
+            {
+                userAgent: req.get('user-agent') || '',
+                ipAddress: req.ip || req.socket?.remoteAddress || ''
+            }
+        );
 
-    return res.json({
-        ok: true,
-        message: 'Message received in demo mode. Check the server console for the submission payload.'
-    });
+        return res.json({
+            ok: true,
+            message: 'Thanks. Your message has been received.'
+        });
+    } catch (error) {
+        console.error('[contact] mailbox save failed', {
+            error: error?.message || String(error),
+            submittedAt: new Date().toISOString(),
+            name,
+            email
+        });
+
+        return res.status(502).json({
+            ok: false,
+            message: 'Unable to receive your message right now. Please try again shortly.'
+        });
+    }
 });
 
 apiRouter.get('/site', (_req, res) => {

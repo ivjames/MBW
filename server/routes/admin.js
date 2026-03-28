@@ -52,6 +52,7 @@ function shell(title, content) {
     <div class="grid">
       <aside class="sidebar stack">
         <a class="btn" href="/admin">Overview</a>
+        <a class="btn" href="/admin/mailbox">Mailbox</a>
         <a class="btn" href="/admin/pages">Pages</a>
         <a class="btn" href="/admin/works">Works</a>
         <a class="btn" href="/admin/posts">Posts</a>
@@ -125,9 +126,11 @@ adminRouter.get('/', (_req, res) => {
     const posts = db.prepare('SELECT COUNT(*) count FROM posts').get().count;
     const topics = db.prepare('SELECT COUNT(*) count FROM helpdesk_topics').get().count;
     const articles = db.prepare('SELECT COUNT(*) count FROM helpdesk_articles').get().count;
+  const mailbox = db.prepare('SELECT COUNT(*) count FROM contact_messages').get().count;
 
     res.send(shell('Overview', `
     <div class="actions">
+      <div class="card"><strong>Mailbox</strong><div class="muted">${mailbox} messages</div></div>
       <div class="card"><strong>Posts</strong><div class="muted">${posts} records</div></div>
       <div class="card"><strong>Topics</strong><div class="muted">${topics} records</div></div>
       <div class="card"><strong>Articles</strong><div class="muted">${articles} records</div></div>
@@ -791,4 +794,86 @@ adminRouter.post('/works/:id', (req, res) => {
 adminRouter.get('/works/:id/delete', (req, res) => {
   db.prepare('DELETE FROM works WHERE id = ?').run(req.params.id);
   res.redirect('/admin/works');
+});
+
+adminRouter.get('/mailbox', (_req, res) => {
+  const rows = db.prepare(`
+    SELECT id, name, email, service, budget, status, created_at,
+           substr(message, 1, 140) AS preview
+    FROM contact_messages
+    ORDER BY datetime(created_at) DESC, id DESC
+  `).all();
+
+  res.send(shell('Mailbox', `
+    <div class="top" style="margin:0">
+      <h2>Mailbox</h2>
+      <div class="muted">Contact form submissions stored in SQLite</div>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>Service</th>
+          <th>Status</th>
+          <th>Submitted</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(r => `
+          <tr>
+            <td>
+              <strong>${esc(r.name || '(no name)')}</strong>
+              <div class="muted">${esc(r.email || '')}</div>
+              <div class="muted">${esc(r.preview || '')}</div>
+            </td>
+            <td>${esc(r.service || '-')}</td>
+            <td>${esc(r.status || 'new')}</td>
+            <td>${esc(r.created_at || '')}</td>
+            <td><a class="btn" href="/admin/mailbox/${r.id}">Open</a></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `));
+});
+
+adminRouter.get('/mailbox/:id', (req, res) => {
+  const row = db.prepare('SELECT * FROM contact_messages WHERE id = ?').get(req.params.id);
+  if (!row) return res.status(404).send('Not found');
+
+  if (row.status === 'new') {
+    db.prepare('UPDATE contact_messages SET status = ? WHERE id = ?').run('read', req.params.id);
+    row.status = 'read';
+  }
+
+  res.send(shell('Mailbox Message', `
+    <div class="top" style="margin:0">
+      <h2>Message #${row.id}</h2>
+      <div class="actions">
+        <a class="btn" href="/admin/mailbox">Back to Mailbox</a>
+        <a class="btn" href="/admin/mailbox/${row.id}/delete">Delete</a>
+      </div>
+    </div>
+    <div class="card stack">
+      <div><strong>From:</strong> ${esc(row.name || '-')} &lt;${esc(row.email || '-')}&gt;</div>
+      <div><strong>Company:</strong> ${esc(row.company || '-')}</div>
+      <div><strong>Phone:</strong> ${esc(row.phone || '-')}</div>
+      <div><strong>Service:</strong> ${esc(row.service || '-')}</div>
+      <div><strong>Budget:</strong> ${esc(row.budget || '-')}</div>
+      <div><strong>Status:</strong> ${esc(row.status || 'new')}</div>
+      <div><strong>Submitted:</strong> ${esc(row.created_at || '')}</div>
+      <div><strong>IP:</strong> ${esc(row.ip_address || '-')}</div>
+      <div><strong>User-Agent:</strong> ${esc(row.user_agent || '-')}</div>
+      <div>
+        <strong>Message</strong>
+        <pre style="margin:8px 0 0;padding:12px;border:1px solid var(--line);border-radius:14px;background:#0d121a;white-space:pre-wrap">${esc(row.message || '')}</pre>
+      </div>
+    </div>
+  `));
+});
+
+adminRouter.get('/mailbox/:id/delete', (req, res) => {
+  db.prepare('DELETE FROM contact_messages WHERE id = ?').run(req.params.id);
+  res.redirect('/admin/mailbox');
 });
