@@ -2775,6 +2775,17 @@
   box-shadow: var(--shadow-1);
 }
 
+:root[data-theme="light"] .form-input {
+  background: #ffffff;
+  color: var(--text-1);
+  border: 1px solid var(--line-strong);
+}
+
+:root[data-theme="light"] .form-input:focus {
+  background: #ffffff;
+  border-color: var(--cmp-c050);
+  box-shadow: 0 0 0 3px var(--cmp-c052);
+}
 :root[data-theme="light"] .btn-primary {
   background: var(--brand-yellow);
   color: var(--text-dark);

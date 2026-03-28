@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { adminRouter } from './routes/admin.js';
 import { apiRouter } from './routes/api.js';
+import { db } from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +14,17 @@ const frontendRoot = path.resolve(__dirname, '..');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+function hasAdminRoute(pathname) {
+  return adminRouter.stack?.some(layer => layer.route?.path === pathname) || false;
+}
+
+function hasMailboxTable() {
+  const row = db
+    .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'contact_messages'")
+    .get();
+  return Boolean(row);
+}
 
 app.use(cors());
 app.use(cookieParser());
@@ -33,6 +45,12 @@ app.get('*', (req, res, next) => {
   res.sendFile(path.join(frontendRoot, 'index.html'));
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Buzzworthy server running at http://localhost:${PORT}`);
+  console.log(`[boot] admin mailbox route: ${hasAdminRoute('/mailbox') ? 'enabled' : 'missing'}`);
+  console.log(`[boot] mailbox table: ${hasMailboxTable() ? 'ready' : 'missing'}`);
+});
+
+server.on('error', err => {
+  console.error(`[boot] server failed to start on port ${PORT}: ${err.message}`);
 });
