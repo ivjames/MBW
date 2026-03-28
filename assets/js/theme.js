@@ -4,12 +4,6 @@ export function getTheme() {
     return localStorage.getItem(STORAGE_KEY) || 'dark';
 }
 
-function setHref(id, theme, file) {
-    const node = document.getElementById(id);
-    if (!node) return;
-    node.setAttribute('href', `/assets/css/${file}.${theme}.css`);
-}
-
 function setStaticHref(id, file) {
     const node = document.getElementById(id);
     if (!node) return;
@@ -22,7 +16,7 @@ export function applyTheme(theme) {
     setStaticHref('theme-tokens', 'tokens');
     setStaticHref('theme-utilities', 'utilities');
     setStaticHref('theme-layout', 'layout');
-    setHref('theme-components', safeTheme, 'components');
+    setStaticHref('theme-components', 'components');
 
     document.documentElement.setAttribute('data-theme', safeTheme);
     localStorage.setItem(STORAGE_KEY, safeTheme);
@@ -30,8 +24,13 @@ export function applyTheme(theme) {
     const toggle = document.getElementById('themeToggle');
     if (toggle) {
         toggle.setAttribute('aria-pressed', safeTheme === 'light' ? 'true' : 'false');
-        toggle.textContent = safeTheme === 'light' ? 'Dark' : 'Light';
+        toggle.textContent = safeTheme === 'light' ? 'Dark Mode' : 'Light Mode';
     }
+
+    // Keep sections from getting stuck hidden after theme swaps.
+    document.querySelectorAll('.reveal').forEach(node => {
+        node.classList.add('is-visible');
+    });
 }
 
 export function initTheme() {
@@ -41,7 +40,7 @@ export function initTheme() {
     const toggle = document.getElementById('themeToggle');
     if (toggle) {
         toggle.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
-        toggle.textContent = theme === 'light' ? 'Dark' : 'Light';
+        toggle.textContent = theme === 'light' ? 'Dark Mode' : 'Light Mode';
     }
 }
 

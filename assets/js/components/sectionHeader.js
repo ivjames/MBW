@@ -8,7 +8,7 @@ export function SectionHeader({
     className = ''
 } = {}) {
     return createElement('div', {
-        className: `section-header section-header-${align} ${className}`.trim(),
+        className: `section-header section-tight-top section-header-${align} ${className}`.trim(),
         children: [
             eyebrow
                 ? createElement('div', { className: 'eyebrow', text: eyebrow })

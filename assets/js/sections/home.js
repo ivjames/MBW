@@ -61,20 +61,8 @@ export function HomePage(data = {}) {
     children: [
       HeroSection(hero),
 
-      logos.length
-        ? createElement('section', {
-          className: 'section section-tight-top',
-          children: [
-            createElement('div', {
-              className: 'container',
-              children: [LogoBand(logos)]
-            })
-          ]
-        })
-        : null,
-
       createElement('section', {
-        className: 'section',
+        className: 'section section-tight-top',
         children: [
           createElement('div', {
             className: 'container',
@@ -92,7 +80,7 @@ export function HomePage(data = {}) {
 
       cases.length
         ? createElement('section', {
-          className: 'section',
+          className: 'section section-tight-top',
           children: [
             createElement('div', {
               className: 'container',
@@ -104,6 +92,18 @@ export function HomePage(data = {}) {
                 }),
                 CaseGallery(cases)
               ]
+            })
+          ]
+        })
+        : null,
+
+      logos.length
+        ? createElement('section', {
+          className: 'section section-tight-top',
+          children: [
+            createElement('div', {
+              className: 'container',
+              children: [LogoBand(logos)]
             })
           ]
         })
@@ -133,7 +133,7 @@ export function HomePage(data = {}) {
         : null,
 
       createElement('section', {
-        className: 'section',
+        className: 'section section-tight-top',
         children: [
           createElement('div', {
             className: 'container dual-panel',

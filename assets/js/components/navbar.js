@@ -73,25 +73,19 @@ export function Navbar({ nav, currentPage }) {
   const actions = createElement('div', {
     className: 'header-actions',
     children: [
-      createElement('button', {
-        className: 'theme-toggle',
-        text: 'Light',
-        attrs: {
-          type: 'button',
-          id: 'themeToggle',
-          'aria-label': 'Toggle theme',
-          'aria-pressed': 'false'
-        }
-      }),
       Button({ label: 'Book a Call', href: '/contact', variant: 'primary' }),
       createElement('button', {
         className: 'mobile-toggle',
-        html: '☰',
         attrs: {
           type: 'button',
           'aria-label': 'Open navigation',
           id: 'mobileToggle'
-        }
+        },
+        children: [
+          createElement('span', { className: 'mobile-toggle-bar' }),
+          createElement('span', { className: 'mobile-toggle-bar' }),
+          createElement('span', { className: 'mobile-toggle-bar' })
+        ]
       })
     ]
   });

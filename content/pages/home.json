@@ -85,32 +85,6 @@
         },
         "image": "https://picsum.photos/seed/buzzworthy-hero-a/1600/900"
     },
-    "logos": [
-        {
-            "name": "NorthPeak",
-            "image": "assets/logos/logo_1.png"
-        },
-        {
-            "name": "Aster",
-            "image": "assets/logos/logo_2.png"
-        },
-        {
-            "name": "Axiom",
-            "image": "assets/logos/logo_3.png"
-        },
-        {
-            "name": "BlueHarbor",
-            "image": "assets/logos/logo_4.png"
-        },
-        {
-            "name": "MetricForge",
-            "image": "assets/logos/logo_5.png"
-        },
-        {
-            "name": "PrimeLayer",
-            "image": "assets/logos/logo_6.png"
-        }
-    ],
     "services": [
         {
             "kicker": "01",
@@ -141,6 +115,32 @@
                 "Responsive UX",
                 "Clear hierarchy"
             ]
+        }
+    ],
+    "logos": [
+        {
+            "name": "NorthPeak",
+            "image": "assets/logos/logo_1.png"
+        },
+        {
+            "name": "Aster",
+            "image": "assets/logos/logo_2.png"
+        },
+        {
+            "name": "Axiom",
+            "image": "assets/logos/logo_3.png"
+        },
+        {
+            "name": "BlueHarbor",
+            "image": "assets/logos/logo_4.png"
+        },
+        {
+            "name": "MetricForge",
+            "image": "assets/logos/logo_5.png"
+        },
+        {
+            "name": "PrimeLayer",
+            "image": "assets/logos/logo_6.png"
         }
     ],
     "cases": [

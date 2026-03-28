@@ -49,6 +49,14 @@ export function Footer(company = {}) {
       createElement('div', {
         className: 'footer-inner',
         children: [
+          createElement('img', {
+            className: 'footer-logo-mark',
+            attrs: {
+              src: '/assets/images/logo-mark.png',
+              alt: '',
+              'aria-hidden': 'true'
+            }
+          }),
           createElement('div', {
             className: 'footer-lede',
             children: [
@@ -119,6 +127,16 @@ export function Footer(company = {}) {
                     className: 'footer-link footer-admin-link',
                     text: 'Admin Login',
                     attrs: { href: '/admin/login' }
+                  }),
+                  createElement('button', {
+                    className: 'footer-link footer-theme-link',
+                    text: 'Light Mode',
+                    attrs: {
+                      type: 'button',
+                      id: 'themeToggle',
+                      'aria-label': 'Toggle theme',
+                      'aria-pressed': 'false'
+                    }
                   })
                 ].filter(Boolean)
               })
