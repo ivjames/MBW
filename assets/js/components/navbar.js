@@ -49,10 +49,10 @@ export function Navbar({ nav, currentPage }) {
       createElement('img', {
         className: 'brand-mark-image',
         attrs: {
-          src: '/assets/images/logo-mark.webp',
+          src: '/assets/images/logo-mark-nav.webp',
           alt: '',
-          width: '500',
-          height: '500'
+          width: '264',
+          height: '264'
         }
       }),
       createElement('div', {
