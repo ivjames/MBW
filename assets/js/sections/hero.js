@@ -52,7 +52,11 @@ export function HeroSection(data = {}) {
                     className: 'hero-stock-image',
                     attrs: {
                       src: data.image || '',
-                      alt: 'Agency team collaboration'
+                      alt: 'Agency team collaboration',
+                      width: '533',
+                      height: '300',
+                      loading: 'eager',
+                      decoding: 'async'
                     }
                   })
                 ]
