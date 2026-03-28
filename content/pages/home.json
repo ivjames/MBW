@@ -120,32 +120,32 @@
     "logos": [
         {
             "name": "NorthPeak",
-            "image": "assets/logos/logo_1.png",
+            "image": "assets/logos/logo_1.webp",
             "href": "/works?slug=northpeak-legal"
         },
         {
             "name": "Aster",
-            "image": "assets/logos/logo_2.png",
+            "image": "assets/logos/logo_2.webp",
             "href": "/works?slug=aster-advisory"
         },
         {
             "name": "Axiom",
-            "image": "assets/logos/logo_3.png",
+            "image": "assets/logos/logo_3.webp",
             "href": "/works"
         },
         {
             "name": "BlueHarbor",
-            "image": "assets/logos/logo_4.png",
+            "image": "assets/logos/logo_4.webp",
             "href": "/works?slug=blueharbor-systems"
         },
         {
             "name": "MetricForge",
-            "image": "assets/logos/logo_5.png",
+            "image": "assets/logos/logo_5.webp",
             "href": "/works?slug=metricforge"
         },
         {
             "name": "PrimeLayer",
-            "image": "assets/logos/logo_6.png",
+            "image": "assets/logos/logo_6.webp",
             "href": "/works"
         }
     ],
