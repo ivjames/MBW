@@ -11,8 +11,7 @@
   <link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <link rel="modulepreload" href="/assets/js/main.min.js">
-  <link rel="preload" as="fetch" href="/api/site" crossorigin>
-  <link rel="preload" as="fetch" href="/content/pages/home.json" crossorigin>
+  <link rel="preload" as="fetch" href="/api/site" crossorigin="use-credentials">
   <link rel="preload" href="/assets/css/app.min.css" as="style" id="app-css"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
@@ -25,6 +24,18 @@
       var safeTheme = theme === 'light' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', safeTheme);
       document.documentElement.style.background = safeTheme === 'light' ? '#f6f8fc' : '#000';
+
+      var path = window.location.pathname.replace(/\/+$/, '') || '/';
+      var isHomeRoute = path === '/';
+
+      if (isHomeRoute) {
+        var homePreload = document.createElement('link');
+        homePreload.rel = 'preload';
+        homePreload.as = 'fetch';
+        homePreload.href = '/content/pages/home.json';
+        homePreload.crossOrigin = 'use-credentials';
+        document.head.appendChild(homePreload);
+      }
     })();
   </script>
 
