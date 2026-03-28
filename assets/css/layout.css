@@ -1,4 +1,32 @@
-.hero-section { padding-top: clamp(2rem, 1rem + 2vw, 1rem); }
+.hero-section {
+  position: relative;
+  isolation: isolate;
+  padding-top: clamp(2rem, 1rem + 2vw, 1rem);
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: min(760px, calc(100% + 5rem));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+:root[data-theme="light"] .hero-section::before {
+  opacity: 1;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(77, 177, 158, 0.16), transparent 32%),
+    radial-gradient(circle at 82% 18%, rgba(241, 137, 76, 0.16), transparent 28%),
+    radial-gradient(circle at 48% 34%, rgba(51, 113, 183, 0.11), transparent 40%),
+    radial-gradient(circle at 38% 86%, rgba(255, 73, 124, 0.08), transparent 34%);
+}
+
+.hero-section>.container {
+  position: relative;
+  z-index: 1;
+}
 
 .hero-grid-meta {
   display: grid;
