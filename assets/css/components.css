@@ -209,7 +209,7 @@
 
 .hero-copy p {
   margin: 0;
-  max-width: 100%;
+  max-width: 90%;
   color: var(--text-2);
   font-size: var(--step-1);
 }
@@ -1042,7 +1042,7 @@
 }
 
 .hero-copy p {
-  max-width: 100%;
+  max-width: 90%;
 }
 
 @media (max-width: 1220px) {
