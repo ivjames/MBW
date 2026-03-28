@@ -4,12 +4,44 @@ import { createSession, requireAdmin, validateLogin } from '../adminAuth.js';
 
 export const adminRouter = express.Router();
 
+const ADMIN_COOKIE_NAME = 'dd_admin';
+const ADMIN_COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 30;
+
+function adminCookieOptions(req) {
+  const isSecureRequest = req.secure || req.get('x-forwarded-proto') === 'https';
+  const secure = process.env.NODE_ENV === 'production' && isSecureRequest;
+
+  return {
+    httpOnly: true,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: ADMIN_COOKIE_MAX_AGE_MS,
+    secure
+  };
+}
+
 const esc = (v = '') =>
     String(v)
         .replaceAll('&', '&amp;')
         .replaceAll('<', '&lt;')
         .replaceAll('>', '&gt;')
         .replaceAll('"', '&quot;');
+
+function formatJsonText(value = '', fallback = '{}') {
+  const source = String(value || fallback || '').trim();
+  if (!source) return fallback;
+
+  try {
+    return JSON.stringify(JSON.parse(source), null, 2);
+  } catch {
+    return source;
+  }
+}
+
+function normalizeAdminPageType(value = '') {
+  const type = String(value || '').trim().toLowerCase();
+  return type === 'article' ? 'article' : 'service';
+}
 
 function page(title, body) {
     return `<!DOCTYPE html>
@@ -20,17 +52,36 @@ function page(title, body) {
 <title>${title}</title>
 <style>
 :root{--bg:#090b10;--surface:#111722;--line:#263043;--text:#edf2ff;--muted:#9bacce;--accent:#f7e30b}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#06070b,#0b1018);color:var(--text);font-family:Inter,system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
 a{text-decoration:none;color:inherit}.wrap{max-width:1200px;margin:0 auto;padding:24px}.grid{display:grid;grid-template-columns:240px 1fr;gap:24px}
 .sidebar,.panel,.card{background:rgba(17,23,34,.94);border:1px solid var(--line);border-radius:22px}.sidebar{padding:16px;height:fit-content}.panel,.card{padding:18px}
 .stack{display:flex;flex-direction:column;gap:14px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:22px}
 .btn,button{padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer}
 .btn-primary{background:var(--accent);color:#111;border-color:rgba(247,227,11,.45);font-weight:800}
+.btn-danger{background:#f03d3d;color:#fff;border-color:rgba(240,61,61,.55);font-weight:700}
+.btn-danger:hover,.btn-danger:focus-visible{background:#d93434}
 input,textarea,select{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:#0d121a;color:var(--text)}
 textarea{min-height:220px;resize:vertical;font-family:ui-monospace,SFMono-Regular,monospace}.table{width:100%;border-collapse:collapse}
+.textarea-compact{min-height:96px}
 .table th,.table td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.table th{color:var(--muted);font-size:12px;text-transform:uppercase}
 .muted{color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap}.h1{margin:0;font-size:34px;letter-spacing:-.05em}
-@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.form-field{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.form-field-full{grid-column:1 / -1}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.kpi-value{font-size:28px;font-weight:800;line-height:1}
+.kpi-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.kpi-meta{font-size:12px;color:var(--muted)}
+.tool-card h3{margin:0 0 6px 0;font-size:18px}
+.tool-card p{margin:0;color:var(--muted)}
+.tool-card .actions{margin-top:10px}
+.dashboard-link{display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:border-color .16s ease, transform .16s ease, box-shadow .16s ease}
+.dashboard-link:hover,.dashboard-link:focus-visible{border-color:rgba(247,227,11,.45);transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,0,0,.22)}
+.link-hint{font-size:12px;color:var(--muted)}
+@media (max-width:1100px){.dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tool-grid{grid-template-columns:1fr}}
+@media (max-width:900px){.grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body><div class="wrap">${body}</div></body></html>`;
@@ -53,11 +104,11 @@ function shell(title, content) {
       <aside class="sidebar stack">
         <a class="btn" href="/admin">Overview</a>
         <a class="btn" href="/admin/mailbox">Mailbox</a>
-        <a class="btn" href="/admin/pages">Pages</a>
-        <a class="btn" href="/admin/works">Works</a>
-        <a class="btn" href="/admin/posts">Posts</a>
-        <a class="btn" href="/admin/topics">Topics</a>
-        <a class="btn" href="/admin/articles">Articles</a>
+        <a class="btn" href="/admin/pages">Service Pages</a>
+        <a class="btn" href="/admin/works">Portfolio Works</a>
+        <a class="btn" href="/admin/posts">Blog Posts</a>
+        <a class="btn" href="/admin/topics">Help Topics</a>
+        <a class="btn" href="/admin/articles">Help Articles</a>
       </aside>
       <main class="panel stack">${content}</main>
     </div>`
@@ -66,20 +117,23 @@ function shell(title, content) {
 
 function workForm(row = {}) {
   return `<form class="stack" method="post" action="${row.id ? `/admin/works/${row.id}` : '/admin/works'}">
-    <input name="title" placeholder="Title" value="${esc(row.title || '')}" />
-    <input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" />
-    <input name="category" placeholder="Category" value="${esc(row.category || '')}" />
-    <textarea name="summary" placeholder="Summary">${esc(row.summary || '')}</textarea>
-    <input name="hero_image" placeholder="Hero image URL" value="${esc(row.hero_image || '')}" />
-    <select name="status">
-      <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>draft</option>
-      <option value="published" ${row.status === 'published' ? 'selected' : ''}>published</option>
-    </select>
-    <textarea name="metrics_json">${esc(row.metrics_json || '[]')}</textarea>
-    <textarea name="content_json">${esc(row.content_json || '[{"type":"paragraph","text":"Project summary"}]')}</textarea>
+    <div class="form-grid">
+      <label class="form-field"><span class="form-label">Title</span><input name="title" placeholder="Title" value="${esc(row.title || '')}" /></label>
+      <label class="form-field"><span class="form-label">Slug</span><input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" /></label>
+      <label class="form-field"><span class="form-label">Category</span><input name="category" placeholder="Category" value="${esc(row.category || '')}" /></label>
+      <label class="form-field"><span class="form-label">Hero Image URL</span><input name="hero_image" placeholder="Hero image URL" value="${esc(row.hero_image || '')}" /></label>
+      <label class="form-field"><span class="form-label">Status</span><select name="status">
+        <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>Draft</option>
+        <option value="published" ${row.status === 'published' ? 'selected' : ''}>Published</option>
+      </select></label>
+      <label class="form-field form-field-full"><span class="form-label">Summary</span><textarea class="textarea-compact" name="summary" placeholder="Summary">${esc(row.summary || '')}</textarea></label>
+      <label class="form-field form-field-full"><span class="form-label">Metrics JSON</span><textarea class="textarea-compact" name="metrics_json">${esc(formatJsonText(row.metrics_json, '[]'))}</textarea></label>
+      <label class="form-field form-field-full"><span class="form-label">Content JSON</span><textarea name="content_json">${esc(formatJsonText(row.content_json, '[{"type":"paragraph","text":"Project summary"}]'))}</textarea></label>
+    </div>
     <div class="actions">
       <button class="btn-primary" type="submit">Save</button>
-      ${row.id ? `<a class="btn" href="/admin/works/${row.id}/delete">Delete</a>` : ''}
+      <button type="button" class="btn" onclick="history.back()">Cancel</button>
+      ${row.id ? `<a class="btn btn-danger" href="/admin/works/${row.id}/delete" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>` : ''}
     </div>
   </form>`;
 }
@@ -89,8 +143,14 @@ adminRouter.get('/login', (_req, res) => {
     <div class="card" style="max-width:420px;margin:8vh auto 0">
       <h1 class="h1">Admin Login</h1>
       <form class="stack" method="post" action="/admin/login">
-        <input name="username" placeholder="Username" />
-        <input name="password" type="password" placeholder="Password" />
+        <label class="form-field">
+          <span class="form-label">Username</span>
+          <input name="username" placeholder="Username" />
+        </label>
+        <label class="form-field">
+          <span class="form-label">Password</span>
+          <input name="password" type="password" placeholder="Password" />
+        </label>
         <button class="btn-primary" type="submit">Sign In</button>
       </form>
     </div>
@@ -107,96 +167,173 @@ adminRouter.post('/login', (req, res) => {
     `));
     }
 
-    res.cookie('dd_admin', createSession(username), {
-        httpOnly: true,
-        sameSite: 'lax'
-    });
+  res.cookie(ADMIN_COOKIE_NAME, createSession(username), adminCookieOptions(req));
 
     res.redirect('/admin');
 });
 
 adminRouter.get('/logout', (_req, res) => {
-    res.clearCookie('dd_admin');
+  res.clearCookie(ADMIN_COOKIE_NAME, {
+    path: '/',
+    sameSite: 'lax'
+  });
     res.redirect('/admin/login');
 });
 
 adminRouter.use(requireAdmin);
 
 adminRouter.get('/', (_req, res) => {
+  const pages = db.prepare("SELECT COUNT(*) count FROM pages WHERE page_type NOT IN ('standard', 'landing')").get().count;
+  const works = db.prepare('SELECT COUNT(*) count FROM works').get().count;
     const posts = db.prepare('SELECT COUNT(*) count FROM posts').get().count;
     const topics = db.prepare('SELECT COUNT(*) count FROM helpdesk_topics').get().count;
     const articles = db.prepare('SELECT COUNT(*) count FROM helpdesk_articles').get().count;
   const mailbox = db.prepare('SELECT COUNT(*) count FROM contact_messages').get().count;
 
+  const unreadMailbox = db.prepare("SELECT COUNT(*) count FROM contact_messages WHERE status = 'new'").get().count;
+  const publishedWorks = db.prepare("SELECT COUNT(*) count FROM works WHERE status = 'published'").get().count;
+  const publishedPosts = db.prepare("SELECT COUNT(*) count FROM posts WHERE status = 'published'").get().count;
+  const publishedArticles = db.prepare("SELECT COUNT(*) count FROM helpdesk_articles WHERE status = 'published'").get().count;
+
     res.send(shell('Overview', `
-    <div class="actions">
-      <div class="card"><strong>Mailbox</strong><div class="muted">${mailbox} messages</div></div>
-      <div class="card"><strong>Posts</strong><div class="muted">${posts} records</div></div>
-      <div class="card"><strong>Topics</strong><div class="muted">${topics} records</div></div>
-      <div class="card"><strong>Articles</strong><div class="muted">${articles} records</div></div>
+    <div class="top" style="margin:0">
+      <h2>Dashboard</h2>
+      <div class="muted">Content operations overview and publishing tools</div>
+    </div>
+
+    <div class="dashboard-grid">
+      <a class="card stack dashboard-link" href="/admin/mailbox">
+        <div class="kpi-label">Mailbox</div>
+        <div class="kpi-value">${mailbox}</div>
+        <div class="kpi-meta">${unreadMailbox} unread</div>
+        <div class="link-hint">Open Mailbox</div>
+      </a>
+      <a class="card stack dashboard-link" href="/admin/pages">
+        <div class="kpi-label">Service Pages</div>
+        <div class="kpi-value">${pages}</div>
+        <div class="kpi-meta">Structured page records</div>
+        <div class="link-hint">Manage Service Pages</div>
+      </a>
+      <a class="card stack dashboard-link" href="/admin/works">
+        <div class="kpi-label">Portfolio Works</div>
+        <div class="kpi-value">${works}</div>
+        <div class="kpi-meta">${publishedWorks} published</div>
+        <div class="link-hint">Manage Works</div>
+      </a>
+      <a class="card stack dashboard-link" href="/admin/articles">
+        <div class="kpi-label">Blog + Helpdesk</div>
+        <div class="kpi-value">${posts + topics + articles}</div>
+        <div class="kpi-meta">${publishedPosts + publishedArticles} published items</div>
+        <div class="link-hint">Manage Help Articles</div>
+      </a>
+    </div>
+
+    <div class="tool-grid">
+      <a class="card tool-card stack dashboard-link" href="/admin/mailbox">
+        <h3>Mailbox</h3>
+        <p>Review contact submissions captured from the site form.</p>
+        <div class="link-hint">Open Mailbox</div>
+      </a>
+
+      <a class="card tool-card stack dashboard-link" href="/admin/pages">
+        <h3>Service Pages</h3>
+        <p>Manage services and related structured page sections.</p>
+        <div class="link-hint">Manage Service Pages</div>
+      </a>
+
+      <a class="card tool-card stack dashboard-link" href="/admin/works">
+        <h3>Portfolio Works</h3>
+        <p>Create and publish case studies shown in your works gallery.</p>
+        <div class="link-hint">Manage Works</div>
+      </a>
+
+      <a class="card tool-card stack dashboard-link" href="/admin/posts">
+        <h3>Blog Posts</h3>
+        <p>Write, edit, and publish blog content.</p>
+        <div class="link-hint">Manage Posts</div>
+      </a>
+
+      <a class="card tool-card stack dashboard-link" href="/admin/topics">
+        <h3>Help Topics</h3>
+        <p>Define helpdesk categories for article grouping.</p>
+        <div class="link-hint">Manage Topics</div>
+      </a>
+
+      <a class="card tool-card stack dashboard-link" href="/admin/articles">
+        <h3>Help Articles</h3>
+        <p>Maintain support articles and publication status.</p>
+        <div class="link-hint">Manage Articles</div>
+      </a>
     </div>
   `));
 });
 
 function postForm(row = {}) {
     return `<form class="stack" method="post" action="${row.id ? `/admin/posts/${row.id}` : '/admin/posts'}">
-    <input name="title" placeholder="Title" value="${esc(row.title || '')}" />
-    <input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" />
-    <textarea name="excerpt" placeholder="Excerpt">${esc(row.excerpt || '')}</textarea>
-    <input name="cover_image" placeholder="Cover image URL" value="${esc(row.cover_image || '')}" />
-    <input name="author" placeholder="Author" value="${esc(row.author || 'Buzzworthy')}" />
-    <select name="status">
-      <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>draft</option>
-      <option value="published" ${row.status === 'published' ? 'selected' : ''}>published</option>
-    </select>
-    <textarea name="content_json">${esc(row.content_json || '[{"type":"paragraph","text":"Body copy"}]')}</textarea>
+    <div class="form-grid">
+      <label class="form-field"><span class="form-label">Title</span><input name="title" placeholder="Title" value="${esc(row.title || '')}" /></label>
+      <label class="form-field"><span class="form-label">Slug</span><input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" /></label>
+      <label class="form-field"><span class="form-label">Cover Image URL</span><input name="cover_image" placeholder="Cover image URL" value="${esc(row.cover_image || '')}" /></label>
+      <label class="form-field"><span class="form-label">Author</span><input name="author" placeholder="Author" value="${esc(row.author || 'Buzzworthy')}" /></label>
+      <label class="form-field"><span class="form-label">Status</span><select name="status">
+        <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>Draft</option>
+        <option value="published" ${row.status === 'published' ? 'selected' : ''}>Published</option>
+      </select></label>
+      <label class="form-field form-field-full"><span class="form-label">Excerpt</span><textarea class="textarea-compact" name="excerpt" placeholder="Excerpt">${esc(row.excerpt || '')}</textarea></label>
+      <label class="form-field form-field-full"><span class="form-label">Content JSON</span><textarea name="content_json">${esc(formatJsonText(row.content_json, '[{"type":"paragraph","text":"Body copy"}]'))}</textarea></label>
+    </div>
     <div class="actions">
       <button class="btn-primary" type="submit">Save</button>
-      ${row.id ? `<a class="btn" href="/admin/posts/${row.id}/delete">Delete</a>` : ''}
+      <button type="button" class="btn" onclick="history.back()">Cancel</button>
+      ${row.id ? `<a class="btn btn-danger" href="/admin/posts/${row.id}/delete" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>` : ''}
     </div>
   </form>`;
 }
 
 function pageForm(row = {}) {
   return `<form class="stack" method="post" action="${row.id ? `/admin/pages/${row.id}` : '/admin/pages'}">
-    <input name="title" placeholder="Title" value="${esc(row.title || '')}" />
-    <input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" />
-    <select name="page_type">
-      <option value="standard" ${row.page_type === 'standard' ? 'selected' : ''}>standard</option>
-      <option value="landing" ${row.page_type === 'landing' ? 'selected' : ''}>landing</option>
-      <option value="service" ${row.page_type === 'service' ? 'selected' : ''}>service</option>
-      <option value="article" ${row.page_type === 'article' ? 'selected' : ''}>article</option>
-    </select>
-    <select name="status">
-      <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>draft</option>
-      <option value="published" ${row.status === 'published' ? 'selected' : ''}>published</option>
-    </select>
-    <input name="seo_title" placeholder="SEO title" value="${esc(row.seo_title || '')}" />
-    <textarea name="seo_description" placeholder="SEO description">${esc(row.seo_description || '')}</textarea>
+    <div class="form-grid">
+      <label class="form-field"><span class="form-label">Title</span><input name="title" placeholder="Title" value="${esc(row.title || '')}" /></label>
+      <label class="form-field"><span class="form-label">Slug</span><input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" /></label>
+      <label class="form-field"><span class="form-label">Page Type</span><select name="page_type">
+        <option value="service" ${row.page_type === 'service' ? 'selected' : ''}>service</option>
+        <option value="article" ${row.page_type === 'article' ? 'selected' : ''}>article</option>
+      </select></label>
+      <label class="form-field"><span class="form-label">Status</span><select name="status">
+        <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>Draft</option>
+        <option value="published" ${row.status === 'published' ? 'selected' : ''}>Published</option>
+      </select></label>
+      <label class="form-field"><span class="form-label">SEO Title</span><input name="seo_title" placeholder="SEO title" value="${esc(row.seo_title || '')}" /></label>
+      <label class="form-field form-field-full"><span class="form-label">SEO Description</span><textarea class="textarea-compact" name="seo_description" placeholder="SEO description">${esc(row.seo_description || '')}</textarea></label>
+    </div>
     <div class="actions">
       <button class="btn-primary" type="submit">Save</button>
-      ${row.id ? `<a class="btn" href="/admin/pages/${row.id}/delete">Delete</a>` : ''}
+      <button type="button" class="btn" onclick="history.back()">Cancel</button>
+      ${row.id ? `<a class="btn btn-danger" href="/admin/pages/${row.id}/delete" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>` : ''}
     </div>
   </form>`;
 }
 
 function sectionForm(section = {}, pageId) {
   return `<form class="stack" method="post" action="${section.id ? `/admin/sections/${section.id}` : `/admin/pages/${pageId}/sections`}">
-    <select name="section_type">
-      <option value="pageHero" ${section.section_type === 'pageHero' ? 'selected' : ''}>pageHero</option>
-      <option value="sectionHeader" ${section.section_type === 'sectionHeader' ? 'selected' : ''}>sectionHeader</option>
-      <option value="featureGrid" ${section.section_type === 'featureGrid' ? 'selected' : ''}>featureGrid</option>
-      <option value="processGrid" ${section.section_type === 'processGrid' ? 'selected' : ''}>processGrid</option>
-      <option value="ctaPanel" ${section.section_type === 'ctaPanel' ? 'selected' : ''}>ctaPanel</option>
-      <option value="articleBody" ${section.section_type === 'articleBody' ? 'selected' : ''}>articleBody</option>
-      <option value="gallery" ${section.section_type === 'gallery' ? 'selected' : ''}>gallery</option>
-      <option value="logoBand" ${section.section_type === 'logoBand' ? 'selected' : ''}>logoBand</option>
-    </select>
-    <input name="sort_order" type="number" value="${esc(section.sort_order ?? 0)}" />
-    <textarea name="props_json">${esc(section.props_json || '{}')}</textarea>
+    <div class="form-grid">
+      <label class="form-field"><span class="form-label">Section Type</span><select name="section_type">
+        <option value="pageHero" ${section.section_type === 'pageHero' ? 'selected' : ''}>pageHero</option>
+        <option value="sectionHeader" ${section.section_type === 'sectionHeader' ? 'selected' : ''}>sectionHeader</option>
+        <option value="featureGrid" ${section.section_type === 'featureGrid' ? 'selected' : ''}>featureGrid</option>
+        <option value="processGrid" ${section.section_type === 'processGrid' ? 'selected' : ''}>processGrid</option>
+        <option value="ctaPanel" ${section.section_type === 'ctaPanel' ? 'selected' : ''}>ctaPanel</option>
+        <option value="articleBody" ${section.section_type === 'articleBody' ? 'selected' : ''}>articleBody</option>
+        <option value="gallery" ${section.section_type === 'gallery' ? 'selected' : ''}>gallery</option>
+        <option value="logoBand" ${section.section_type === 'logoBand' ? 'selected' : ''}>logoBand</option>
+      </select></label>
+      <label class="form-field"><span class="form-label">Sort Order</span><input name="sort_order" type="number" value="${esc(section.sort_order ?? 0)}" /></label>
+      <label class="form-field form-field-full"><span class="form-label">Props JSON</span><textarea name="props_json">${esc(formatJsonText(section.props_json, '{}'))}</textarea></label>
+    </div>
     <div class="actions">
       <button class="btn-primary" type="submit">Save</button>
-      ${section.id ? `<a class="btn" href="/admin/sections/${section.id}/delete">Delete</a>` : ''}
+      <button type="button" class="btn" onclick="history.back()">Cancel</button>
+      ${section.id ? `<a class="btn btn-danger" href="/admin/sections/${section.id}/delete" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>` : ''}
     </div>
   </form>`;
 }
@@ -299,13 +436,16 @@ adminRouter.get('/posts/:id/delete', (req, res) => {
 
 function topicForm(row = {}) {
     return `<form class="stack" method="post" action="${row.id ? `/admin/topics/${row.id}` : '/admin/topics'}">
-    <input name="title" placeholder="Title" value="${esc(row.title || '')}" />
-    <input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" />
-    <textarea name="description" placeholder="Description">${esc(row.description || '')}</textarea>
-    <input name="sort_order" type="number" value="${esc(row.sort_order ?? 0)}" />
+    <div class="form-grid">
+      <label class="form-field"><span class="form-label">Title</span><input name="title" placeholder="Title" value="${esc(row.title || '')}" /></label>
+      <label class="form-field"><span class="form-label">Slug</span><input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" /></label>
+      <label class="form-field"><span class="form-label">Sort Order</span><input name="sort_order" type="number" value="${esc(row.sort_order ?? 0)}" /></label>
+      <label class="form-field form-field-full"><span class="form-label">Description</span><textarea name="description" placeholder="Description">${esc(row.description || '')}</textarea></label>
+    </div>
     <div class="actions">
       <button class="btn-primary" type="submit">Save</button>
-      ${row.id ? `<a class="btn" href="/admin/topics/${row.id}/delete">Delete</a>` : ''}
+      <button type="button" class="btn" onclick="history.back()">Cancel</button>
+      ${row.id ? `<a class="btn btn-danger" href="/admin/topics/${row.id}/delete" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>` : ''}
     </div>
   </form>`;
 }
@@ -396,22 +536,25 @@ adminRouter.get('/topics/:id/delete', (req, res) => {
 
 function articleForm(row = {}, topics = []) {
     return `<form class="stack" method="post" action="${row.id ? `/admin/articles/${row.id}` : '/admin/articles'}">
-    <input name="title" placeholder="Title" value="${esc(row.title || '')}" />
-    <input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" />
-    <select name="topic_id">
-      <option value="">Select topic</option>
-      ${topics.map(t => `<option value="${t.id}" ${String(row.topic_id || '') === String(t.id) ? 'selected' : ''}>${esc(t.title)}</option>`).join('')}
-    </select>
-    <textarea name="excerpt" placeholder="Excerpt">${esc(row.excerpt || '')}</textarea>
-    <select name="status">
-      <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>draft</option>
-      <option value="published" ${row.status === 'published' ? 'selected' : ''}>published</option>
-    </select>
-    <textarea name="tags_json">${esc(row.tags_json || '[]')}</textarea>
-    <textarea name="content_json">${esc(row.content_json || '[{"type":"paragraph","text":"Help article body"}]')}</textarea>
+    <div class="form-grid">
+      <label class="form-field"><span class="form-label">Title</span><input name="title" placeholder="Title" value="${esc(row.title || '')}" /></label>
+      <label class="form-field"><span class="form-label">Slug</span><input name="slug" placeholder="Slug" value="${esc(row.slug || '')}" /></label>
+      <label class="form-field"><span class="form-label">Topic</span><select name="topic_id">
+        <option value="">Select topic</option>
+        ${topics.map(t => `<option value="${t.id}" ${String(row.topic_id || '') === String(t.id) ? 'selected' : ''}>${esc(t.title)}</option>`).join('')}
+      </select></label>
+      <label class="form-field"><span class="form-label">Status</span><select name="status">
+        <option value="draft" ${row.status === 'draft' ? 'selected' : ''}>Draft</option>
+        <option value="published" ${row.status === 'published' ? 'selected' : ''}>Published</option>
+      </select></label>
+      <label class="form-field form-field-full"><span class="form-label">Excerpt</span><textarea class="textarea-compact" name="excerpt" placeholder="Excerpt">${esc(row.excerpt || '')}</textarea></label>
+      <label class="form-field form-field-full"><span class="form-label">Tags JSON</span><textarea class="textarea-compact" name="tags_json">${esc(formatJsonText(row.tags_json, '[]'))}</textarea></label>
+      <label class="form-field form-field-full"><span class="form-label">Content JSON</span><textarea name="content_json">${esc(formatJsonText(row.content_json, '[{"type":"paragraph","text":"Help article body"}]'))}</textarea></label>
+    </div>
     <div class="actions">
       <button class="btn-primary" type="submit">Save</button>
-      ${row.id ? `<a class="btn" href="/admin/articles/${row.id}/delete">Delete</a>` : ''}
+      <button type="button" class="btn" onclick="history.back()">Cancel</button>
+      ${row.id ? `<a class="btn btn-danger" href="/admin/articles/${row.id}/delete" onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>` : ''}
     </div>
   </form>`;
 }
@@ -521,6 +664,7 @@ adminRouter.get('/pages', (_req, res) => {
   const rows = db.prepare(`
     SELECT *
     FROM pages
+    WHERE page_type NOT IN ('standard', 'landing')
     ORDER BY updated_at DESC
   `).all();
 
@@ -547,7 +691,7 @@ adminRouter.get('/pages', (_req, res) => {
 });
 
 adminRouter.get('/pages/:id', (req, res) => {
-  const row = db.prepare('SELECT * FROM pages WHERE id = ?').get(req.params.id);
+  const row = db.prepare("SELECT * FROM pages WHERE id = ? AND page_type NOT IN ('standard', 'landing')").get(req.params.id);
   if (!row) return res.status(404).send('Not found');
 
   const sections = db.prepare(`
@@ -583,6 +727,7 @@ adminRouter.get('/pages/:id', (req, res) => {
 adminRouter.post('/pages', (req, res) => {
   const now = nowIso();
   const title = String(req.body.title || '').trim();
+  const pageType = normalizeAdminPageType(req.body.page_type);
 
   db.prepare(`
     INSERT INTO pages (slug, title, page_type, status, seo_title, seo_description, created_at, updated_at)
@@ -590,7 +735,7 @@ adminRouter.post('/pages', (req, res) => {
   `).run(
     slugify(req.body.slug || title),
     title,
-    req.body.page_type || 'standard',
+    pageType,
     req.body.status || 'draft',
     req.body.seo_title || '',
     req.body.seo_description || '',
@@ -604,6 +749,7 @@ adminRouter.post('/pages', (req, res) => {
 adminRouter.post('/pages/:id', (req, res) => {
   const now = nowIso();
   const title = String(req.body.title || '').trim();
+  const pageType = normalizeAdminPageType(req.body.page_type);
 
   db.prepare(`
     UPDATE pages
@@ -612,7 +758,7 @@ adminRouter.post('/pages/:id', (req, res) => {
   `).run(
     slugify(req.body.slug || title),
     title,
-    req.body.page_type || 'standard',
+    pageType,
     req.body.status || 'draft',
     req.body.seo_title || '',
     req.body.seo_description || '',
