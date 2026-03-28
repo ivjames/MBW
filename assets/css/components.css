@@ -1932,12 +1932,17 @@
 .service-subnav-wrap {
   display: flex;
   align-items: center;
+  justify-content: center;
+    width: 100%;
 }
 
 .service-subnav {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.75rem;
+  margin-inline: auto;
+    max-width: min(1080px, 100%);
 }
 
 .service-pill {
@@ -1985,15 +1990,42 @@
 
 .service-subnav-bar {
   position: relative;
-  z-index: 5;
-  padding-top: 0.75rem;
-  padding-bottom: 0.25rem;
+  z-index: 6;
+    isolation: isolate;
+    padding-top: 0.85rem;
+    padding-bottom: 0.95rem;
+  }
+  
+  .service-subnav-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, var(--cmp-c056), var(--cmp-c010)),
+      radial-gradient(circle at 18% 50%, var(--cmp-c031), var(--cmp-transparent) 56%),
+      radial-gradient(circle at 82% 50%, var(--cmp-c019), var(--cmp-transparent) 58%);
 }
 
 .service-subnav-bar .service-subnav {
   justify-content: center;
 }
 
+.service-subnav-bar+.page-hero {
+  padding-top: 2rem !important;
+}
+
+.service-subnav-bar+.page-hero::before {
+  inset: 0;
+}
+
+:root[data-theme="light"] .service-subnav-bar::before {
+  background:
+    linear-gradient(180deg, var(--cmp-c070), var(--cmp-c058)),
+    radial-gradient(circle at 18% 50%, var(--cmp-c082), var(--cmp-transparent) 56%),
+    radial-gradient(circle at 82% 50%, var(--cmp-c038), var(--cmp-transparent) 58%);
+}
 .page-hero {
   padding-top: 2.2rem !important;
   /* tighter now that pills sit above */
@@ -2861,8 +2893,38 @@
 }
 
 .helpdesk-article-header-section {
+  position: relative;
+    z-index: 6;
+    isolation: isolate;
+    padding-top: 0.85rem !important;
+    padding-bottom: 0.95rem !important;
+  }
+  
+  .helpdesk-article-header-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, var(--cmp-c056), var(--cmp-c010)),
+      radial-gradient(circle at 18% 50%, var(--cmp-c031), var(--cmp-transparent) 56%),
+      radial-gradient(circle at 82% 50%, var(--cmp-c019), var(--cmp-transparent) 58%);
+  }
+  
+  .helpdesk-article-header-section+.page-hero {
   padding-top: 2rem !important;
-  padding-bottom: 1.25rem !important;
+}
+
+.helpdesk-article-header-section+.page-hero::before {
+  inset: 0;
+}
+
+:root[data-theme="light"] .helpdesk-article-header-section::before {
+  background:
+    linear-gradient(180deg, var(--cmp-c070), var(--cmp-c058)),
+    radial-gradient(circle at 18% 50%, var(--cmp-c082), var(--cmp-transparent) 56%),
+    radial-gradient(circle at 82% 50%, var(--cmp-c038), var(--cmp-transparent) 58%);
 }
 
 .helpdesk-article-header-wrap {

@@ -508,6 +508,13 @@
 html {
   background: var(--bg);
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  }
+  
+  @supports not (scrollbar-gutter: stable) {
+    body {
+      overflow-y: scroll;
+    }
 }
 
 body {
