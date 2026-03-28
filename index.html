@@ -8,11 +8,10 @@
   <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico" />
   <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/fonts.css">
-  <link id="theme-tokens" rel="stylesheet" href="/assets/css/tokens.css">
-  <link id="theme-utilities" rel="stylesheet" href="/assets/css/utilities.css">
-  <link id="theme-layout" rel="stylesheet" href="/assets/css/layout.css">
-  <link id="theme-components" rel="stylesheet" href="/assets/css/components.css">
+  <link rel="modulepreload" href="/assets/js/main.min.js">
+  <link rel="preload" as="fetch" href="/api/site" crossorigin>
+  <link rel="preload" as="fetch" href="/content/pages/home.json" crossorigin>
+  <link rel="stylesheet" href="/assets/css/app.min.css">
 
   <script>
     (function () {
@@ -32,6 +31,6 @@
     <footer id="site-footer"></footer>
   </div>
 
-  <script type="module" src="/assets/js/main.js"></script>
+  <script type="module" src="/assets/js/main.min.js"></script>
 </body>
 </html>
