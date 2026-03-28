@@ -60,6 +60,11 @@ export async function resolvePageRenderer(page) {
         return (pageContent, site) => ContactPage(pageContent, site.company);
     }
 
+    if (page === 'build-from-scratch') {
+        const { BuildFromScratchPage } = await import('../sections/buildFromScratchPage.js');
+        return pageContent => BuildFromScratchPage(pageContent);
+    }
+
     const { HomePage } = await import('../sections/home.js');
     return (pageContent, site) => HomePage({ home: pageContent, ...site });
 }

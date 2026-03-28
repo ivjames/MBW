@@ -158,6 +158,7 @@
     "cases": [
         {
             "badge": "B2B Professional Services",
+            "slug": "northpeak-legal",
             "title": "NorthPeak Legal",
             "body": "Repositioned the firm, rebuilt core service pages, and tightened consultation flows to improve trust and lead quality for a multi-location practice.",
             "image": "https://picsum.photos/seed/buzzworthy-case-legal/586/330.webp",
@@ -178,6 +179,7 @@
         },
         {
             "badge": "Growth-Stage SaaS",
+            "slug": "metricforge",
             "title": "MetricForge",
             "body": "Rebuilt the homepage and demand-gen landing flow around a clearer product story, stronger proof, and sharper user segmentation.",
             "image": "https://picsum.photos/seed/buzzworthy-case-saas/586/330.webp",
@@ -198,6 +200,7 @@
         },
         {
             "badge": "Industrial Services",
+            "slug": "blueharbor-systems",
             "title": "BlueHarbor Systems",
             "body": "Rebuilt a dense legacy site into a cleaner technical platform with better hierarchy, stronger lead routing, and easier decision paths.",
             "image": "https://picsum.photos/seed/buzzworthy-case-industrial/586/330.webp",
@@ -285,6 +288,16 @@
         "quote": "Buzzworthy replaced a generic website with a system our team can extend without degrading the design or the message.",
         "author": "Maya Chen, CEO at Aster Advisory"
     },
+        "buildStory": {
+            "eyebrow": "Behind the build",
+            "title": "Built from scratch, not dropped into a generic CMS theme.",
+            "lead": "This site was planned and engineered as a custom modular build, not assembled from a pre-existing WordPress stack. That gives tighter performance control, cleaner updates, and fewer plugin-level failure points.",
+            "panelEyebrow": "Why this matters",
+            "panelTitle": "Custom architecture gives us better speed, security, and control",
+            "panelBody": "By owning the component system, routing, and data models directly, we can evolve content and features without the dependency churn that often slows down CMS-heavy builds.",
+            "linkLabel": "View build timeline",
+            "linkHref": "/build-from-scratch"
+        },
     "cta": {
         "title": "Ready to replace the template with a real offer?",
         "body": "Use this starter as the base for a static self-hosted build, then swap placeholder metrics, case studies, and contact routing with real business content.",

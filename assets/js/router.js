@@ -23,6 +23,7 @@ export function resolveRoute() {
         '/': 'home',
         '/services': 'services',
         '/works': 'works',
+        '/build-from-scratch': 'build-from-scratch',
         '/blog': 'blog',
         '/helpdesk': 'helpdesk',
         '/article': 'article',

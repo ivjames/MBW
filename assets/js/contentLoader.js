@@ -54,7 +54,8 @@ export async function loadSiteContent(page) {
   if (!pagePromise) {
     const filePageMap = {
       home: '/content/pages/home.json',
-      contact: '/content/pages/contact.json'
+      contact: '/content/pages/contact.json',
+      'build-from-scratch': '/content/pages/build-from-scratch.json'
     };
 
     const path = filePageMap[page] || filePageMap.home;

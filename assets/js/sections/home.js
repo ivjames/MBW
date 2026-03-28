@@ -12,6 +12,7 @@ function CaseGallery(cases = []) {
   const filters = ['All', ...new Set(cases.map(item => item.badge || 'Work'))];
 
   const projects = cases.map(item => ({
+    slug: item.slug || '',
     title: item.title || '',
     category: item.badge || 'Work',
     image: item.image || '',
@@ -54,6 +55,7 @@ export function HomePage(data = {}) {
   const services = home.services || [];
   const cases = home.cases || [];
   const system = home.system || {};
+  const buildStory = home.buildStory || {};
   const testimonial = home.testimonial || {};
   const cta = home.cta || {};
 
@@ -150,7 +152,37 @@ export function HomePage(data = {}) {
             ]
           })
         ]
-      })
+      }),
+
+      buildStory.title
+        ? createElement('section', {
+          className: 'section section-tight-top',
+          children: [
+            createElement('div', {
+              className: 'container',
+              children: [
+                SectionHeader({
+                  eyebrow: buildStory.eyebrow || 'Behind the build',
+                  title: buildStory.title,
+                  lead: buildStory.lead || ''
+                }),
+                CtaPanel({
+                  eyebrow: buildStory.panelEyebrow || 'Built custom on purpose',
+                  title: buildStory.panelTitle || 'Why we did not use WordPress for this site',
+                  body: buildStory.panelBody || 'We chose a custom architecture for performance control, cleaner security posture, and easier long-term iteration.',
+                  actions: [
+                    {
+                      label: buildStory.linkLabel || 'View more',
+                      href: buildStory.linkHref || '/build-from-scratch',
+                      variant: 'primary'
+                    }
+                  ]
+                })
+              ]
+            })
+          ]
+        })
+        : null
     ].filter(Boolean)
   });
 }
