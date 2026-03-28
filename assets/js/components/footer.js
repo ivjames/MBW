@@ -54,7 +54,9 @@ export function Footer(company = {}) {
             attrs: {
               src: '/assets/images/logo-mark.webp',
               alt: '',
-              'aria-hidden': 'true'
+              'aria-hidden': 'true',
+              width: '780',
+              height: '780'
             }
           }),
           createElement('div', {

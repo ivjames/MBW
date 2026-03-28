@@ -17,6 +17,13 @@ run_privileged() {
   fi
 }
 
+cd "$SCRIPT_DIR/.."
+
+echo "[deploy] Syncing with remote"
+git fetch --prune origin
+git reset --hard origin/main
+git clean -fd
+
 cd "$SCRIPT_DIR"
 
 echo "[deploy] Installing dependencies"

@@ -2042,9 +2042,10 @@
   inset: 0;
   display: none;
   place-items: center;
-  padding: 2rem;
-  background: var(--cmp-c010);
-  z-index: 80;
+  padding: clamp(1rem, 2vw, 2rem);
+    background: rgba(6, 12, 24, 0.78);
+    backdrop-filter: blur(8px);
+    z-index: 120;
 }
 
 .gallery-modal.is-open {
@@ -2053,9 +2054,11 @@
 
 .gallery-modal-inner {
   width: min(100%, 1100px);
+  max-height: calc(100vh - 2rem);
 }
 
 .gallery-modal-panel {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
   gap: 1rem;
@@ -2064,6 +2067,8 @@
   background: var(--cmp-c001);
   border: 1px solid var(--line-strong);
   box-shadow: var(--shadow-2);
+  max-height: calc(100vh - 2rem);
+    overflow: auto;
 }
 
 .gallery-modal-panel img {
@@ -2083,8 +2088,8 @@
 
 .gallery-modal-close {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
+  top: 1rem;
+    right: 1rem;
   min-height: 42px;
   padding: 0.7rem 1rem;
   border-radius: 999px;
@@ -2116,6 +2121,9 @@
   .gallery-modal {
     padding: 1rem;
   }
+.gallery-modal-panel {
+  max-height: calc(100vh - 2rem);
+}
 }
 
 .blog-grid {
@@ -2995,7 +3003,8 @@
 }
 
 .gallery-modal {
-  background: var(--cmp-c059) !important;
+  background: rgba(6, 12, 24, 0.78) !important;
+    backdrop-filter: blur(8px);
 }
 
 .gallery-modal-panel {
@@ -3044,6 +3053,9 @@
   background: var(--surface-2) !important;
 }
 
+body.gallery-modal-open {
+  overflow: hidden;
+}
 .logo-band {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));

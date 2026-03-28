@@ -76,7 +76,10 @@ function GalleryModal() {
         className: 'gallery-modal',
         attrs: {
             id: 'galleryModal',
-            'aria-hidden': 'true'
+            'aria-hidden': 'true',
+            'aria-modal': 'true',
+            role: 'dialog',
+            tabindex: '-1'
         },
         children: [
             createElement('button', {
@@ -182,11 +185,14 @@ export function Gallery({ filters = [], projects = [], className = '' } = {}) {
         renderModalContent(modal, project);
         modal.classList.add('is-open');
         modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('gallery-modal-open');
+        modal.focus();
     }
 
     function closeModal() {
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('gallery-modal-open');
     }
 
     function visibleProjects(active = 'All') {
@@ -219,6 +225,15 @@ export function Gallery({ filters = [], projects = [], className = '' } = {}) {
         if (event.target === modal) closeModal();
     });
 
-    root.append(filterBar, grid, modal);
+    modal.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    document.getElementById('galleryModal')?.remove();
+    document.body.appendChild(modal);
+
+    root.append(filterBar, grid);
     return root;
 }
