@@ -17,7 +17,7 @@
   background: var(--cmp-c064);
   border-bottom: 1px solid var(--line-soft);
   box-shadow: 0 10px 30px var(--cmp-transparent);
-    transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+  transition: none;
 }
 
 .header-inner {
@@ -28,7 +28,6 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-6);
-  transition: min-height 240ms ease;
 }
 
 .brand-lockup {
@@ -50,13 +49,11 @@
   font-weight: 700;
   line-height: 0.92;
   letter-spacing: -0.05em;
-  transition: font-size 240ms ease;
 }
 .brand-lockup img {
   height: calc(var(--brand-mark-base) * var(--header-scale) * var(--brand-mark-scale));
   width: auto;
   filter: none;
-  transition: height 240ms ease;
 }
 
 .nav-links {
@@ -65,7 +62,6 @@
   gap: var(--space-5);
   color: var(--text-2);
   font-weight: 600;
-  transition: gap 240ms ease;
 }
 
 .nav-links a {
@@ -108,7 +104,7 @@
 
 .site-header .header-actions .button,
 .site-header .mobile-toggle {
-  transition: min-height 240ms ease, height 240ms ease, transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
 }
 
 .site-header .header-actions .button {
@@ -188,6 +184,32 @@
   font-size: 0.92rem;
 }
 
+/* Large-font resilience: allow key labels/chips to wrap without overflow. */
+.nav-links a,
+.button,
+.button-chip,
+.service-pill,
+.gallery-filter,
+.blog-back-link,
+.logo-pill,
+.footer-pill,
+.token-chip,
+.gallery-metric {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.hero-copy h1,
+.page-hero-copy h1,
+.card-title,
+.blog-post-title,
+.helpdesk-article-title {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  text-wrap: balance;
+}
 .card {
   position: relative;
   overflow: hidden;
@@ -950,7 +972,44 @@
   }
 }
 
-@media (max-width: 840px) {
+@media (min-width: 841px) and (max-width: 1024px) {
+  .site-header {
+    --brand-title-base: 1rem;
+  }
+
+  .site-header.is-scrolled {
+    --brand-title-scale: 1.12;
+  }
+
+  .header-inner {
+    gap: var(--space-4);
+  }
+
+  .site-header .nav-links,
+  .site-header.is-scrolled .nav-links {
+    gap: clamp(0.55rem, 1.4vw, 0.85rem);
+    font-size: 0.9rem;
+  }
+
+  .site-header .nav-links a {
+    padding: 0.4rem 0;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .site-header .header-actions {
+    gap: var(--space-2);
+  }
+
+  .site-header .header-actions .button {
+    min-height: 50px;
+    padding-inline: 0.95rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 1111px) {
 
   .nav-links,
   .header-actions .desktop-only {
@@ -971,7 +1030,7 @@
     left: 1rem;
     right: 1rem;
     padding: 1rem;
-    background: var(--cmp-c067);
+    background: var(--surface-solid);
     border: 1px solid var(--line-soft);
     border-radius: var(--radius-lg);
     flex-direction: column;
@@ -1648,6 +1707,10 @@
   .form-grid {
     grid-template-columns: 1fr;
   }
+.form-textarea,
+textarea.form-input {
+  resize: none !important;
+}
 }
 
 /* v6 compact card pass + Node demo form */
@@ -1899,7 +1962,7 @@
                                                                 }
                                                                 }
                                 
-                                                                @media (max-width: 840px) {
+                                                                                                                                                                                                                                                                @media (max-width: 1111px) {
                                 
                                                                   .site-header.is-open .nav-item,
                                                                   .site-header.is-open .has-submenu {
