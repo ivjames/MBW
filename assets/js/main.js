@@ -13,6 +13,12 @@ let detachHeaderScrollState = null;
 
 initTheme();
 
+function cssReady() {
+  const link = document.getElementById('app-css');
+  if (!link || link.rel === 'stylesheet') return Promise.resolve();
+  return new Promise(resolve => link.addEventListener('load', resolve, { once: true }));
+}
+
 function updateCanonical() {
   const tag = document.getElementById('canonical-url');
   if (tag) {
@@ -31,6 +37,7 @@ function resetScrollPosition() {
 }
 
 async function boot() {
+  await cssReady();
   updateCanonical();
   const route = resolveRoute();
   const { page } = route;

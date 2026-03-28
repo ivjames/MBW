@@ -12,14 +12,18 @@
   <link rel="modulepreload" href="/assets/js/main.min.js">
   <link rel="preload" as="fetch" href="/api/site" crossorigin>
   <link rel="preload" as="fetch" href="/content/pages/home.json" crossorigin>
-  <link rel="stylesheet" href="/assets/css/app.min.css">
+  <link rel="preload" href="/assets/css/app.min.css" as="style" id="app-css"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+  </noscript>
 
   <script>
     (function () {
       var theme = localStorage.getItem('dd-theme') || 'dark';
       var safeTheme = theme === 'light' ? 'light' : 'dark';
-
       document.documentElement.setAttribute('data-theme', safeTheme);
+      document.documentElement.style.background = safeTheme === 'light' ? '#f6f8fc' : '#000';
     })();
   </script>
 
