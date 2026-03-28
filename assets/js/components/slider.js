@@ -13,7 +13,7 @@ export function CaseSlider(items) {
           createElement('div', {
             className: 'slide-media',
             children: [
-              createElement('img', { attrs: { src: item.image, alt: item.title } })
+              createElement('img', { attrs: { src: item.image, alt: '' } })
             ]
           }),
           createElement('div', {

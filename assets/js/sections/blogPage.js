@@ -18,7 +18,7 @@ function BlogCard(post) {
                     createElement('img', {
                         attrs: {
                             src: post.image,
-                            alt: post.title
+                            alt: ''
                         }
                     })
                 ]

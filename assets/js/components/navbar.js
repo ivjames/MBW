@@ -50,7 +50,9 @@ export function Navbar({ nav, currentPage }) {
         className: 'brand-mark-image',
         attrs: {
           src: '/assets/images/logo-mark.webp',
-          alt: 'Buzzworthy logo mark'
+          alt: '',
+          width: '500',
+          height: '500'
         }
       }),
       createElement('div', {

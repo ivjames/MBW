@@ -27,7 +27,7 @@ export function LogoBand(items = [], className = '') {
         item.image
           ? createElement('img', {
             className: 'logo-item-image',
-            attrs: { src: item.image, alt: item.label || 'Client logo' }
+            attrs: { src: item.image, alt: item.label ? '' : 'Client logo' }
           })
           : null,
         item.label

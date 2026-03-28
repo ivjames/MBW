@@ -18,7 +18,7 @@ export function PageHero({ eyebrow, title, lead, image }) {
           createElement('div', {
             className: 'page-hero-media reveal',
             children: [
-              createElement('img', { attrs: { src: image, alt: title } })
+              createElement('img', { attrs: { src: image, alt: '' } })
             ]
           })
         ]

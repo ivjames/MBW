@@ -13,6 +13,13 @@ let detachHeaderScrollState = null;
 
 initTheme();
 
+function updateCanonical() {
+  const tag = document.getElementById('canonical-url');
+  if (tag) {
+    tag.href = window.location.origin + window.location.pathname + window.location.search;
+  }
+}
+
 function resetScrollPosition() {
   if (window.scrollY <= 1) {
     return;
@@ -24,6 +31,7 @@ function resetScrollPosition() {
 }
 
 async function boot() {
+  updateCanonical();
   const route = resolveRoute();
   const { page } = route;
   const rendererPromise = resolvePageRenderer(page);

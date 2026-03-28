@@ -43,7 +43,7 @@ export function PageHero({
                             className: 'page-hero-media reveal',
                             children: [
                                 createElement('img', {
-                                    attrs: { src: image, alt: title || 'Page hero image' }
+                                    attrs: { src: image, alt: '' }
                                 })
                             ]
                         })

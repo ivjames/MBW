@@ -11,7 +11,7 @@ function GalleryCard(project = {}, openModal) {
                     createElement('img', {
                         attrs: {
                             src: project.image || '',
-                            alt: project.title || 'Project image'
+                            alt: ''
                         }
                     })
                 ]
@@ -104,7 +104,7 @@ function renderModalContent(modal, project = {}) {
                 createElement('img', {
                     attrs: {
                         src: project.image || '',
-                        alt: project.title || 'Project image'
+                        alt: ''
                     }
                 }),
                 createElement('div', {
