@@ -3,6 +3,7 @@
         "eyebrow": "Built From Scratch",
         "title": "Why we built this site without WordPress",
         "lead": "This project was intentionally designed and developed as a custom, modular stack instead of a prebuilt CMS theme. The result is faster pages, cleaner ownership, and fewer plugin-driven surprises over time.",
+        "image": "https://picsum.photos/seed/buzzworthy-build-from-scratch-hero/467/300.webp",
         "meta": [
             "Custom architecture",
             "Modular sections",
