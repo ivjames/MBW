@@ -8,6 +8,7 @@
   --header-scale: 2;
   --header-min-height-base: 84px;
   --brand-mark-base: 44px;
+  --brand-mark-scale: 1.5;
   --brand-title-base: 1.125rem;
   --brand-title-scale: 1;
   position: relative;
@@ -52,7 +53,7 @@
   transition: font-size 240ms ease;
 }
 .brand-lockup img {
-  height: calc(var(--brand-mark-base) * var(--header-scale));
+  height: calc(var(--brand-mark-base) * var(--header-scale) * var(--brand-mark-scale));
   width: auto;
   filter: none;
   transition: height 240ms ease;
@@ -96,6 +97,7 @@
 
 .site-header.is-scrolled {
   --header-scale: 1;
+  --brand-mark-scale: 1;
   --brand-title-scale: 1.18;
   box-shadow: 0 16px 40px var(--cmp-c035);
 }
@@ -907,6 +909,10 @@
 }
 
 @media (max-width: 425px) {
+  .site-header {
+      --brand-mark-base: 34px;
+      --brand-mark-scale: 1.1;
+    }
   .brand-name {
     font-size: calc(var(--brand-title-base) * var(--header-scale) * 0.75);
   }
