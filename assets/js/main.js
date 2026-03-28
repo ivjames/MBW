@@ -9,6 +9,8 @@ const headerMount = document.getElementById('site-header');
 const appMount = document.getElementById('app');
 const footerMount = document.getElementById('site-footer');
 
+let detachHeaderScrollState = null;
+
 initTheme();
 
 async function boot() {
@@ -35,6 +37,9 @@ function initUI() {
   const mobileToggle = document.getElementById('mobileToggle');
   const navLinks = headerMount.querySelector('.nav-links');
   const themeToggle = document.getElementById('themeToggle');
+
+  detachHeaderScrollState?.();
+  detachHeaderScrollState = bindHeaderScrollState(header);
 
   mobileToggle?.addEventListener('click', () => {
     header?.classList.toggle('is-open');
@@ -135,6 +140,23 @@ function initUI() {
       });
     });
   }
+}
+
+function bindHeaderScrollState(header) {
+  if (!header) {
+    return null;
+  }
+
+  const syncHeaderState = () => {
+    header.classList.toggle('is-scrolled', window.scrollY > 12);
+  };
+
+  syncHeaderState();
+  window.addEventListener('scroll', syncHeaderState, { passive: true });
+
+  return () => {
+    window.removeEventListener('scroll', syncHeaderState);
+  };
 }
 
 window.addEventListener('app:navigate', boot);

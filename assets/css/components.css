@@ -1,20 +1,33 @@
-.site-header {
+#site-header {
   position: sticky;
   top: 0;
   z-index: 40;
+}
+
+.site-header {
+  --header-scale: 2;
+  --header-min-height-base: 84px;
+  --brand-mark-base: 44px;
+  --brand-title-base: 1.125rem;
+  --brand-title-scale: 1;
+  position: relative;
+  width: 100%;
   backdrop-filter: blur(20px);
   background: var(--cmp-c064);
   border-bottom: 1px solid var(--line-soft);
+  box-shadow: 0 10px 30px var(--cmp-transparent);
+    transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
 }
 
 .header-inner {
   width: var(--container);
   margin-inline: auto;
-  min-height: 84px;
+  min-height: calc(var(--header-min-height-base) * var(--header-scale));
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-6);
+  transition: min-height 240ms ease;
 }
 
 .brand-lockup {
@@ -23,10 +36,26 @@
   gap: var(--space-4);
 }
 
+.brand-wordmark {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.brand-name {
+  color: var(--text-1);
+  font-family: var(--font-display);
+  font-size: calc(var(--brand-title-base) * var(--header-scale) * var(--brand-title-scale));
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+  transition: font-size 240ms ease;
+}
 .brand-lockup img {
-  height: 44px;
+  height: calc(var(--brand-mark-base) * var(--header-scale));
   width: auto;
   filter: none;
+  transition: height 240ms ease;
 }
 
 .nav-links {
@@ -35,6 +64,7 @@
   gap: var(--space-5);
   color: var(--text-2);
   font-weight: 600;
+  transition: gap 240ms ease;
 }
 
 .nav-links a {
@@ -64,6 +94,36 @@
   gap: var(--space-3);
 }
 
+.site-header.is-scrolled {
+  --header-scale: 1;
+  --brand-title-scale: 1.18;
+  box-shadow: 0 16px 40px var(--cmp-c035);
+}
+
+.site-header.is-scrolled .nav-links {
+  gap: var(--space-5);
+}
+
+.site-header .header-actions .button,
+.site-header .mobile-toggle {
+  transition: min-height 240ms ease, height 240ms ease, transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.site-header .header-actions .button {
+  min-height: 58px;
+}
+
+.site-header .mobile-toggle {
+  height: 54px;
+}
+
+.site-header.is-scrolled .header-actions .button {
+  min-height: 52px;
+}
+
+.site-header.is-scrolled .mobile-toggle {
+  height: 48px;
+}
 .mobile-toggle {
   display: none;
   width: 48px;
@@ -799,6 +859,9 @@
     display: inline-flex;
   }
 
+                                                                .site-header {
+                                                                  --brand-title-base: 1rem;
+                                                                }
   .site-header.is-open .nav-links {
     display: flex;
     position: absolute;
@@ -826,6 +889,11 @@
     width: min(100vw - 1rem, 1240px);
   }
 
+                                                                .site-header {
+                                                                  --header-min-height-base: 72px;
+                                                                  --brand-mark-base: 38px;
+                                                                  --brand-title-base: 0.95rem;
+                                                                }
   .hero-copy h1 {
     max-width: 10ch;
   }
@@ -838,6 +906,15 @@
   }
 }
 
+@media (max-width: 425px) {
+  .brand-name {
+    font-size: calc(var(--brand-title-base) * var(--header-scale) * 0.75);
+  }
+
+  .site-header.is-scrolled .brand-name {
+    font-size: calc(var(--brand-title-base) * 2 * 0.75);
+  }
+}
 
 .hero-copy .highlight {
   color: var(--brand-yellow);
@@ -1712,14 +1789,21 @@
     align-items: stretch;
   }
 
-  .nav-item,
-  .has-submenu {
+                                                                .hero-copy h1 {
+                                                                  max-width: 90%;
+                                                                }
+                                                                }
+                                
+                                                                @media (max-width: 840px) {
+                                
+                                                                  .site-header.is-open .nav-item,
+                                                                  .site-header.is-open .has-submenu {
     width: 100%;
     flex-direction: column;
     align-items: stretch;
   }
 
-  .has-submenu .submenu {
+                                                                .site-header.is-open .has-submenu .submenu {
     position: static;
     min-width: 0;
     margin-top: 0.5rem;
@@ -1731,6 +1815,11 @@
   }
 }
 
+@media (min-width: 425px) and (max-width: 768px) {
+  .site-header {
+    --brand-title-base: 0.82rem;
+  }
+}
 .section-tight-top {
   padding-top: 0.25rem !important;
 }
