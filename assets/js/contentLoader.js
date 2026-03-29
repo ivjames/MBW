@@ -1,7 +1,7 @@
 import { resolveRoute } from './router.js';
 
 export async function loadJSON(path) {
-  const res = await fetch(path);
+  const res = await fetch(path, { credentials: 'include' });
 
   if (!res.ok) {
     throw new Error(`Failed to load ${path} (${res.status})`);
