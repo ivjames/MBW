@@ -1124,13 +1124,20 @@
     font-size: 0;
     line-height: 1;
     flex: 0 0 46px;
+    justify-content: center;
+      align-items: center;
+      gap: 0;
   }
 
   .site-header .header-actions .header-contact-button::before {
     content: "\f095";
+    display: block;
+      width: 1em;
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 0.98rem;
+    line-height: 1;
+      text-align: center;
     color: var(--text-dark);
   }
 }
