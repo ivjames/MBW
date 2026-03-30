@@ -75,7 +75,7 @@ export function Navbar({ nav, currentPage }) {
   const actions = createElement('div', {
     className: 'header-actions',
     children: [
-      Button({ label: 'Book a Call', href: '/contact', variant: 'primary' }),
+      Button({ label: 'Book a Call', href: '/contact', variant: 'primary', className: 'header-contact-button' }),
       createElement('button', {
         className: 'mobile-toggle',
         attrs: {
