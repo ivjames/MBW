@@ -1063,6 +1063,11 @@
     flex-direction: column;
     align-items: flex-start;
     box-shadow: var(--shadow-2);
+    max-height: calc(100vh - 7rem);
+      max-height: calc(100dvh - 7rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
   }
 
   .header-inner {
