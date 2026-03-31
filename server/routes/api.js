@@ -65,7 +65,7 @@ apiRouter.get('/site', (_req, res) => {
     res.json({
         company: {
             name: 'Buzzworthy',
-            email: 'maurice@marketingbuzzworthy.com',
+            email: 'hello@example.com',
             phone: '1-800-123-4567',
             supportPhone: '1-800-123-4569',
             addressLines: ['2231 Sycamore Lake Road', 'Green Bay, WI 54304']
@@ -273,7 +273,7 @@ apiRouter.get('/works', (_req, res) => {
             eyebrow: 'Selected work',
             title: 'Previous projects, presented as a browsable gallery.',
             lead: 'Use this page to show recent work, visual direction, project categories, and short business context without forcing users into a heavy case-study flow.',
-            image: 'https://picsum.photos/seed/deepdigital-works-hero/467/300.webp'
+            image: 'https://picsum.photos/seed/agency-works-hero/467/300.webp'
         },
         intro: {
             title: 'Interactive project gallery',
