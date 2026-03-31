@@ -9,7 +9,7 @@ export function ServicesPage(data = {}) {
     children: [
       PageHero({
         ...data.hero,
-        image: data.hero?.image || 'https://picsum.photos/seed/deepdigital-services/1600/1000.webp'
+        image: data.hero?.image || 'https://picsum.photos/seed/agency-services/1600/1000.webp'
       }),
 
       createElement('section', {

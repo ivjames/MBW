@@ -779,13 +779,13 @@ if (!db.prepare('SELECT 1 FROM works LIMIT 1').get()) {
             title: 'NorthPeak Legal',
             category: 'Web Design',
             summary: 'Service-page redesign focused on trust, clarity, and consultation conversion.',
-            hero_image: 'https://picsum.photos/seed/deepdigital-work-legal/1600/1000.webp',
+            hero_image: 'https://picsum.photos/seed/agency-work-legal/1600/1000.webp',
             metrics_json: JSON.stringify(['+41% qualified leads', '+28% consult bookings']),
             content_json: JSON.stringify([
                 { type: 'paragraph', text: 'NorthPeak Legal needed a cleaner digital presence that made complex services easier to understand and easier to trust.' },
                 { type: 'heading', text: 'Project Focus' },
                 { type: 'paragraph', text: 'We rebuilt the service architecture, simplified decision paths, and aligned messaging around consultation intent.' },
-                { type: 'image', src: 'https://picsum.photos/seed/deepdigital-work-legal-detail/1400/900.webp', alt: 'Legal project screen', caption: 'A tighter structure improved readability and trust.' },
+                { type: 'image', src: 'https://picsum.photos/seed/agency-work-legal-detail/1400/900.webp', alt: 'Legal project screen', caption: 'A tighter structure improved readability and trust.' },
                 { type: 'heading', text: 'Outcome' },
                 { type: 'paragraph', text: 'The result was a cleaner consultation funnel, stronger content hierarchy, and a site that felt more aligned with the quality of the firm.' }
             ])
@@ -794,13 +794,13 @@ if (!db.prepare('SELECT 1 FROM works LIMIT 1').get()) {
             title: 'MetricForge',
             category: 'Development',
             summary: 'Modular marketing site rebuild with cleaner product story and stronger user flow.',
-            hero_image: 'https://picsum.photos/seed/deepdigital-work-saas/1600/1000.webp',
+            hero_image: 'https://picsum.photos/seed/agency-work-saas/1600/1000.webp',
             metrics_json: JSON.stringify(['+52% demo requests', '+33% activation rate']),
             content_json: JSON.stringify([
                 { type: 'paragraph', text: 'MetricForge had a strong product but a fragmented marketing surface that made positioning harder than it needed to be.' },
                 { type: 'heading', text: 'What We Changed' },
                 { type: 'paragraph', text: 'We rebuilt the page system around reusable modules, clearer segmentation, and stronger product-to-action flows.' },
-                { type: 'image', src: 'https://picsum.photos/seed/deepdigital-work-saas-detail/1400/900.webp', alt: 'SaaS project screen', caption: 'Reusable modules made future expansion easier.' },
+                { type: 'image', src: 'https://picsum.photos/seed/agency-work-saas-detail/1400/900.webp', alt: 'SaaS project screen', caption: 'Reusable modules made future expansion easier.' },
                 { type: 'heading', text: 'Outcome' },
                 { type: 'paragraph', text: 'The resulting build was easier to extend, easier to maintain, and more effective at moving visitors toward demos.' }
             ])
@@ -809,13 +809,13 @@ if (!db.prepare('SELECT 1 FROM works LIMIT 1').get()) {
             title: 'BlueHarbor Systems',
             category: 'Marketing',
             summary: 'Campaign landing pages and message cleanup for an industrial services brand.',
-            hero_image: 'https://picsum.photos/seed/deepdigital-work-industrial/1600/1000.webp',
+            hero_image: 'https://picsum.photos/seed/agency-work-industrial/1600/1000.webp',
             metrics_json: JSON.stringify(['+31% quote requests', '-17% drop-off rate']),
             content_json: JSON.stringify([
                 { type: 'paragraph', text: 'BlueHarbor Systems needed campaign pages that translated technical offerings into a clearer buying story.' },
                 { type: 'heading', text: 'Execution' },
                 { type: 'paragraph', text: 'We aligned campaign message structure, landing page hierarchy, and follow-up CTA placement around buyer intent.' },
-                { type: 'image', src: 'https://picsum.photos/seed/deepdigital-work-industrial-detail/1400/900.webp', alt: 'Industrial project screen', caption: 'Cleaner hierarchy reduced friction in technical decision flows.' },
+                { type: 'image', src: 'https://picsum.photos/seed/agency-work-industrial-detail/1400/900.webp', alt: 'Industrial project screen', caption: 'Cleaner hierarchy reduced friction in technical decision flows.' },
                 { type: 'heading', text: 'Outcome' },
                 { type: 'paragraph', text: 'The campaign system became easier to scale and produced stronger quote-request behavior from qualified visitors.' }
             ])
@@ -824,13 +824,13 @@ if (!db.prepare('SELECT 1 FROM works LIMIT 1').get()) {
             title: 'Aster Advisory',
             category: 'Branding',
             summary: 'Brand system refresh with tighter visual language and stronger executive positioning.',
-            hero_image: 'https://picsum.photos/seed/deepdigital-work-brand/1600/1000.webp',
+            hero_image: 'https://picsum.photos/seed/agency-work-brand/1600/1000.webp',
             metrics_json: JSON.stringify(['Brand refresh', 'Guideline system']),
             content_json: JSON.stringify([
                 { type: 'paragraph', text: 'Aster Advisory needed a sharper visual system and more confident executive-facing positioning.' },
                 { type: 'heading', text: 'Brand Direction' },
                 { type: 'paragraph', text: 'We refined typography, tone, spacing, and core identity rules into a more coherent brand system.' },
-                { type: 'image', src: 'https://picsum.photos/seed/deepdigital-work-brand-detail/1400/900.webp', alt: 'Brand project screen', caption: 'A stronger identity system improved consistency across touchpoints.' },
+                { type: 'image', src: 'https://picsum.photos/seed/agency-work-brand-detail/1400/900.webp', alt: 'Brand project screen', caption: 'A stronger identity system improved consistency across touchpoints.' },
                 { type: 'heading', text: 'Outcome' },
                 { type: 'paragraph', text: 'The refresh gave the firm a more controlled, polished, and scalable presentation across the site and related materials.' }
             ])
@@ -839,13 +839,13 @@ if (!db.prepare('SELECT 1 FROM works LIMIT 1').get()) {
             title: 'HarborCart',
             category: 'Ecommerce',
             summary: 'Ecommerce UX refresh focused on product discovery and checkout simplification.',
-            hero_image: 'https://picsum.photos/seed/deepdigital-work-ecommerce/1600/1000.webp',
+            hero_image: 'https://picsum.photos/seed/agency-work-ecommerce/1600/1000.webp',
             metrics_json: JSON.stringify(['Higher AOV', 'Cleaner navigation']),
             content_json: JSON.stringify([
                 { type: 'paragraph', text: 'HarborCart needed a storefront that felt easier to browse and easier to buy from.' },
                 { type: 'heading', text: 'UX Improvements' },
                 { type: 'paragraph', text: 'We reorganized navigation, clarified product-page hierarchy, and reduced checkout friction.' },
-                { type: 'image', src: 'https://picsum.photos/seed/deepdigital-work-ecommerce-detail/1400/900.webp', alt: 'Ecommerce project screen', caption: 'Improved product discovery supported stronger shopping behavior.' },
+                { type: 'image', src: 'https://picsum.photos/seed/agency-work-ecommerce-detail/1400/900.webp', alt: 'Ecommerce project screen', caption: 'Improved product discovery supported stronger shopping behavior.' },
                 { type: 'heading', text: 'Outcome' },
                 { type: 'paragraph', text: 'The new experience supported clearer browsing paths and stronger commercial performance.' }
             ])
@@ -854,13 +854,13 @@ if (!db.prepare('SELECT 1 FROM works LIMIT 1').get()) {
             title: 'SignalRank',
             category: 'SEO',
             summary: 'SEO structure and content improvements to support discoverability and ranking.',
-            hero_image: 'https://picsum.photos/seed/deepdigital-work-seo/1600/1000.webp',
+            hero_image: 'https://picsum.photos/seed/agency-work-seo/1600/1000.webp',
             metrics_json: JSON.stringify(['Technical cleanup', 'Content structure']),
             content_json: JSON.stringify([
                 { type: 'paragraph', text: 'SignalRank needed a content and structure cleanup that made the site easier for users and search engines to understand.' },
                 { type: 'heading', text: 'Technical + Content Work' },
                 { type: 'paragraph', text: 'We tightened heading hierarchy, internal linking, metadata discipline, and page-level content structure.' },
-                { type: 'image', src: 'https://picsum.photos/seed/deepdigital-work-seo-detail/1400/900.webp', alt: 'SEO project screen', caption: 'Better structure supported both crawlability and readability.' },
+                { type: 'image', src: 'https://picsum.photos/seed/agency-work-seo-detail/1400/900.webp', alt: 'SEO project screen', caption: 'Better structure supported both crawlability and readability.' },
                 { type: 'heading', text: 'Outcome' },
                 { type: 'paragraph', text: 'The site became more coherent, more indexable, and easier to expand with future content.' }
             ])

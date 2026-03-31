@@ -65,7 +65,7 @@ function importAbout() {
         title: 'About Us',
         pageType: 'standard',
         seoTitle: 'About Us',
-        seoDescription: 'About DeepDigital'
+        seoDescription: 'About Us'
     });
 
     let sort = 10;
@@ -74,7 +74,7 @@ function importAbout() {
         eyebrow: 'About Us',
         title: 'Getting online is easy. Succeeding online is a different story.',
         lead: 'We build web design, marketing, and branding systems that do more than look modern. They clarify the offer, support trust, and help turn attention into qualified leads.',
-        image: 'https://picsum.photos/seed/deepdigital-about-main/467/300.webp',
+        image: 'https://picsum.photos/seed/agency-about-main/467/300.webp',
         meta: ['Web Design', 'Marketing', 'Branding'],
         actions: [
             { label: 'Book a Call', href: '/contact', variant: 'primary' },
@@ -186,7 +186,7 @@ function importAllServicePages() {
         slug: 'marketing',
         title: 'Marketing',
         description: 'We use strategic marketing tactics that have been proven to work. But strategy only matters when it is tied to the right audience, the right offer, and a system that can turn attention into qualified leads.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-marketing/467/300.webp',
+        heroImage: 'https://picsum.photos/seed/agency-marketing/467/300.webp',
         mainItems: [
             {
                 title: 'Campaign Strategy',
@@ -226,7 +226,7 @@ function importAllServicePages() {
         slug: 'development',
         title: 'Development',
         description: 'Custom programming for the most complex functions you can think of. We build the systems, modules, and integrations that remove friction from your operations and make the site easier to grow.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-development/467/300.webp',
+        heroImage: 'https://picsum.photos/seed/agency-development/467/300.webp',
         mainItems: [
             {
                 title: 'Custom Features',
@@ -266,7 +266,7 @@ function importAllServicePages() {
         slug: 'web-design',
         title: 'Web Design',
         description: 'Powerful web design should do more than look modern. It should make your business easier to understand, easier to trust, and easier to choose.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-web-design/467/300.webp',
+        heroImage: 'https://picsum.photos/seed/agency-web-design/467/300.webp',
         mainItems: [
             {
                 title: 'Conversion-First Design',
@@ -306,7 +306,7 @@ function importAllServicePages() {
         slug: 'seo-optimisation',
         title: 'SEO Optimisation',
         description: 'Optimizing web design to rank well is not an afterthought. It starts with structure, clarity, crawlability, and content that supports the way real users search.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-seo/467/300.webp',
+        heroImage: 'https://picsum.photos/seed/agency-seo/467/300.webp',
         mainItems: [
             {
                 title: 'Technical SEO Foundations',
@@ -346,7 +346,7 @@ function importAllServicePages() {
         slug: 'ecommerce',
         title: 'Ecommerce',
         description: 'We build online stores on flexible, modular systems that make it easier to grow the catalog, improve product discovery, and reduce purchase friction over time.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-ecommerce/467/300.webp',
+        heroImage: 'https://picsum.photos/seed/agency-ecommerce/467/300.webp',
         mainItems: [
             {
                 title: 'Scalable Storefront Structure',
@@ -386,7 +386,7 @@ function importAllServicePages() {
         slug: 'branding',
         title: 'Branding',
         description: 'A solid brand strategy, logo system, and set of guidelines make it easier to be recognized, remembered, and trusted across every touchpoint.',
-        heroImage: 'https://picsum.photos/seed/deepdigital-branding/467/300.webp',
+        heroImage: 'https://picsum.photos/seed/agency-branding/467/300.webp',
         mainItems: [
             {
                 title: 'Brand Strategy',
@@ -689,7 +689,7 @@ function upsertPost({
     title,
     excerpt,
     coverImage,
-    author = 'DeepDigital',
+    author = 'Agency',
     status = 'published',
     content = []
 }) {
