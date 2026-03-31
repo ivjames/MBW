@@ -1,0 +1,333 @@
+/* ============================================================
+   DESIGN SPIKE: BOLD & COLORFUL REFRESH
+   
+   This file contains experimental design tokens and component
+   overrides for a radically refreshed visual direction.
+   
+   To enable: Add data-theme="spike" to <html> or use theme switcher
+   To disable: Remove data-theme="spike" or switch back to default
+   ============================================================ */
+
+/* =================
+   1. TOKEN OVERRIDES
+   ================= */
+
+:root[data-theme="spike"] {
+    /* NEW COLOR PALETTE */
+    --bg: #0f1626;
+    /* Richer navy instead of pure black */
+    --bg-elevated: #1a1f3a;
+    /* Elevated navy with depth */
+    --surface-1: rgba(26, 31, 58, 0.95);
+    --surface-2: rgba(35, 42, 76, 0.98);
+    --surface-3: rgba(45, 54, 90, 0.99);
+    --surface-solid: #15192e;
+
+    /* BRAND COLORS - VIBRANT, SATURATED */
+    --brand-primary: #ff006e;
+    /* Hot magenta — primary accent */
+    --brand-cyan: #00f0ff;
+    /* Electric teal — secondary */
+    --brand-lime: #00ff88;
+    /* Lime green — accent/success hint */
+    --brand-orange: #ff6b35;
+    /* Hot orange — warm accent */
+
+    /* Backwards compat — remap old color vars */
+    --brand-yellow: #ffdd00;
+    /* Brighter yellow */
+    --brand-yellow-soft: rgba(255, 221, 0, 0.18);
+    --brand-yellow-glow: rgba(255, 221, 0, 0.32);
+
+    --brand-blue: #00f0ff;
+    /* Remapped to cyan */
+    --brand-blue-soft: rgba(0, 240, 255, 0.12);
+
+    --brand-purple: #d946ef;
+    /* More saturated purple */
+    --brand-purple-soft: rgba(217, 70, 239, 0.14);
+
+    /* TEXT */
+    --text-1: #ffffff;
+    /* Pure white for max contrast */
+    --text-2: #e8ecf8;
+    /* Softer white */
+    --text-3: #a8b0d8;
+    /* Muted blue-gray */
+    --text-dark: #0f1626;
+    /* Match background for light theme */
+
+    /* SURFACE & LINES */
+    --surface-glass-bg: linear-gradient(180deg, rgba(0, 240, 255, 0.06), rgba(255, 0, 110, 0.04));
+    --line-soft: rgba(0, 240, 255, 0.14);
+    /* Cyan-tinted lines */
+    --line-strong: rgba(0, 240, 255, 0.28);
+
+    /* STATUS COLORS */
+    --success: #00ff88;
+    /* Bright lime green */
+    --danger: #ff3366;
+    /* Bright magenta-red */
+
+    /* SHADOWS & GLOWS */
+    --shadow-1: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --shadow-2: 0 30px 90px rgba(0, 0, 0, 0.65);
+
+    --glow-yellow: 0 0 0 1px rgba(255, 221, 0, 0.2), 0 0 32px rgba(255, 221, 0, 0.16);
+    --glow-blue: 0 0 0 1px rgba(0, 240, 255, 0.24), 0 0 32px rgba(0, 240, 255, 0.18);
+    --glow-purple: 0 0 0 1px rgba(217, 70, 239, 0.22), 0 0 32px rgba(217, 70, 239, 0.16);
+
+    /* UTILITY */
+    --eyebrow-bg: rgba(0, 240, 255, 0.08);
+    /* Cyan tint */
+    --section-divider-color: rgba(0, 240, 255, 0.18);
+}
+
+/* =================
+   2. COMPONENT OVERHAULS
+   ================= */
+
+/* HEADER & NAVIGATION */
+:root[data-theme="spike"] .site-header {
+    background: linear-gradient(135deg, #0f1626 0%, #1a1f3a 100%);
+    border-bottom: 2px solid var(--brand-cyan);
+    box-shadow: 0 4px 24px rgba(0, 240, 255, 0.08);
+}
+
+:root[data-theme="spike"] .site-header .nav-links a {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+:root[data-theme="spike"] .site-header .nav-links a::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--brand-primary);
+    transition: width 0.3s ease;
+}
+
+:root[data-theme="spike"] .site-header .nav-links a:hover::after {
+    width: 100%;
+}
+
+/* CTA BUTTON - MORE AGGRESSIVE */
+:root[data-theme="spike"] .site-header .header-actions .button {
+    background: linear-gradient(135deg, var(--brand-primary), #ff1e5e);
+    border: none;
+    color: #ffffff;
+    font-weight: 700;
+    padding: var(--space-4) var(--space-6);
+    min-height: 48px;
+    box-shadow: 0 8px 24px rgba(255, 0, 110, 0.28);
+    transition: all 0.3s ease;
+}
+
+:root[data-theme="spike"] .site-header .header-actions .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(255, 0, 110, 0.36);
+}
+
+:root[data-theme="spike"] .site-header .header-actions .button:active {
+    transform: translateY(0);
+}
+
+/* HERO SECTION - ASYMMETRIC ZONES */
+:root[data-theme="spike"] .hero-container {
+    position: relative;
+    overflow: hidden;
+}
+
+:root[data-theme="spike"] .hero-shell {
+    position: relative;
+    z-index: 2;
+}
+
+/* Gradient accent bar behind hero visual */
+:root[data-theme="spike"] .hero-visual::before {
+    content: "";
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 120%;
+    height: 120%;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(255, 0, 110, 0.08), rgba(0, 255, 136, 0.08));
+    border-radius: 40% 60%;
+    z-index: -1;
+    animation: spadGradientShift 8s ease-in-out infinite;
+}
+
+@keyframes spadGradientShift {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(6deg);
+    }
+}
+
+/* SECTION DIVIDERS - ACCENT BANDS */
+:root[data-theme="spike"] .site-header::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand-cyan), transparent, var(--brand-primary));
+    z-index: -1;
+}
+
+/* CARDS - COLORED LEFT BORDER */
+:root[data-theme="spike"] .card,
+:root[data-theme="spike"] [class*="card"],
+:root[data-theme="spike"] .dashboard-grid>* {
+    border-left: 4px solid var(--brand-cyan);
+    background: var(--surface-2);
+    box-shadow: 0 8px 32px rgba(0, 240, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+:root[data-theme="spike"] .card:hover,
+:root[data-theme="spike"] [class*="card"]:hover,
+:root[data-theme="spike"] .dashboard-grid>*:hover {
+    border-left-color: var(--brand-primary);
+    transform: translateX(4px);
+    box-shadow: 0 12px 48px rgba(255, 0, 110, 0.12);
+}
+
+/* Alternate border colors for visual depth */
+:root[data-theme="spike"] .card:nth-child(3n+1) {
+    border-left-color: var(--brand-primary);
+}
+
+:root[data-theme="spike"] .card:nth-child(3n+2) {
+    border-left-color: var(--brand-cyan);
+}
+
+:root[data-theme="spike"] .card:nth-child(3n) {
+    border-left-color: var(--brand-lime);
+}
+
+/* BUTTONS - BOLDER */
+:root[data-theme="spike"] button,
+:root[data-theme="spike"] .button {
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    border: 1px solid transparent;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+:root[data-theme="spike"] button:hover,
+:root[data-theme="spike"] .button:hover {
+    transform: scale(1.04);
+}
+
+/* SECTION TITLES - MORE AGGRESSIVE */
+:root[data-theme="spike"] h2,
+:root[data-theme="spike"] h3 {
+    letter-spacing: -0.8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.92em;
+}
+
+/* Add accent color bars above sections */
+:root[data-theme="spike"] [class*="section"]>h2::before {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--brand-primary), var(--brand-cyan));
+    margin-bottom: var(--space-4);
+    border-radius: 2px;
+}
+
+/* =================
+   3. FORM & INPUT OVERHAUL
+   ================= */
+
+:root[data-theme="spike"] input,
+:root[data-theme="spike"] textarea,
+:root[data-theme="spike"] select {
+    border: 2px solid var(--line-strong);
+    background: var(--surface-1);
+    color: var(--text-1);
+    transition: all 0.3s ease;
+}
+
+:root[data-theme="spike"] input:focus,
+:root[data-theme="spike"] textarea:focus,
+:root[data-theme="spike"] select:focus {
+    border-color: var(--brand-cyan);
+    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.12);
+    background: var(--surface-2);
+}
+
+/* =================
+   4. RESPONSIVE TWEAKS
+   ================= */
+
+/* Adjust section padding for breathing room */
+:root[data-theme="spike"] {
+    --section-pad: clamp(5rem, 4rem + 3vw, 8rem);
+}
+
+/* Larger gaps between grid items */
+:root[data-theme="spike"] .dashboard-grid,
+:root[data-theme="spike"] [class*="grid"] {
+    gap: var(--space-8);
+}
+
+/* =================
+   5. ACCESSIBILITY & CONTRAST
+   ================= */
+
+/* Ensure all text meets WCAG AA (4.5:1) */
+:root[data-theme="spike"] body {
+    color: var(--text-1);
+}
+
+:root[data-theme="spike"] .text-muted,
+:root[data-theme="spike"] .text-secondary {
+    color: var(--text-2);
+}
+
+/* =================
+   6. DARK MODE GLOW EFFECTS (Optional Enhancement)
+   ================= */
+
+:root[data-theme="spike"] .feature-grid>* {
+    position: relative;
+}
+
+:root[data-theme="spike"] .feature-grid>*::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background: radial-gradient(circle at center, rgba(0, 240, 255, 0.08) 0%, transparent 100%);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+:root[data-theme="spike"] .feature-grid>*:hover::before {
+    opacity: 1;
+}
+
+/* ============================================================
+   END SPIKE FILE
+   
+   To test: Add `data-theme="spike"` to the <html> tag
+   To compare: Remove the attribute to see original design
+   ============================================================ */
