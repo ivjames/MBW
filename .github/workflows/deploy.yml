@@ -22,5 +22,5 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no user@your-server.com 
           "
-          cd /path/to/your/app &&
-          ./deploy.sh"
+          cd /var/www/MBW/server &&
+          ./npm run deploy:prod -- mbw"
