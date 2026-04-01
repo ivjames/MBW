@@ -8,6 +8,7 @@
    To disable: Remove data-theme="spike" or switch back to default
    ============================================================ */
 
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&display=swap");
 /* =================
    1. TOKEN OVERRIDES
    ================= */
@@ -77,6 +78,9 @@
     --glow-blue: 0 0 0 1px rgba(0, 240, 255, 0.24), 0 0 32px rgba(0, 240, 255, 0.18);
     --glow-purple: 0 0 0 1px rgba(217, 70, 239, 0.22), 0 0 32px rgba(217, 70, 239, 0.16);
 
+    /* TYPOGRAPHY */
+        --font-display: "Archivo Narrow", "Inter", system-ui, sans-serif;
+        --font-body: "Inter", system-ui, sans-serif;
     /* UTILITY */
     --eyebrow-bg: rgba(0, 240, 255, 0.08);
     /* Cyan tint */
@@ -90,29 +94,38 @@
 /* HEADER & NAVIGATION */
 :root[data-theme="spike"] .site-header {
     background: linear-gradient(135deg, #0f1626 0%, #1a1f3a 100%);
-    border-bottom: 2px solid var(--brand-cyan);
-    box-shadow: 0 4px 24px rgba(0, 240, 255, 0.08);
+    border-bottom: none;
+        box-shadow: none;
 }
 
 :root[data-theme="spike"] .site-header .nav-links a {
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
     position: relative;
 }
 
 :root[data-theme="spike"] .site-header .nav-links a::after {
-    content: "";
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--brand-primary);
-    transition: width 0.3s ease;
+    display: none;
 }
 
-:root[data-theme="spike"] .site-header .nav-links a:hover::after {
-    width: 100%;
+:root[data-theme="spike"] .site-header .submenu,
+:root[data-theme="spike"] .site-header .has-submenu .submenu {
+    background: var(--surface-solid);
+    border: 1px solid var(--line-strong);
+    box-shadow: var(--shadow-1);
+    backdrop-filter: none;
+}
+
+:root[data-theme="spike"] .site-header .submenu a:hover,
+:root[data-theme="spike"] .site-header .submenu a:focus-visible,
+:root[data-theme="spike"] .site-header .submenu a[aria-current="page"] {
+    background: var(--surface-2);
+}
+
+@media (max-width: 980px) {
+    :root[data-theme="spike"] .site-header.is-open .has-submenu .submenu {
+        background: var(--surface-solid);
+    }
 }
 
 /* CTA BUTTON - MORE AGGRESSIVE */
@@ -173,57 +186,43 @@
     }
 }
 
-/* SECTION DIVIDERS - ACCENT BANDS */
-:root[data-theme="spike"] .site-header::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--brand-cyan), transparent, var(--brand-primary));
-    z-index: -1;
-}
+/* SECTION DIVIDERS - REMOVED FOR LINELESS DESIGN */
 
-/* CARDS - COLORED LEFT BORDER */
+/* CARDS - LINELESS, CLEAN SPACING */
 :root[data-theme="spike"] .card,
 :root[data-theme="spike"] [class*="card"],
 :root[data-theme="spike"] .dashboard-grid>* {
-    border-left: 4px solid var(--brand-cyan);
-    background: var(--surface-2);
-    box-shadow: 0 8px 32px rgba(0, 240, 255, 0.08);
+    border: none;
+        background: transparent;
+        box-shadow: none;
     transition: all 0.3s ease;
 }
 
 :root[data-theme="spike"] .card:hover,
 :root[data-theme="spike"] [class*="card"]:hover,
 :root[data-theme="spike"] .dashboard-grid>*:hover {
-    border-left-color: var(--brand-primary);
-    transform: translateX(4px);
-    box-shadow: 0 12px 48px rgba(255, 0, 110, 0.12);
+    border: none;
+        transform: none;
+        box-shadow: none;
+        background: rgba(0, 240, 255, 0.04);
 }
 
-/* Alternate border colors for visual depth */
-:root[data-theme="spike"] .card:nth-child(3n+1) {
-    border-left-color: var(--brand-primary);
-}
-
-:root[data-theme="spike"] .card:nth-child(3n+2) {
-    border-left-color: var(--brand-cyan);
-}
-
+/* Remove alternating border colors */
+:root[data-theme="spike"] .card:nth-child(3n+1),
+:root[data-theme="spike"] .card:nth-child(3n+2),
 :root[data-theme="spike"] .card:nth-child(3n) {
-    border-left-color: var(--brand-lime);
+    border: none;
 }
 
-/* BUTTONS - BOLDER */
+/* BUTTONS - LINEAR, NO RADIUS */
 :root[data-theme="spike"] button,
 :root[data-theme="spike"] .button {
     font-weight: 700;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     font-size: 0.85rem;
     border: 1px solid transparent;
+    border-radius: 0;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -232,24 +231,38 @@
     transform: scale(1.04);
 }
 
+/* Remove pill styling from all pill-shaped elements */
+:root[data-theme="spike"] [class*="pill"],
+:root[data-theme="spike"] .badge {
+    border-radius: 0 !important;
+}
 /* SECTION TITLES - MORE AGGRESSIVE */
 :root[data-theme="spike"] h2,
 :root[data-theme="spike"] h3 {
-    letter-spacing: -0.8px;
+    letter-spacing: -0.02em;
     font-weight: 800;
     text-transform: uppercase;
     font-size: 0.92em;
 }
 
-/* Add accent color bars above sections */
+:root[data-theme="spike"] .eyebrow,
+:root[data-theme="spike"] .button-chip,
+:root[data-theme="spike"] .token-chip,
+:root[data-theme="spike"] .metric-label,
+:root[data-theme="spike"] .chart-label {
+    letter-spacing: 0.14em;
+}
+
+:root[data-theme="spike"] .hero-copy h1 {
+    letter-spacing: -0.01em;
+    max-width: none;
+    width: 100%;
+    text-wrap: initial;
+}
+
+/* Remove accent bars from section titles */
 :root[data-theme="spike"] [class*="section"]>h2::before {
-    content: "";
-    display: block;
-    width: 48px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--brand-primary), var(--brand-cyan));
-    margin-bottom: var(--space-4);
-    border-radius: 2px;
+    display: none;
 }
 
 /* =================
@@ -259,8 +272,8 @@
 :root[data-theme="spike"] input,
 :root[data-theme="spike"] textarea,
 :root[data-theme="spike"] select {
-    border: 2px solid var(--line-strong);
-    background: var(--surface-1);
+    border: none;
+        background: transparent;
     color: var(--text-1);
     transition: all 0.3s ease;
 }
@@ -268,9 +281,31 @@
 :root[data-theme="spike"] input:focus,
 :root[data-theme="spike"] textarea:focus,
 :root[data-theme="spike"] select:focus {
-    border-color: var(--brand-cyan);
-    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.12);
-    background: var(--surface-2);
+    border: none;
+        box-shadow: none;
+        background: rgba(0, 240, 255, 0.04);
+    }
+    
+    /* Restore explicit field borders for the contact page form */
+    :root[data-theme="spike"] .contact-form {
+        border: 1px solid var(--line-strong);
+    }
+    
+    :root[data-theme="spike"] .contact-form .form-input,
+    :root[data-theme="spike"] .contact-form input,
+    :root[data-theme="spike"] .contact-form textarea,
+    :root[data-theme="spike"] .contact-form select {
+        border: 1px solid var(--line-strong);
+        background: var(--cmp-c012);
+    }
+    
+    :root[data-theme="spike"] .contact-form .form-input:focus,
+    :root[data-theme="spike"] .contact-form input:focus,
+    :root[data-theme="spike"] .contact-form textarea:focus,
+    :root[data-theme="spike"] .contact-form select:focus {
+        border: 1px solid var(--cmp-c050);
+        box-shadow: 0 0 0 3px var(--cmp-c052);
+        background: var(--cmp-c014);
 }
 
 /* =================

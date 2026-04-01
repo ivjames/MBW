@@ -46,7 +46,7 @@ export function BuildFromScratchPage(data = {}) {
                                     title: data.timelineTitle || 'How this site was delivered from zero.',
                                     lead: data.timelineLead || 'A practical, phased process from discovery to launch and iteration.'
                                 }),
-                                ProcessGrid(timeline)
+                                ProcessGrid(timeline, 'process-grid-3up')
                             ]
                         })
                     ]

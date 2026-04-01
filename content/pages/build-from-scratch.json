@@ -85,6 +85,11 @@
             "step": 5,
             "title": "QA, optimization, and launch",
             "copy": "Validated navigation, responsiveness, and accessibility while tightening asset delivery and deployment reliability."
+        },
+        {
+            "step": 6,
+            "title": "Post-launch measurement and iteration",
+            "copy": "Reviewed performance and behavior after launch, then prioritized incremental improvements based on real usage signals."
         }
     ],
     "cta": {

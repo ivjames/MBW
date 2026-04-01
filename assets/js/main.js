@@ -1,9 +1,12 @@
 import { loadSiteContent } from './contentLoader.js';
 import { resolveRoute, navigate } from './router.js';
-import { initTheme, toggleTheme } from './theme.js';
+import { initTheme, toggleTheme, toggleDesignMode } from './theme.js';
 import { Navbar } from './components/navbar.js';
 import { Footer } from './components/footer.js';
 import { resolvePageRenderer } from './renderers/renderPage.js';
+
+// Expose design mode toggle to console for easy testing
+window.toggleDesignMode = toggleDesignMode;
 
 const headerMount = document.getElementById('site-header');
 const appMount = document.getElementById('app');
