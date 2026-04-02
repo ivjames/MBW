@@ -45,6 +45,7 @@ npm run deploy:prod -- mbw
 What it does:
 - Installs dependencies with `npm ci`
 - Builds minified bundles (`assets/js/main.min.js` and `assets/css/app.min.css`)
+- Runs DB migrations (`npm run migrate`)
 - Restarts the service (`systemctl restart mbw` by default)
 
 If your service has a different name, pass it as the argument:

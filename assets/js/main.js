@@ -48,7 +48,7 @@ async function boot() {
 
   const nextHeader = Navbar({ nav: site.nav || [], currentPage: page });
   const nextPage = renderPage(pageContent, site);
-  const nextFooter = Footer(site.company || {});
+  const nextFooter = Footer(site || {});
 
   headerMount.innerHTML = '';
   headerMount.appendChild(nextHeader);

@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { CONTENT_PAGE_BOOTSTRAP } from './contentPageBootstrap.js';
+import { SITE_CONFIG_BOOTSTRAP } from './siteConfigBootstrap.js';
 import { db, nowIso, slugify } from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -82,7 +84,52 @@ CREATE TABLE IF NOT EXISTS contact_messages (
 );
 `);
 
+db.exec(`
+CREATE TABLE IF NOT EXISTS content_pages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug TEXT NOT NULL UNIQUE,
+    payload_json TEXT NOT NULL DEFAULT '{}',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+`);
+
+db.exec(`
+CREATE TABLE IF NOT EXISTS site_settings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    setting_key TEXT NOT NULL UNIQUE,
+    payload_json TEXT NOT NULL DEFAULT '{}',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+`);
+
 const now = nowIso();
+
+function seedContentPageBootstrap(slug, payload) {
+    const existing = db.prepare('SELECT id FROM content_pages WHERE slug = ?').get(slug);
+    if (existing) return;
+
+    try {
+        db.prepare(`
+          INSERT INTO content_pages (slug, payload_json, created_at, updated_at)
+          VALUES (?, ?, ?, ?)
+        `).run(slug, JSON.stringify(payload, null, 4), now, now);
+    } catch (error) {
+        console.error(`[migrate] failed seeding content page ${slug}:`, error.message);
+    }
+}
+
+Object.entries(CONTENT_PAGE_BOOTSTRAP).forEach(([slug, payload]) => {
+    seedContentPageBootstrap(slug, payload);
+});
+
+if (!db.prepare('SELECT id FROM site_settings WHERE setting_key = ?').get('default')) {
+    db.prepare(`
+            INSERT INTO site_settings (setting_key, payload_json, created_at, updated_at)
+            VALUES (?, ?, ?, ?)
+        `).run('default', JSON.stringify(SITE_CONFIG_BOOTSTRAP, null, 4), now, now);
+}
 
 if (!db.prepare('SELECT 1 FROM posts LIMIT 1').get()) {
     const insert = db.prepare(`

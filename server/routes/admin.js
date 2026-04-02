@@ -43,6 +43,605 @@ function normalizeAdminPageType(value = '') {
   return type === 'article' ? 'article' : 'service';
 }
 
+// ─── DB-backed content page editor ─────────────────────────────────────────
+
+const CONTENT_PAGE_SLUGS = new Set([
+  'home',
+  'contact',
+  'build-from-scratch',
+]);
+
+const ARRAY_FIELD_TYPES = new Set([
+  'ctas', 'metrics', 'chart-points', 'logos', 'services',
+  'cases', 'pillars', 'process', 'timeline', 'methods',
+  'nav-items', 'site-links', 'footer-columns'
+]);
+
+const REPEATER_SCHEMAS = {
+  ctas: [
+    { key: 'label', label: 'Label', type: 'text' },
+    { key: 'href', label: 'Href', type: 'text' },
+    { key: 'variant', label: 'Variant', type: 'select', options: ['primary', 'secondary', 'ghost'] },
+  ],
+  metrics: [
+    { key: 'label', label: 'Label', type: 'text' },
+    { key: 'value', label: 'Value', type: 'text' },
+    { key: 'trend', label: 'Trend', type: 'text' },
+  ],
+  'chart-points': [
+    { key: 'label', label: 'Label', type: 'text' },
+    { key: 'value', label: 'Value', type: 'number' },
+  ],
+  logos: [
+    { key: 'name', label: 'Name', type: 'text' },
+    { key: 'image', label: 'Image URL', type: 'text' },
+    { key: 'href', label: 'Href', type: 'text' },
+  ],
+  services: [
+    { key: 'title', label: 'Title', type: 'text' },
+    { key: 'href', label: 'Href', type: 'text' },
+    { key: 'icon', label: 'Icon (FA class)', type: 'text' },
+    { key: 'copy', label: 'Copy', type: 'textarea' },
+    { key: 'detail', label: 'Detail', type: 'textarea' },
+    { key: 'tokens', label: 'Tokens (comma-separated)', type: 'tokens' },
+  ],
+  cases: [
+    { key: 'badge', label: 'Badge', type: 'text' },
+    { key: 'slug', label: 'Slug', type: 'text' },
+    { key: 'title', label: 'Title', type: 'text' },
+    { key: 'body', label: 'Body', type: 'textarea' },
+    { key: 'image', label: 'Image URL', type: 'text' },
+    { key: 'stats', label: 'Stats JSON [{value,label}]', type: 'json' },
+  ],
+  pillars: [
+    { key: 'icon', label: 'Icon (FA class)', type: 'text' },
+    { key: 'title', label: 'Title', type: 'text' },
+    { key: 'copy', label: 'Copy', type: 'textarea' },
+    { key: 'tokens', label: 'Tokens (comma-separated)', type: 'tokens' },
+  ],
+  process: [
+    { key: 'step', label: 'Step', type: 'text' },
+    { key: 'title', label: 'Title', type: 'text' },
+    { key: 'copy', label: 'Copy', type: 'textarea' },
+  ],
+  timeline: [
+    { key: 'step', label: 'Step', type: 'text' },
+    { key: 'title', label: 'Title', type: 'text' },
+    { key: 'copy', label: 'Copy', type: 'textarea' },
+  ],
+  methods: [
+    { key: 'icon', label: 'Icon (FA class)', type: 'text' },
+    { key: 'title', label: 'Title', type: 'text' },
+    { key: 'copy', label: 'Copy', type: 'text' },
+  ],
+  'nav-items': [
+    { key: 'label', label: 'Label', type: 'text' },
+    { key: 'href', label: 'Href', type: 'text' },
+    { key: 'page', label: 'Page Key', type: 'text' },
+    { key: 'children', label: 'Children JSON [{label,href,page}]', type: 'json' },
+  ],
+  'site-links': [
+    { key: 'label', label: 'Label', type: 'text' },
+    { key: 'href', label: 'Href', type: 'text' },
+    { key: 'page', label: 'Page Key', type: 'text' },
+  ],
+  'footer-columns': [
+    { key: 'title', label: 'Title', type: 'text' },
+    { key: 'links', label: 'Links JSON [{label,href}]', type: 'json' },
+  ],
+};
+
+const SITE_SETTINGS_SCHEMA = {
+  sections: [
+    {
+      title: 'Company', fields: [
+        { path: 'company.name', label: 'Name', type: 'text' },
+        { path: 'company.email', label: 'Email', type: 'text' },
+        { path: 'company.phone', label: 'Phone', type: 'text' },
+        { path: 'company.supportPhone', label: 'Support Phone', type: 'text' },
+        { path: 'company.addressLines', label: 'Address Lines', type: 'strings', hint: 'One per line' },
+      ]
+    },
+    {
+      title: 'Navigation', fields: [
+        { path: 'nav', label: 'Primary Navigation', type: 'nav-items' },
+        { path: 'servicePills', label: 'Service Pills', type: 'site-links' },
+      ]
+    },
+    {
+      title: 'Footer', fields: [
+        { path: 'footer.tagline', label: 'Tagline', type: 'textarea' },
+        { path: 'footer.columns', label: 'Footer Columns', type: 'footer-columns' },
+      ]
+    },
+  ]
+};
+
+const PAGE_SCHEMAS = {
+  home: {
+    sections: [
+      {
+        title: 'Hero', fields: [
+          { path: 'hero.eyebrow', label: 'Eyebrow', type: 'text' },
+          { path: 'hero.title', label: 'Title', type: 'html', hint: 'Supports inline HTML' },
+          { path: 'hero.lead', label: 'Lead', type: 'textarea' },
+          { path: 'hero.image', label: 'Hero Image URL', type: 'text' },
+          { path: 'hero.quote.text', label: 'Quote Text', type: 'textarea' },
+          { path: 'hero.quote.author', label: 'Quote Author', type: 'text' },
+          { path: 'hero.ctas', label: 'CTAs', type: 'ctas' },
+          { path: 'hero.proof', label: 'Proof Points', type: 'strings', hint: 'One per line' },
+          { path: 'hero.metrics', label: 'Metrics', type: 'metrics' },
+          { path: 'hero.chart.label', label: 'Chart Label', type: 'text' },
+          { path: 'hero.chart.points', label: 'Chart Data Points', type: 'chart-points' },
+        ]
+      },
+      {
+        title: 'Services', fields: [
+          { path: 'services', label: 'Service Cards', type: 'services' },
+        ]
+      },
+      {
+        title: 'Logos', fields: [
+          { path: 'logos', label: 'Logo Band', type: 'logos' },
+        ]
+      },
+      {
+        title: 'Cases', fields: [
+          { path: 'cases', label: 'Case Studies', type: 'cases' },
+        ]
+      },
+      {
+        title: 'System', fields: [
+          { path: 'system.title', label: 'Title', type: 'text' },
+          { path: 'system.lead', label: 'Lead', type: 'textarea' },
+          { path: 'system.pillars', label: 'Pillars', type: 'pillars' },
+          { path: 'system.process', label: 'Process Steps', type: 'process' },
+        ]
+      },
+      {
+        title: 'Testimonial', fields: [
+          { path: 'testimonial.quote', label: 'Quote', type: 'textarea' },
+          { path: 'testimonial.author', label: 'Author', type: 'text' },
+        ]
+      },
+      {
+        title: 'Build Story', fields: [
+          { path: 'buildStory.eyebrow', label: 'Eyebrow', type: 'text' },
+          { path: 'buildStory.title', label: 'Title', type: 'text' },
+          { path: 'buildStory.lead', label: 'Lead', type: 'textarea' },
+          { path: 'buildStory.panelEyebrow', label: 'Panel Eyebrow', type: 'text' },
+          { path: 'buildStory.panelTitle', label: 'Panel Title', type: 'text' },
+          { path: 'buildStory.panelBody', label: 'Panel Body', type: 'textarea' },
+          { path: 'buildStory.linkLabel', label: 'Link Label', type: 'text' },
+          { path: 'buildStory.linkHref', label: 'Link Href', type: 'text' },
+        ]
+      },
+      {
+        title: 'CTA', fields: [
+          { path: 'cta.title', label: 'Title', type: 'text' },
+          { path: 'cta.body', label: 'Body', type: 'textarea' },
+          { path: 'cta.actions', label: 'Actions', type: 'ctas' },
+        ]
+      },
+    ]
+  },
+
+  contact: {
+    sections: [
+      {
+        title: 'Hero', fields: [
+          { path: 'hero.eyebrow', label: 'Eyebrow', type: 'text' },
+          { path: 'hero.title', label: 'Title', type: 'text' },
+          { path: 'hero.lead', label: 'Lead', type: 'textarea' },
+        ]
+      },
+      {
+        title: 'Contact Methods', fields: [
+          { path: 'methods', label: 'Methods', type: 'methods' },
+        ]
+      },
+      {
+        title: 'Image', fields: [
+          { path: 'image', label: 'Image URL', type: 'text' },
+        ]
+      },
+    ]
+  },
+
+  'build-from-scratch': {
+    sections: [
+      {
+        title: 'Hero', fields: [
+          { path: 'hero.eyebrow', label: 'Eyebrow', type: 'text' },
+          { path: 'hero.title', label: 'Title', type: 'text' },
+          { path: 'hero.lead', label: 'Lead', type: 'textarea' },
+          { path: 'hero.image', label: 'Image URL', type: 'text' },
+          { path: 'hero.meta', label: 'Meta Points', type: 'strings', hint: 'One per line' },
+          { path: 'hero.actions', label: 'Actions', type: 'ctas' },
+        ]
+      },
+      {
+        title: 'Reasons Section', fields: [
+          { path: 'reasonsEyebrow', label: 'Eyebrow', type: 'text' },
+          { path: 'reasonsTitle', label: 'Title', type: 'text' },
+          { path: 'reasonsLead', label: 'Lead', type: 'textarea' },
+          { path: 'reasons', label: 'Reasons', type: 'pillars' },
+        ]
+      },
+      {
+        title: 'Timeline Section', fields: [
+          { path: 'timelineEyebrow', label: 'Eyebrow', type: 'text' },
+          { path: 'timelineTitle', label: 'Title', type: 'text' },
+          { path: 'timelineLead', label: 'Lead', type: 'textarea' },
+          { path: 'timeline', label: 'Steps', type: 'timeline' },
+        ]
+      },
+      {
+        title: 'CTA', fields: [
+          { path: 'cta.eyebrow', label: 'Eyebrow', type: 'text' },
+          { path: 'cta.title', label: 'Title', type: 'text' },
+          { path: 'cta.body', label: 'Body', type: 'textarea' },
+          { path: 'cta.actions', label: 'Actions', type: 'ctas' },
+        ]
+      },
+    ]
+  },
+};
+
+function getPath(obj, dotPath) {
+  return dotPath.split('.').reduce((acc, k) => (acc != null ? acc[k] : undefined), obj);
+}
+
+function setPath(obj, dotPath, value) {
+  const keys = dotPath.split('.');
+  let cur = obj;
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (cur[keys[i]] == null || typeof cur[keys[i]] !== 'object') cur[keys[i]] = {};
+    cur = cur[keys[i]];
+  }
+  cur[keys[keys.length - 1]] = value;
+}
+
+function titleFromContentPage(slug, data) {
+  if (slug === 'home') return 'Home';
+  const heroTitle = String(data?.hero?.title || '').trim();
+  if (heroTitle) return heroTitle.replace(/<[^>]+>/g, '').trim();
+  return String(slug || '')
+    .split('-')
+    .map(s => s.charAt(0).toUpperCase() + s.slice(1))
+    .join(' ');
+}
+
+function upsertContentPageMirrorRow(slug, data) {
+  const now = nowIso();
+  const title = titleFromContentPage(slug, data);
+  const existing = db.prepare('SELECT id FROM pages WHERE slug = ?').get(slug);
+
+  if (existing) {
+    db.prepare(`
+      UPDATE pages
+      SET title = ?, updated_at = ?
+      WHERE id = ?
+    `).run(title, now, existing.id);
+    return;
+  }
+
+  db.prepare(`
+    INSERT INTO pages (slug, title, page_type, status, seo_title, seo_description, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    slug,
+    title,
+    'standard',
+    'published',
+    title,
+    '',
+    now,
+    now
+  );
+}
+
+function loadContentPagePayload(slug) {
+  const row = db.prepare('SELECT payload_json FROM content_pages WHERE slug = ?').get(slug);
+  if (!row) return {};
+  try {
+    const parsed = JSON.parse(row.payload_json || '{}');
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveContentPagePayload(slug, data) {
+  const now = nowIso();
+  const payload = JSON.stringify(data || {}, null, 4);
+  const existing = db.prepare('SELECT id FROM content_pages WHERE slug = ?').get(slug);
+
+  if (existing) {
+    db.prepare('UPDATE content_pages SET payload_json = ?, updated_at = ? WHERE id = ?')
+      .run(payload, now, existing.id);
+    return;
+  }
+
+  db.prepare('INSERT INTO content_pages (slug, payload_json, created_at, updated_at) VALUES (?, ?, ?, ?)')
+    .run(slug, payload, now, now);
+}
+
+function loadSiteSettings() {
+  const row = db.prepare('SELECT payload_json FROM site_settings WHERE setting_key = ?').get('default');
+  if (!row) return {};
+  try {
+    const parsed = JSON.parse(row.payload_json || '{}');
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveSiteSettings(data) {
+  const now = nowIso();
+  const payload = JSON.stringify(data || {}, null, 4);
+  const row = db.prepare('SELECT id FROM site_settings WHERE setting_key = ?').get('default');
+
+  if (row) {
+    db.prepare('UPDATE site_settings SET payload_json = ?, updated_at = ? WHERE id = ?')
+      .run(payload, now, row.id);
+    return;
+  }
+
+  db.prepare('INSERT INTO site_settings (setting_key, payload_json, created_at, updated_at) VALUES (?, ?, ?, ?)')
+    .run('default', payload, now, now);
+}
+
+function safeEmbedJson(val) {
+  return JSON.stringify(val)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026');
+}
+
+function blockEditorHtml(contentJson, fieldName) {
+  let blocks = [];
+  try { blocks = JSON.parse(contentJson || '[]'); } catch { blocks = []; }
+  if (!Array.isArray(blocks)) blocks = [];
+  const uid = fieldName.replace(/\W/g, '_');
+  const blocksEmbedded = safeEmbedJson(blocks);
+  return `<div class="form-field form-field-full">
+  <span class="form-label">Content Blocks</span>
+  <div class="block-editor" id="be_${uid}">
+    <div class="be-list" id="be_list_${uid}"></div>
+    <div class="be-toolbar">
+      <span class="be-toolbar-label">Add:</span>
+      <button type="button" class="btn be-add" data-beid="${uid}" data-type="paragraph">Paragraph</button>
+      <button type="button" class="btn be-add" data-beid="${uid}" data-type="heading">Heading</button>
+      <button type="button" class="btn be-add" data-beid="${uid}" data-type="subheading">Subheading</button>
+      <button type="button" class="btn be-add" data-beid="${uid}" data-type="quote">Quote</button>
+      <button type="button" class="btn be-add" data-beid="${uid}" data-type="list">List</button>
+      <button type="button" class="btn be-add" data-beid="${uid}" data-type="image">Image</button>
+    </div>
+    <textarea name="${esc(fieldName)}" id="be_hidden_${uid}" hidden></textarea>
+  </div>
+</div>
+<script>
+!function(){var UID='${uid}';
+var list=document.getElementById('be_list_'+UID);
+var hidden=document.getElementById('be_hidden_'+UID);
+var blocks=${blocksEmbedded};
+function ce(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fieldHtml(b){
+  if(b.type==='paragraph'||b.type==='heading'||b.type==='subheading'||b.type==='quote'){
+    return '<label class="form-field form-field-full"><span class="form-label">Text</span><textarea class="be-inp textarea-compact" data-key="text">'+ce(b.text||'')+'</textarea></label>';
+  }
+  if(b.type==='list'){
+    return '<label class="form-field form-field-full"><span class="form-label">Items (one per line)</span><textarea class="be-inp textarea-compact" data-key="items">'+ce((b.items||[]).join('\\n'))+'</textarea></label>';
+  }
+  if(b.type==='image'){
+    return '<label class="form-field form-field-full"><span class="form-label">Image URL</span><input class="be-inp" data-key="src" value="'+ce(b.src||'')+'" /></label>'+
+           '<label class="form-field"><span class="form-label">Alt text</span><input class="be-inp" data-key="alt" value="'+ce(b.alt||'')+'" /></label>'+
+           '<label class="form-field"><span class="form-label">Caption</span><input class="be-inp" data-key="caption" value="'+ce(b.caption||'')+'" /></label>';
+  }
+  return '';
+}
+function mkBlock(type){return type==='list'?{type:type,items:[]}:type==='image'?{type:type,src:'',alt:'',caption:''}:{type:type,text:''};}
+function sync(){hidden.value=JSON.stringify(blocks);}
+function render(){
+  list.innerHTML='';
+  blocks.forEach(function(b,i){
+    var el=document.createElement('div');
+    el.className='be-block';el.dataset.idx=i;
+    el.innerHTML='<div class="be-block-header"><span class="be-block-type">'+b.type+'</span><div class="actions">'+
+      (i>0?'<button type="button" class="btn be-mv" data-d="-1">&#8593;</button>':'')+
+      (i<blocks.length-1?'<button type="button" class="btn be-mv" data-d="1">&#8595;</button>':'')+
+      '<button type="button" class="btn btn-danger be-rm">&#x2715;</button></div></div>'+
+      '<div class="form-grid" style="gap:8px">'+fieldHtml(b)+'</div>';
+    list.appendChild(el);
+  });
+  sync();
+}
+list.addEventListener('input',function(e){
+  var el=e.target.closest('.be-block');if(!el)return;
+  var i=+el.dataset.idx;var k=e.target.dataset.key;if(!k)return;
+  blocks[i][k]=k==='items'?e.target.value.split('\\n'):e.target.value;
+  sync();
+});
+list.addEventListener('click',function(e){
+  var el=e.target.closest('.be-block');if(!el)return;
+  var i=+el.dataset.idx;
+  if(e.target.classList.contains('be-rm')){blocks.splice(i,1);render();}
+  else if(e.target.classList.contains('be-mv')){
+    var d=+e.target.dataset.d;var j=i+d;
+    if(j>=0&&j<blocks.length){var t=blocks[i];blocks[i]=blocks[j];blocks[j]=t;render();}
+  }
+});
+document.querySelectorAll('.be-add[data-beid="'+UID+'"]').forEach(function(btn){
+  btn.addEventListener('click',function(){blocks.push(mkBlock(btn.dataset.type));render();});
+});
+render();
+}();
+</script>`;
+}
+
+function repeaterHtml(field, items, itemSchema) {
+  const uid = field.path.replace(/\W/g, '_');
+  if (!Array.isArray(items)) items = [];
+  const itemsEmbedded = safeEmbedJson(items);
+  const schemaEmbedded = safeEmbedJson(itemSchema);
+  return `<div class="form-field form-field-full">
+  <div class="repeater-header">
+    <span class="form-label">${esc(field.label)}</span>
+    <button type="button" class="btn btn-primary" id="rp_add_${uid}">+ Add</button>
+  </div>
+  <div class="rp-list" id="rp_list_${uid}"></div>
+  <input type="hidden" name="${esc(field.path)}" id="rp_hidden_${uid}" />
+</div>
+<script>
+!function(){
+var UID='${uid}';
+var list=document.getElementById('rp_list_'+UID);
+var hidden=document.getElementById('rp_hidden_'+UID);
+var schema=${schemaEmbedded};
+var items=${itemsEmbedded};
+function ce(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function disp(v,t){if(t==='tokens')return Array.isArray(v)?v.join(', '):String(v||'');if(t==='json')return typeof v==='string'?v:JSON.stringify(v,null,2);return String(v==null?'':v);}
+function parse(v,t){if(t==='tokens')return v.split(',').map(function(s){return s.trim();}).filter(Boolean);if(t==='json'){try{return JSON.parse(v);}catch(e){return v;}}if(t==='number')return Number(v)||0;return v;}
+function itemLabel(item){return item.title||item.name||item.label||'';}
+function renderItem(item,idx){
+  var fields='';
+  schema.forEach(function(f){
+    var v=item[f.key];var d=disp(v,f.type);
+    if(f.type==='select'){
+      var opts=(f.options||[]).map(function(o){return '<option value="'+ce(o)+'"'+(o===v?' selected':'')+'>'+ce(o)+'</option>';}).join('');
+      fields+='<label class="form-field"><span class="form-label">'+ce(f.label)+'</span><select class="rp-inp" data-key="'+f.key+'" data-ftype="'+f.type+'">'+opts+'</select></label>';
+    } else if(f.type==='textarea'||f.type==='json'){
+      fields+='<label class="form-field form-field-full"><span class="form-label">'+ce(f.label)+'</span><textarea class="rp-inp textarea-compact" data-key="'+f.key+'" data-ftype="'+f.type+'">'+ce(d)+'</textarea></label>';
+    } else {
+      fields+='<label class="form-field"><span class="form-label">'+ce(f.label)+'</span><input class="rp-inp" data-key="'+f.key+'" data-ftype="'+f.type+'" value="'+ce(d)+'" /></label>';
+    }
+  });
+  var el=document.createElement('div');
+  el.className='rp-item';el.dataset.idx=idx;
+  el.innerHTML='<div class="rp-item-header"><span class="rp-item-label">'+(itemLabel(item)||'Item '+(idx+1))+'</span><div class="actions">'+
+    (idx>0?'<button type="button" class="btn rp-mv" data-d="-1">&#8593;</button>':'')+
+    (idx<items.length-1?'<button type="button" class="btn rp-mv" data-d="1">&#8595;</button>':'')+
+    '<button type="button" class="btn btn-danger rp-rm">&#x2715;</button></div></div>'+
+    '<div class="rp-fields">'+fields+'</div>';
+  return el;
+}
+function sync(){hidden.value=JSON.stringify(items);}
+function render(){
+  list.innerHTML='';
+  items.forEach(function(item,idx){list.appendChild(renderItem(item,idx));});
+  sync();
+}
+list.addEventListener('input',function(e){
+  var el=e.target.closest('.rp-item');if(!el)return;
+  var i=+el.dataset.idx;var k=e.target.dataset.key;var ft=e.target.dataset.ftype;if(!k)return;
+  items[i][k]=parse(e.target.value,ft);sync();
+});
+list.addEventListener('change',function(e){
+  var el=e.target.closest('.rp-item');if(!el)return;
+  var i=+el.dataset.idx;var k=e.target.dataset.key;var ft=e.target.dataset.ftype;if(!k)return;
+  items[i][k]=parse(e.target.value,ft);sync();
+});
+list.addEventListener('click',function(e){
+  var el=e.target.closest('.rp-item');if(!el)return;
+  var i=+el.dataset.idx;
+  if(e.target.classList.contains('rp-rm')){items.splice(i,1);render();}
+  else if(e.target.classList.contains('rp-mv')){
+    var d=+e.target.dataset.d;var j=i+d;
+    if(j>=0&&j<items.length){var t=items[i];items[i]=items[j];items[j]=t;render();}
+  }
+});
+document.getElementById('rp_add_'+UID).addEventListener('click',function(){
+  var ni={};
+  schema.forEach(function(f){if(f.type==='tokens'||f.type==='json')ni[f.key]=[];else if(f.type==='number')ni[f.key]=0;else ni[f.key]='';});
+  items.push(ni);render();
+});
+render();
+}();
+</script>`;
+}
+
+function renderFormField(field, data) {
+  const raw = getPath(data, field.path);
+  const value = raw ?? '';
+
+  if (field.type === 'text') {
+    return `<label class="form-field">
+      <span class="form-label">${esc(field.label)}</span>
+      <input name="${esc(field.path)}" value="${esc(String(value))}" />
+    </label>`;
+  }
+
+  if (field.type === 'html' || field.type === 'textarea') {
+    const hint = field.hint ? ` <span class="muted" style="font-size:11px">(${esc(field.hint)})</span>` : '';
+    return `<label class="form-field form-field-full">
+      <span class="form-label">${esc(field.label)}${hint}</span>
+      <textarea class="textarea-compact" name="${esc(field.path)}">${esc(String(value))}</textarea>
+    </label>`;
+  }
+
+  if (field.type === 'strings') {
+    const hint = field.hint ? ` <span class="muted" style="font-size:11px">(${esc(field.hint)})</span>` : '';
+    const display = Array.isArray(value) ? value.join('\n') : String(value);
+    return `<label class="form-field form-field-full">
+      <span class="form-label">${esc(field.label)}${hint}</span>
+      <textarea class="textarea-compact" name="${esc(field.path)}">${esc(display)}</textarea>
+    </label>`;
+  }
+
+  const schema = REPEATER_SCHEMAS[field.type];
+  if (schema) {
+    return repeaterHtml(field, Array.isArray(value) ? value : [], schema);
+  }
+
+  return `<label class="form-field">
+    <span class="form-label">${esc(field.label)}</span>
+    <input name="${esc(field.path)}" value="${esc(JSON.stringify(value) || '')}" />
+  </label>`;
+}
+
+function renderPageContentForm(slug, data) {
+  const schema = PAGE_SCHEMAS[slug];
+  if (!schema) return '<p class="muted">No schema defined for this page.</p>';
+
+  const sectionsHtml = schema.sections.map(s => `<details class="content-section" open>
+    <summary class="content-section-summary">${esc(s.title)}</summary>
+    <div class="content-section-body">
+      <div class="form-grid">
+        ${s.fields.map(f => renderFormField(f, data)).join('')}
+      </div>
+    </div>
+  </details>`).join('');
+
+  return `<form class="stack" method="post" action="/admin/content/${esc(slug)}">
+    ${sectionsHtml}
+    <div class="actions">
+      <button class="btn-primary" type="submit">Save</button>
+      <button type="button" class="btn" onclick="history.back()">Cancel</button>
+    </div>
+  </form>`;
+}
+
+function renderSiteSettingsForm(data) {
+  const sectionsHtml = SITE_SETTINGS_SCHEMA.sections.map(s => `<details class="content-section" open>
+    <summary class="content-section-summary">${esc(s.title)}</summary>
+    <div class="content-section-body">
+      <div class="form-grid">
+        ${s.fields.map(f => renderFormField(f, data)).join('')}
+      </div>
+    </div>
+  </details>`).join('');
+
+  return `<form class="stack" method="post" action="/admin/site">
+    ${sectionsHtml}
+    <div class="actions">
+      <button class="btn-primary" type="submit">Save</button>
+      <button type="button" class="btn" onclick="history.back()">Cancel</button>
+    </div>
+  </form>`;
+}
+
 function page(title, body) {
     return `<!DOCTYPE html>
 <html lang="en">
@@ -82,7 +681,29 @@ textarea{min-height:220px;resize:vertical;font-family:ui-monospace,SFMono-Regula
 .link-hint{font-size:12px;color:var(--muted)}
 @media (max-width:1100px){.dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tool-grid{grid-template-columns:1fr}}
 @media (max-width:900px){.grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}}
+/* Block editor */
+.block-editor{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}.be-list{display:flex;flex-direction:column;gap:8px}
+.be-toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding-top:10px;border-top:1px solid var(--line)}
+.be-toolbar-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-right:4px}
+.be-block{background:#080c12;border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.be-block-header{display:flex;justify-content:space-between;align-items:center}
+.be-block-type{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:700}
+/* Repeater */
+.repeater-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.rp-list{display:flex;flex-direction:column;gap:8px}
+.rp-item{background:#080c12;border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.rp-item-header{display:flex;justify-content:space-between;align-items:center}
+.rp-item-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.rp-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+/* Content sections */
+.content-section{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:rgba(17,23,34,.5)}
+.content-section-summary{padding:12px 16px;cursor:pointer;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.content-section-summary::-webkit-details-marker{display:none}
+.content-section-summary::after{content:'▾';color:var(--muted)}
+details[open] .content-section-summary::after{content:'▴'}
+.content-section-body{padding:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
 </style>
+
 </head>
 <body><div class="wrap">${body}</div></body></html>`;
 }
@@ -103,6 +724,8 @@ function shell(title, content) {
     <div class="grid">
       <aside class="sidebar stack">
         <a class="btn" href="/admin">Overview</a>
+        <a class="btn" href="/admin/site">Site Settings</a>
+        <a class="btn" href="/admin/content">Content Pages</a>
         <a class="btn" href="/admin/mailbox">Mailbox</a>
         <a class="btn" href="/admin/pages">Service Pages</a>
         <a class="btn" href="/admin/works">Portfolio Works</a>
@@ -128,7 +751,7 @@ function workForm(row = {}) {
       </select></label>
       <label class="form-field form-field-full"><span class="form-label">Summary</span><textarea class="textarea-compact" name="summary" placeholder="Summary">${esc(row.summary || '')}</textarea></label>
       <label class="form-field form-field-full"><span class="form-label">Metrics JSON</span><textarea class="textarea-compact" name="metrics_json">${esc(formatJsonText(row.metrics_json, '[]'))}</textarea></label>
-      <label class="form-field form-field-full"><span class="form-label">Content JSON</span><textarea name="content_json">${esc(formatJsonText(row.content_json, '[{"type":"paragraph","text":"Project summary"}]'))}</textarea></label>
+      ${blockEditorHtml(row.content_json || '[{"type":"paragraph","text":"Project summary"}]', 'content_json')}
     </div>
     <div class="actions">
       <button class="btn-primary" type="submit">Save</button>
@@ -280,7 +903,7 @@ function postForm(row = {}) {
         <option value="published" ${row.status === 'published' ? 'selected' : ''}>Published</option>
       </select></label>
       <label class="form-field form-field-full"><span class="form-label">Excerpt</span><textarea class="textarea-compact" name="excerpt" placeholder="Excerpt">${esc(row.excerpt || '')}</textarea></label>
-      <label class="form-field form-field-full"><span class="form-label">Content JSON</span><textarea name="content_json">${esc(formatJsonText(row.content_json, '[{"type":"paragraph","text":"Body copy"}]'))}</textarea></label>
+      ${blockEditorHtml(row.content_json || '[{"type":"paragraph","text":"Body copy"}]', 'content_json')}
     </div>
     <div class="actions">
       <button class="btn-primary" type="submit">Save</button>
@@ -549,7 +1172,7 @@ function articleForm(row = {}, topics = []) {
       </select></label>
       <label class="form-field form-field-full"><span class="form-label">Excerpt</span><textarea class="textarea-compact" name="excerpt" placeholder="Excerpt">${esc(row.excerpt || '')}</textarea></label>
       <label class="form-field form-field-full"><span class="form-label">Tags JSON</span><textarea class="textarea-compact" name="tags_json">${esc(formatJsonText(row.tags_json, '[]'))}</textarea></label>
-      <label class="form-field form-field-full"><span class="form-label">Content JSON</span><textarea name="content_json">${esc(formatJsonText(row.content_json, '[{"type":"paragraph","text":"Help article body"}]'))}</textarea></label>
+      ${blockEditorHtml(row.content_json || '[{"type":"paragraph","text":"Help article body"}]', 'content_json')}
     </div>
     <div class="actions">
       <button class="btn-primary" type="submit">Save</button>
@@ -1022,4 +1645,96 @@ adminRouter.get('/mailbox/:id', (req, res) => {
 adminRouter.get('/mailbox/:id/delete', (req, res) => {
   db.prepare('DELETE FROM contact_messages WHERE id = ?').run(req.params.id);
   res.redirect('/admin/mailbox');
+});
+
+adminRouter.get('/site', (_req, res) => {
+  const data = loadSiteSettings();
+  res.send(shell('Site Settings', `
+    <div class="top" style="margin:0">
+      <h2>Site Settings</h2>
+      <div class="muted">Editable site-wide company, navigation, and footer data</div>
+    </div>
+    ${renderSiteSettingsForm(data)}
+  `));
+});
+
+adminRouter.post('/site', (req, res) => {
+  const current = loadSiteSettings();
+  for (const section of SITE_SETTINGS_SCHEMA.sections) {
+    for (const field of section.fields) {
+      const raw = req.body[field.path];
+      if (raw === undefined) continue;
+      let value;
+      if (field.type === 'strings') {
+        value = String(raw || '').split('\n').map(s => s.trim()).filter(Boolean);
+      } else if (ARRAY_FIELD_TYPES.has(field.type)) {
+        try { value = JSON.parse(raw || '[]'); } catch { value = []; }
+      } else {
+        value = String(raw || '');
+      }
+      setPath(current, field.path, value);
+    }
+  }
+  saveSiteSettings(current);
+  res.redirect('/admin/site');
+});
+
+// ─── Content page editor routes ─────────────────────────────────────────────
+
+adminRouter.get('/content', (_req, res) => {
+  const rows = [...CONTENT_PAGE_SLUGS].map(slug => ({ slug }));
+  res.send(shell('Content Pages', `
+    <div class="top" style="margin:0">
+      <h2>Content Pages</h2>
+      <div class="muted">Edit JSON-driven page content stored in SQLite</div>
+    </div>
+    <table class="table">
+      <thead><tr><th>Page</th><th>Source</th><th></th></tr></thead>
+      <tbody>
+        ${rows.map(r => `<tr>
+          <td><strong>${esc(r.slug)}</strong></td>
+          <td><code>content_pages.payload_json</code></td>
+          <td><a class="btn" href="/admin/content/${esc(r.slug)}">Edit</a></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  `));
+});
+
+adminRouter.get('/content/:slug', (req, res) => {
+  const { slug } = req.params;
+  if (!CONTENT_PAGE_SLUGS.has(slug)) return res.status(404).send('Not found');
+  const data = loadContentPagePayload(slug);
+  res.send(shell(`Content: ${slug}`, `
+    <div class="top" style="margin:0">
+      <h2>${esc(slug)}</h2>
+      <div class="muted">SQLite table: content_pages</div>
+    </div>
+    ${renderPageContentForm(slug, data)}
+  `));
+});
+
+adminRouter.post('/content/:slug', (req, res) => {
+  const { slug } = req.params;
+  if (!CONTENT_PAGE_SLUGS.has(slug)) return res.status(404).send('Not found');
+  const current = loadContentPagePayload(slug);
+  const schema = PAGE_SCHEMAS[slug];
+  for (const section of schema.sections) {
+    for (const field of section.fields) {
+      const raw = req.body[field.path];
+      if (raw === undefined) continue;
+      let value;
+      if (field.type === 'strings') {
+        value = String(raw || '').split('\n').map(s => s.trim()).filter(Boolean);
+      } else if (ARRAY_FIELD_TYPES.has(field.type)) {
+        try { value = JSON.parse(raw || '[]'); } catch { value = []; }
+      } else {
+        value = String(raw || '');
+      }
+      setPath(current, field.path, value);
+    }
+  }
+  saveContentPagePayload(slug, current);
+  upsertContentPageMirrorRow(slug, current);
+  res.redirect(`/admin/content/${slug}`);
 });

@@ -52,14 +52,9 @@ export async function loadSiteContent(page) {
   }
 
   if (!pagePromise) {
-    const filePageMap = {
-      home: '/content/pages/home.json',
-      contact: '/content/pages/contact.json',
-      'build-from-scratch': '/content/pages/build-from-scratch.json'
-    };
-
-    const path = filePageMap[page] || filePageMap.home;
-    pagePromise = loadJSON(path);
+    const contentPageSlugs = new Set(['home', 'contact', 'build-from-scratch']);
+    const contentSlug = contentPageSlugs.has(page) ? page : 'home';
+    pagePromise = loadJSON(`/api/content-pages/${contentSlug}`);
   }
 
   const [site, pageContent] = await Promise.all([sitePromise, pagePromise]);

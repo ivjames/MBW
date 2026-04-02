@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { CONTENT_PAGE_BOOTSTRAP } from './contentPageBootstrap.js';
 import { db, nowIso, slugify } from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -474,7 +475,7 @@ function importWorks() {
 }
 
 function importHome() {
-    const data = readJSON('content/pages/home.json');
+    const data = CONTENT_PAGE_BOOTSTRAP.home;
     const slug = 'home';
 
     clearPageBySlug(slug);

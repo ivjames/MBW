@@ -1,6 +1,7 @@
 import express from 'express';
 import { db } from '../db.js';
 import { saveContactMessage } from '../mail.js';
+import { SITE_CONFIG_BOOTSTRAP } from '../siteConfigBootstrap.js';
 
 export const apiRouter = express.Router();
 
@@ -62,42 +63,13 @@ apiRouter.post('/contact', async (req, res) => {
 });
 
 apiRouter.get('/site', (_req, res) => {
-    res.json({
-        company: {
-            name: 'Buzzworthy',
-            email: 'maurice@marketingbuzzworthy.com',
-            phone: '1-800-123-4567',
-            supportPhone: '1-800-123-4569',
-            addressLines: ['2231 Sycamore Lake Road', 'Green Bay, WI 54304']
-        },
-        nav: [
-            { label: 'Home', href: '/index', page: 'home' },
-            {
-                label: 'Services', href: '/services', page: 'services',
-                children: [
-                    { label: 'Marketing', href: '/marketing', page: 'marketing' },
-                    { label: 'Development', href: '/development', page: 'development' },
-                    { label: 'Web Design', href: '/web-design', page: 'web-design' },
-                    { label: 'SEO Optimisation', href: '/seo-optimisation', page: 'seo-optimisation' },
-                    { label: 'Ecommerce', href: '/ecommerce', page: 'ecommerce' },
-                    { label: 'Branding', href: '/branding', page: 'branding' }
-                ]
-            },
-            { label: 'Works', href: '/works', page: 'works' },
-            { label: 'Blog', href: '/blog', page: 'blog' },
-            { label: 'Helpdesk', href: '/helpdesk', page: 'helpdesk' },
-            { label: 'About', href: '/about', page: 'about' },
-            { label: 'Contact', href: '/contact', page: 'contact' }
-        ],
-        servicePills: [
-            { label: 'Marketing', href: '/marketing', page: 'marketing' },
-            { label: 'Development', href: '/development', page: 'development' },
-            { label: 'Web Design', href: '/web-design', page: 'web-design' },
-            { label: 'SEO Optimisation', href: '/seo-optimisation', page: 'seo-optimisation' },
-            { label: 'Ecommerce', href: '/ecommerce', page: 'ecommerce' },
-            { label: 'Branding', href: '/branding', page: 'branding' }
-        ]
-    });
+    const row = db.prepare(`
+      SELECT payload_json
+      FROM site_settings
+      WHERE setting_key = ?
+    `).get('default');
+
+    res.json(parseJSON(row?.payload_json, SITE_CONFIG_BOOTSTRAP));
 });
 
 apiRouter.get('/blog', (_req, res) => {
@@ -251,6 +223,18 @@ apiRouter.get('/pages/:slug', (req, res) => {
         seo_description: page.seo_description,
         sections
     });
+});
+
+apiRouter.get('/content-pages/:slug', (req, res) => {
+    const row = db.prepare(`
+      SELECT payload_json
+      FROM content_pages
+      WHERE slug = ?
+    `).get(req.params.slug);
+
+    if (!row) return res.status(404).json({ error: 'Not found' });
+
+    res.json(parseJSON(row.payload_json, {}));
 });
 
 apiRouter.get('/works', (_req, res) => {

@@ -22,21 +22,23 @@ function footerLinkColumn(title, links = []) {
   });
 }
 
-export function Footer(company = {}) {
+export function Footer(site = {}) {
+  const company = site?.company || {};
+  const footer = site?.footer || {};
   const year = new Date().getFullYear();
   const name = company?.name || 'Buzzworthy';
   const email = company?.email || '';
   const phone = company?.phone || '';
   const addressLines = company?.addressLines || [];
 
-  const primaryLinks = [
+  const primaryLinks = footer?.columns?.[0]?.links || [
     { label: 'Services', href: '/services' },
     { label: 'Works', href: '/works' },
     { label: 'Blog', href: '/blog' },
     { label: 'Helpdesk', href: '/helpdesk' }
   ];
 
-  const serviceLinks = [
+  const serviceLinks = footer?.columns?.[1]?.links || [
     { label: 'Marketing', href: '/marketing' },
     { label: 'Development', href: '/development' },
     { label: 'Web Design', href: '/web-design' },
@@ -72,7 +74,7 @@ export function Footer(company = {}) {
               }),
               createElement('p', {
                 className: 'footer-copy',
-                text: 'Conversion-focused pages, editable content, and a heavier presentation layer built to feel polished during review.'
+                text: footer?.tagline || 'Conversion-focused pages, editable content, and a heavier presentation layer built to feel polished during review.'
               }),
               createElement('div', {
                 className: 'footer-pill-row',
@@ -96,8 +98,8 @@ export function Footer(company = {}) {
           createElement('div', {
             className: 'footer-grid',
             children: [
-              footerLinkColumn('Explore', primaryLinks),
-              footerLinkColumn('Services', serviceLinks),
+              footerLinkColumn(footer?.columns?.[0]?.title || 'Explore', primaryLinks),
+              footerLinkColumn(footer?.columns?.[1]?.title || 'Services', serviceLinks),
               createElement('div', {
                 className: 'footer-column footer-contact',
                 children: [

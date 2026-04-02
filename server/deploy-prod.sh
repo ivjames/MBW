@@ -32,6 +32,9 @@ npm ci
 echo "[deploy] Building minified assets"
 npm run build:assets
 
+echo "[deploy] Running database migrations"
+npm run migrate
+
 echo "[deploy] Restarting service: ${SERVICE_NAME}"
 if command -v systemctl >/dev/null 2>&1; then
   run_privileged systemctl restart "${SERVICE_NAME}"
