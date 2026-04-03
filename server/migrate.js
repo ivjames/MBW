@@ -131,6 +131,54 @@ if (!db.prepare('SELECT id FROM site_settings WHERE setting_key = ?').get('defau
         `).run('default', JSON.stringify(SITE_CONFIG_BOOTSTRAP, null, 4), now, now);
 }
 
+function backfillCompanyFooterLinks() {
+    const row = db.prepare('SELECT id, payload_json FROM site_settings WHERE setting_key = ?').get('default');
+    if (!row) return;
+
+    let payload = {};
+    try {
+        payload = JSON.parse(row.payload_json || '{}');
+    } catch {
+        payload = {};
+    }
+
+    if (!payload.footer || typeof payload.footer !== 'object') payload.footer = {};
+    if (!Array.isArray(payload.footer.columns)) payload.footer.columns = [];
+
+    let companyColumn = payload.footer.columns.find(col =>
+        String(col?.title || '').trim().toLowerCase() === 'company'
+    );
+
+    if (!companyColumn) {
+        companyColumn = { title: 'Company', links: [] };
+        payload.footer.columns.push(companyColumn);
+    }
+
+    if (!Array.isArray(companyColumn.links)) companyColumn.links = [];
+
+    const requiredLinks = [
+        { label: 'Helpdesk', href: '/helpdesk' },
+        { label: 'Blog', href: '/blog' },
+        { label: 'Built From Scratch', href: '/build-from-scratch' }
+    ];
+
+    for (const required of requiredLinks) {
+        const exists = companyColumn.links.some(link =>
+            String(link?.href || '').trim() === required.href ||
+            String(link?.label || '').trim().toLowerCase() === required.label.toLowerCase()
+        );
+        if (!exists) companyColumn.links.push(required);
+    }
+
+    db.prepare('UPDATE site_settings SET payload_json = ?, updated_at = ? WHERE id = ?').run(
+        JSON.stringify(payload, null, 4),
+        now,
+        row.id
+    );
+}
+
+backfillCompanyFooterLinks();
+
 if (!db.prepare('SELECT 1 FROM posts LIMIT 1').get()) {
     const insert = db.prepare(`
     INSERT INTO posts (

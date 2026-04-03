@@ -3,17 +3,20 @@
 Static multipage frontend with a small Node backend for contact form demo submissions.
 
 ## Pages
+
 - `index.html`
 - `services.html`
 - `about.html`
 - `contact.html`
 
 ## Backend
+
 - `server/server.js`
 - `POST /api/contact`
 - Simulates a mailbox by writing contact messages to SQLite (`contact_messages`)
 
 ## Run
+
 ```bash
 cd server
 npm install
@@ -24,17 +27,21 @@ Then open:
 `http://localhost:3000`
 
 ## Mailbox Simulation (Admin)
+
 Contact form submissions are stored in SQLite and viewable in Admin:
+
 - Visit `/admin/mailbox` after logging in.
 - Messages are marked read when opened.
 - You can delete messages from the mailbox view.
 
 ## Notes
+
 - The contact form posts JSON to the Node backend.
 - Picsum images use seeded URLs with fixed dimensions for more stable results.
 - Cards were tightened so most content blocks do not inherit oversized vertical space.
 
 ## Production Deploy (One Command)
+
 On the droplet:
 
 ```bash
@@ -43,6 +50,7 @@ npm run deploy:prod -- mbw
 ```
 
 What it does:
+
 - Installs dependencies with `npm ci`
 - Builds minified bundles (`assets/js/main.min.js` and `assets/css/app.min.css`)
 - Runs DB migrations (`npm run migrate`)
@@ -55,15 +63,17 @@ npm run deploy:prod -- your-service-name
 ```
 
 ## Optional Nginx Compression
+
 Compression snippet is provided at:
+
 - `deploy/nginx/mbw-performance.conf`
 
 To apply:
+
 1. Include the snippet in the `http {}` block of `/etc/nginx/nginx.conf`
 2. Test config: `sudo nginx -t`
 3. Reload: `sudo systemctl reload nginx`
 
 The snippet enables gzip and includes an optional Brotli block (commented out unless your nginx build supports Brotli).
-
 
 Update: fixed missing About/Contact hero images and tightened subpage hero spacing.

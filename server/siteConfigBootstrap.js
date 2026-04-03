@@ -80,7 +80,10 @@ export const SITE_CONFIG_BOOTSTRAP = {
                 title: 'Company',
                 links: [
                     { label: 'About', href: '/about' },
-                    { label: 'Contact', href: '/contact' }
+                    { label: 'Contact', href: '/contact' },
+                    { label: 'Helpdesk', href: '/helpdesk' },
+                    { label: 'Blog', href: '/blog' },
+                    { label: 'Built From Scratch', href: '/build-from-scratch' }
                 ]
             }
         ]
