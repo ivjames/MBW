@@ -45,9 +45,22 @@ Contact form submissions are stored in SQLite and viewable in Admin:
 On the droplet:
 
 ```bash
-cd /var/www/MBW/server
+cd /var/www/mbw/server
 npm run deploy:prod -- mbw
 ```
+
+> **The directory is lowercase `mbw`, while this repo is `MBW`.** The lab980
+> registry (`ivjames/lab980.com`, `.claude/sites.json`) records
+> `dir: /var/www/mbw`, collected from the droplet, and notes the case
+> difference explicitly. This page said `/var/www/MBW`, which does not exist on
+> a case-sensitive filesystem — the `cd` fails and nothing deploys.
+> Not re-checked on the box by this edit; if a `cd /var/www/mbw` there fails,
+> `ls -d /var/www/[Mm][Bb][Ww]` settles it and the registry is what should be
+> corrected.
+
+Deploys are a separate step from merging: nothing here ships on a merge to
+`main`. This site runs under **systemd** (`mbw.service`), not pm2, so it never
+appears in `pm2 list`.
 
 What it does:
 
